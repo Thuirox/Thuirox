@@ -1,0 +1,38 @@
+:root{
+    --gold-color: #F6BB62;
+    --gold-color-light: #f6CA62;
+    --gold-color-very-light: #fcecc6;
+    --silver-color: #bdbdbd;
+    --silver-color-light: #ececec;
+    --nearly-black:#0F2226;
+    --bottom-color:#1A2623;
+    --top-color:#455854;
+}
+
+html, body{
+    margin: 0;
+    height: 100%;
+}
+
+canvas{
+    width: 100%;
+    height: 100%;
+    display:block;
+    z-index: 1;
+}
+
+#gyro-button{
+    position: absolute;
+    left: 1vh;
+    top: 1vh;
+    background-color: #F6BB62;
+    width: 60px;
+    height: 60px;
+}
+
+#text{
+    position: absolute;
+    left: 1vh;
+    top: calc(1vh + 60px);
+    color: white;
+}

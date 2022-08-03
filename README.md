@@ -13,4 +13,8 @@ Here are some ideas to get you started:
 - 📫 How to reach me: ...
 - 😄 Pronouns: ...
 - ⚡ Fun fact: ...
--->
+
+# Libraries used
+* THREE.JS is a library used to create 3D content in websites. https://threejs.org/
+* OrbitControls is a library to move around in a three.js scene with clicks and touches. https://github.com/mrdoob/three.js/blob/master/examples/jsm/controls/OrbitControls.js
+* threex To detect click on mesh in Three.js. https://github.com/jeromeetienne/threex.domevents-->
