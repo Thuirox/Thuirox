@@ -15,12 +15,12 @@ function main() {
     camera.position.set(0, 0, 0.1);
     
 
-    const updateControls = setupBasicControls();
+    const controls = setupBasicControls();
     
     var gyroControl = false;
     const updateGyro = setupDeviceOrientationControls();
 
-    
+
     const debug_text = document.getElementById("debug_text");
     function switchGyroControl(){
         gyroControl = !gyroControl;
@@ -51,7 +51,7 @@ function main() {
         if(gyroControl){
             updateGyro();
         } else {
-            updateControls();
+            controls.update();
         }
        
        
@@ -164,9 +164,7 @@ function main() {
 
         controls.enabled = true;
 
-        return ()=>{
-            controls.update();
-        }
+        return controls;
     }
 
     function setupDeviceOrientationControls(){
