@@ -5,15 +5,20 @@ import {OrbitControls} from './OrbitControls.js';
 function main() {
     const canvas = document.querySelector('#c');
     const renderer = new THREE.WebGLRenderer({canvas});
+    renderer.localClippingEnabled = true;
+
+    
 
     // camera setup
-    const fov = 75;
+    const fov = 70;
     const aspect = 2;  // the canvas default
     const near = 0.1;
-    const far = 50;
+    const far = 100;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set(0, 0, 0.1);
+    camera.position.set(0.001, 0, 0);
+    // camera.position.set(40, 20, 20);
     
+    const domEvents = new THREEx.DomEvents(camera, canvas);
 
     const controls = setupManualControls();
     
@@ -33,6 +38,39 @@ function main() {
     gyroButton.onclick = switchGyroControl;
     
 
+    var move = false;
+
+    window.addEventListener("mousedown", function(event){
+        console.log("mouse down");
+        move = false;
+    }, false);
+
+
+    window.addEventListener("mousemove", function(event){
+        if(!move){
+            console.log("mouse move");
+            move = true;
+        }
+    }, false);
+
+
+
+
+    function addInteraction(object, fct){
+        domEvents.addEventListener(object, "mouseup", function(event){
+            console.log("mouseup");
+            if(!move){
+                fct();
+            }
+        }, false);
+    
+        // Touchend not detected correctly. Using touchstart instead.
+        domEvents.addEventListener(object, "touchstart", function(event){
+            console.log("touchstart");
+            fct();
+        }, false);
+
+    }
 
 
     const scene = new THREE.Scene();
@@ -73,79 +111,99 @@ function main() {
         return needResize;
     }
 
-    
-    function setupScene(){
 
-        const boxWidth = 1;
-        const boxHeight = 1;
-        const boxDepth = 1;
-        const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+    /**
+     * 
+     * @param {Scene} scene 
+     * @param {Object:{x:integer, y:integer, z:integer}} center 
+     */
+    function createRoom(scene, center={x:0, y:0, z:0}, roomColor=0xaaaa44){
+        const exitPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), center.x + 14);
+        const entryPlane = new THREE.Plane(new THREE.Vector3(1, 0, 0), -center.x + 14);
 
-        const materialX = new THREE.MeshPhongMaterial({color: 0xaa4444});
-        const materialZ = new THREE.MeshPhongMaterial({color: 0x4444aa});
-        const materialY = new THREE.MeshPhongMaterial({color: 0x44aa44});
-
-        let cubes = []
-
-        const cube1 = new THREE.Mesh(geometry, materialX);
-        scene.add(cube1);
-        cube1.position.x = 2;
-        cube1.rotateX(90);
-        cube1.rotateY(90);
-
-        const cube2 = new THREE.Mesh(geometry, materialX);
-        scene.add(cube2);
-        cube2.position.x = -2;
-
-        const cube3 = new THREE.Mesh(geometry, materialZ);
-        scene.add(cube3);
-        cube3.position.z = 2;
-
-        const cube4 = new THREE.Mesh(geometry, materialZ);
-        scene.add(cube4);
-        cube4.position.z = -2;
-
-        const cube5 = new THREE.Mesh(geometry, materialY);
-        scene.add(cube5);
-        cube5.position.y = 2;
-
-        const cube6 = new THREE.Mesh(geometry, materialY);
-        scene.add(cube6);
-        cube6.position.y = -2;
-
-
-        cubes.push(cube1);
-        cubes.push(cube2);
-        // cube2.rotation.order = "YXZ";
-        cubes.push(cube3);
-        cubes.push(cube4);
-        cubes.push(cube5);
-        cubes.push(cube6);
-
-        var domEvents	= new THREEx.DomEvents(camera, canvas)
-        let counter = 0;
-        cubes.map((cube) => {
-            counter++;
-            let c = counter;
-            domEvents.addEventListener(cube, "click", function(event){
-                debug_text.textContent = `Clicked ${c}`;
-                console.log(`Clicked ${c}`);
-            }, false);
-            domEvents.addEventListener(cube, "touchstart", function(event){
-                debug_text.textContent = `Touched ${c}`;
-                console.log(`Touched ${c}`);
-            }, false);
+        const sphereGeometry = new THREE.SphereGeometry( 15, 200, 32 );
+        const sphereMaterial = new THREE.MeshPhongMaterial({
+            side: THREE.DoubleSide,
+            color: roomColor,
+            clippingPlanes: [entryPlane, exitPlane],
+            clipShadows: true,
+            clipIntersection: false
         });
+        const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+        sphere.position.x = center.x;
+        sphere.position.y = center.y;
+        scene.add(sphere);
+
+        
 
         // Light
         const color = 0xFFFFFF;
         const intensity = 1;
-        const light = new THREE.AmbientLight(color, intensity);
-        light.position.set(0, 10, 0);
-        scene.add(light);
 
+        const sun = new THREE.PointLight(color, intensity, 30);
+        sun.position.set(center.x, center.y+10, center.z);
+        scene.add(sun);
+
+        const bottomLight = new THREE.PointLight(color, intensity, 20);
+        bottomLight.position.set(center.x, center.y-10, center.z);
+        scene.add(bottomLight);
+
+        
+
+        // Click point
+        const boxSide = 7;
+        const boxWidth = boxSide;
+        const boxHeight = boxSide;
+        const boxDepth = boxSide;
+        const cubeGeometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+        const cubeMaterial = new THREE.MeshPhongMaterial({color:roomColor});
+
+        const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube.rotateZ(Math.PI/4);
+        cube.rotateY(Math.PI/4);
+        cube.position.x = center.x;
+        cube.position.y = center.y;
+        scene.add(cube);
+
+        addInteraction(cube, function(event){
+            debug_text.textContent = `Interacted x:${center.x}`;
+            console.log(`Interacted ${center.x}`);
+            updateCameraPosition(center.x, center.y, center.z);
+        });
+    }
+    
+    function setupScene(){
+        // Color palette used: https://coolors.co/773344-e3b5a4-f5e9e2-0b0014-d44d5c
+        const colors = [
+            0x773344,
+            0xE3B5A4,
+            0xF5E9E2,
+            0x0B0014,
+            0xD44D5C
+        ]
+
+        let x = 0;
+        for(const color of colors){
+            createRoom(scene, {x:x, y:0, z:0}, color);
+
+            x += 28;
+        }
+
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+        scene.add(ambientLight);
 
         renderer.render(scene, camera);
+    }
+
+    function updateCameraPosition(x, y, z){
+        let xDiff = 0.001;
+        if(camera.position.x - x < 0){
+            xDiff = -xDiff;
+        }
+
+        controls.target.set(x, y, z);
+        camera.position.set(x + xDiff, y, z);
+
     }
 
     function setupManualControls(){
@@ -155,7 +213,14 @@ function main() {
         controls.enableZoom = false;
         controls.enableDamping = true;
 
-        controls.rotateSpeed = 0.5;
+        // Check if the user is usign a mobile device. https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
+        const isMobile = navigator.userAgentData.mobile;
+
+        if(isMobile){
+            controls.rotateSpeed = 0.7;
+        } else {
+            controls.rotateSpeed = 0.5;
+        }
         // reverse control
         controls.rotateSpeed *= -1;
 
