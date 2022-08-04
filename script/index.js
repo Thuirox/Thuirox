@@ -1,10 +1,15 @@
 import * as THREE from './three.module.js';
 import {THREEx} from './threex.domevents.js';
 import {OrbitControls} from './OrbitControls.js';
+import {Font} from './FontLoader.js';
+import {TTFLoader} from './TTFLoader.js';
 
 function main() {
     const canvas = document.querySelector('#c');
-    const renderer = new THREE.WebGLRenderer({canvas});
+    const renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: true
+    });
     renderer.localClippingEnabled = true;
 
     
@@ -171,6 +176,43 @@ function main() {
             updateCameraPosition(center.x, center.y, center.z);
         });
     }
+
+    function createText(scene){
+        const loader = new TTFLoader();
+        loader.load( 'fonts/Arizonia-Regular.ttf', function ( json ) {
+            const font = new Font(json);
+
+            const message = 'Anthony\n  Bayet';
+            const shapes = font.generateShapes( message, 5 );
+
+            
+			const textGeo = new THREE.ShapeGeometry( shapes );
+
+            textGeo.computeBoundingBox();
+
+            const color = 0x981235;
+            const matLite = new THREE.MeshPhongMaterial( {
+                color: color,
+                opacity: 0.4,
+                side: THREE.DoubleSide
+            } );
+            
+			const text = new THREE.Mesh( textGeo, matLite );
+            text.rotateY(Math.PI/2);
+            text.position.x = -50;
+            text.position.z = 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+            text.position.y = 0.1 * ( textGeo.boundingBox.max.y - textGeo.boundingBox.min.y );
+            scene.add(text);
+        } );
+
+        // Light
+        const color = 0xFFFFFF;
+        const intensity = 1;
+
+        const sun = new THREE.PointLight(color, intensity, 30);
+        sun.position.set(-40, 0, 0);
+        scene.add(sun);
+    }
     
     function setupScene(){
         // Color palette used: https://coolors.co/773344-e3b5a4-f5e9e2-0b0014-d44d5c
@@ -189,6 +231,10 @@ function main() {
             x += 28;
         }
 
+        createText(scene);
+
+
+        // Global light
         const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
         scene.add(ambientLight);
 
