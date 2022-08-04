@@ -128,6 +128,7 @@ function main() {
             counter++;
             let c = counter;
             domEvents.addEventListener(cube, "click", function(event){
+                debug_text.textContent = `Clicked ${c}`;
                 console.log(`Clicked ${c}`);
             }, false);
             domEvents.addEventListener(cube, "touchstart", function(event){
