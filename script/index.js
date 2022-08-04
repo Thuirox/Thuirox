@@ -15,7 +15,7 @@ function main() {
     camera.position.set(0, 0, 0.1);
     
 
-    const controls = setupBasicControls();
+    const controls = setupManualControls();
     
     var gyroControl = false;
     const updateGyro = setupDeviceOrientationControls();
@@ -148,7 +148,7 @@ function main() {
         renderer.render(scene, camera);
     }
 
-    function setupBasicControls(){
+    function setupManualControls(){
         // Init mouse and touch controls
         const controls = new OrbitControls(camera, canvas);
         controls.enablePan = false;
@@ -196,6 +196,8 @@ function main() {
             // Then, swap the controls to the gyroscope one.
             if(!gyroSupportDetected && event.alpha != null){
                 switchGyroControl();
+                // Make appear the button to switch between controls
+                document.getElementById("gyro-button").style.display = "block";
                 gyroSupportDetected = true;
             }
             deviceOrientation = event;
@@ -207,7 +209,7 @@ function main() {
 
         var screenOrientation = 0;
         function updateGyro(){
-            gyro_text.textContent = `${deviceOrientation.alpha}\n${deviceOrientation.beta}\n${deviceOrientation.gamma}`;
+            gyro_text.textContent = `${deviceOrientation.alpha.toFixed(1)}\n${deviceOrientation.beta.toFixed(1)}\n${deviceOrientation.gamma.toFixed(1)}`;
 
             var alpha = deviceOrientation.alpha ? THREE.MathUtils.degToRad( deviceOrientation.alpha ) : 0; // Z
             var beta = deviceOrientation.beta ? THREE.MathUtils.degToRad( deviceOrientation.beta ) : 0; // X'
