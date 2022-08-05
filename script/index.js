@@ -10,6 +10,8 @@ function main() {
         canvas,
         antialias: true
     });
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.localClippingEnabled = true;
 
     
@@ -18,7 +20,7 @@ function main() {
     const fov = 70;
     const aspect = 2;  // the canvas default
     const near = 0.1;
-    const far = 100;
+    const far = 250;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     camera.position.set(0.001, 0, 0);
     // camera.position.set(40, 20, 20);
@@ -126,7 +128,7 @@ function main() {
         const exitPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), center.x + 14);
         const entryPlane = new THREE.Plane(new THREE.Vector3(1, 0, 0), -center.x + 14);
 
-        const sphereGeometry = new THREE.SphereGeometry( 15, 200, 32 );
+        const sphereGeometry = new THREE.SphereGeometry( 15, 70, 70 );
         const sphereMaterial = new THREE.MeshPhongMaterial({
             side: THREE.DoubleSide,
             color: roomColor,
@@ -178,40 +180,75 @@ function main() {
     }
 
     function createText(scene){
+        const textX = -30;
+        const textBackgroundXDifference = -8;
+        const textSize = 1.4;
+        const textColor = 0xC8ADB4;
+
         const loader = new TTFLoader();
-        loader.load( 'fonts/Arizonia-Regular.ttf', function ( json ) {
+        loader.load( 'fonts/Cinzel-Regular.ttf', function ( json ) {
             const font = new Font(json);
 
-            const message = 'Anthony\n  Bayet';
-            const shapes = font.generateShapes( message, 5 );
+            const nameContent = 'Anthony Bayet';
+            const nameShapes = font.generateShapes( nameContent, textSize );
+
+			const nameGeo = new THREE.ShapeGeometry( nameShapes );
+
+            nameGeo.computeBoundingBox();
+            
+            const nameMat = new THREE.MeshPhongMaterial( {
+                color: textColor,
+                side: THREE.DoubleSide
+            } );
 
             
-			const textGeo = new THREE.ShapeGeometry( shapes );
+			const name = new THREE.Mesh( nameGeo, nameMat );
+            name.rotateY(Math.PI/2);
+            name.position.x = textX;
+            name.position.z = 0.5 * ( nameGeo.boundingBox.max.x - nameGeo.boundingBox.min.x );
+            name.position.y = 1 * ( nameGeo.boundingBox.max.y - nameGeo.boundingBox.min.y );
+            name.castShadow = true;
+            scene.add(name);
 
-            textGeo.computeBoundingBox();
+            const titleContent = 'Software Engineer';
+            const titleShapes = font.generateShapes( titleContent, textSize-0.3*textSize );
 
-            const color = 0x981235;
-            const matLite = new THREE.MeshPhongMaterial( {
-                color: color,
-                opacity: 0.4,
+			const titleGeo = new THREE.ShapeGeometry( titleShapes );
+
+            titleGeo.computeBoundingBox();
+            
+            const titleMaterial = new THREE.MeshPhongMaterial( {
+                color: textColor,
                 side: THREE.DoubleSide
             } );
             
-			const text = new THREE.Mesh( textGeo, matLite );
-            text.rotateY(Math.PI/2);
-            text.position.x = -50;
-            text.position.z = 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
-            text.position.y = 0.1 * ( textGeo.boundingBox.max.y - textGeo.boundingBox.min.y );
-            scene.add(text);
+			const title = new THREE.Mesh( titleGeo, titleMaterial );
+            title.castShadow = true;
+            title.rotateY(Math.PI/2);
+            title.position.x = textX;
+            title.position.z = 0.5 * ( titleGeo.boundingBox.max.x - titleGeo.boundingBox.min.x );
+            title.position.y = -1 * ( titleGeo.boundingBox.max.y - titleGeo.boundingBox.min.y );
+            scene.add(title);
+
+            // Light
+            const color = 0xFFFFFF;
+            const intensity = 0.8;
+
+            const spotLight = new THREE.SpotLight( color, intensity );
+            spotLight.position.set(-15, 5, 0);
+
+            spotLight.target = name;
+            // spotLight.castShadow = true;
+
+            spotLight.shadow.mapSize.width = 1024;
+            spotLight.shadow.mapSize.height = 1024;
+
+            spotLight.shadow.camera.near = 30;
+            spotLight.shadow.camera.far = 4000;
+            spotLight.shadow.camera.fov = 50;
+
+            scene.add( spotLight )
         } );
-
-        // Light
-        const color = 0xFFFFFF;
-        const intensity = 1;
-
-        const sun = new THREE.PointLight(color, intensity, 30);
-        sun.position.set(-40, 0, 0);
-        scene.add(sun);
     }
     
     function setupScene(){
@@ -235,7 +272,7 @@ function main() {
 
 
         // Global light
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
         scene.add(ambientLight);
 
         renderer.render(scene, camera);
