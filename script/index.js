@@ -14,6 +14,8 @@ function main() {
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.localClippingEnabled = true;
 
+    let cameraDirection = {duration:0};
+
     
 
     // camera setup
@@ -97,6 +99,34 @@ function main() {
             updateGyro();
         } else {
             controls.update();
+        }
+
+        // Update camera
+        cameraDirection
+        let currentTime = Date.now();
+        if(cameraDirection.duration != 0){
+            let differenceTime = currentTime - cameraDirection.startTime;
+
+            let position;
+            let ratio;
+
+            if(differenceTime > cameraDirection.duration){
+                position = cameraDirection.endPosition;
+                cameraDirection.duration = 0;
+            } else {
+                ratio = differenceTime / cameraDirection.duration;
+                position = {
+                    x: cameraDirection.startPosition.x + (cameraDirection.endPosition.x - cameraDirection.startPosition.x) * ratio,
+                    y: cameraDirection.startPosition.y + (cameraDirection.endPosition.y - cameraDirection.startPosition.y) * ratio,
+                    z: cameraDirection.startPosition.z + (cameraDirection.endPosition.z - cameraDirection.startPosition.z) * ratio
+                };
+            }
+            // console.log(ratio)
+            console.log((cameraDirection.endPosition.x - cameraDirection.startPosition.x) * ratio)
+            // console.log(position.x)
+            // console.log(position.y)
+            // console.log(position.z)
+            camera.position.set(position.x + cameraDirection.diff, position.y, position.z);
         }
        
        
@@ -285,7 +315,18 @@ function main() {
         }
 
         controls.target.set(x, y, z);
-        camera.position.set(x + xDiff, y, z);
+        // camera.position.set(x + xDiff, y, z);
+        cameraDirection = {
+            startPosition: {
+                x:camera.position.x,
+                y:camera.position.y,
+                z:camera.position.z
+            },
+            endPosition: {x:x, y:y, z:z},
+            startTime: Date.now(),
+            duration: 1000,
+            diff: xDiff
+        }
 
     }
 
