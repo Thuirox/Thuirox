@@ -260,13 +260,14 @@ function main() {
         controls.enableDamping = true;
 
         // Check if the user is usign a mobile device. https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
-        const isMobile = navigator.userAgentData.mobile;
+        // const isMobile = navigator.userAgentData.mobile;
 
-        if(isMobile){
-            controls.rotateSpeed = 0.7;
-        } else {
-            controls.rotateSpeed = 0.5;
-        }
+        // if(isMobile){
+        //     controls.rotateSpeed = 0.7;
+        // } else {
+        //     controls.rotateSpeed = 0.5;
+        // }
+        controls.rotateSpeed = 0.5;
         // reverse control
         controls.rotateSpeed *= -1;
 
