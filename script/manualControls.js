@@ -15,8 +15,7 @@ function setupManualControls(camera, canvas){
     } else {
         controls.rotateSpeed = 0.5;
     }
-
-    controls.rotateSpeed = 0.5;
+    
     // reverse control
     controls.rotateSpeed *= -1;
 

@@ -63,7 +63,7 @@ function main() {
 
 
     const scene = new THREE.Scene();
-    setupScene(scene, domEvents, camera, renderer);
+    setupScene(scene, camera, renderer);
 
 
     function render(time) {

@@ -136,11 +136,9 @@ function createText(scene){
 }
 
 
-var domEvents;
 var camera;
-function setupScene(scene, domEvents_, camera_, renderer){
+function setupScene(scene, camera_, renderer){
     // Color palette used: https://coolors.co/773344-e3b5a4-f5e9e2-0b0014-d44d5c
-    domEvents = domEvents_;
     camera = camera_;
     const colors = [
         0x773344,
