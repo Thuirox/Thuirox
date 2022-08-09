@@ -1,7 +1,8 @@
 import * as THREE from './libs/three.module.js';
 import { Font } from './libs/FontLoader.js';
 import { TTFLoader } from './libs/TTFLoader.js';
-import { addInteraction } from './interaction.js'
+import { addInteraction } from './interaction.js';
+import { Animation, animationController } from './animation.js';
 
 /**
  * 
@@ -42,7 +43,7 @@ function createRoom(scene, center={x:0, y:0, z:0}, roomColor=0xaaaa44){
     
 
     // Click point
-    const boxSide = 7;
+    const boxSide = 7.5;
     const boxWidth = boxSide;
     const boxHeight = boxSide;
     const boxDepth = boxSide;
@@ -55,6 +56,18 @@ function createRoom(scene, center={x:0, y:0, z:0}, roomColor=0xaaaa44){
     cube.position.x = center.x;
     cube.position.y = center.y;
     scene.add(cube);
+
+
+    let animation = new Animation(
+        0, Math.PI*0.001, 1000,
+        (ratio, animation) => {
+            animation.args.cube.rotation.y += animation.end;
+        }, undefined, { cube: cube });
+
+    animation.setIsLooping(true);
+    animation.init();
+
+    animationController.add(animation);
 
     addInteraction(cube, function(event){
         debug_text.textContent = `Interacted x:${center.x}`;
