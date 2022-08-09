@@ -26,7 +26,7 @@ function main() {
     const near = 0.1;
     const far = 250;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set(0.001, 0, 0);
+    camera.position.set(-0.001, 0, 0);
     // camera.position.set(40, 20, 20);
     
     const domEvents = new THREEx.DomEvents(camera, canvas);
@@ -119,11 +119,7 @@ setTimeout(()=>{
         document.getElementById("loading-screen-left-panel").style.left = "-100%";
         document.getElementById("loading-screen-right-panel").style.left = "calc(100% + 5px)";
         document.getElementById("loading-screen").style.pointerEvents = "none";
-    
-        setTimeout(()=>{
-            
-        }, 2000)
         
-    }, 2000)
+    }, 1000)
 
 }, 1000)
