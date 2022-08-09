@@ -454,6 +454,6 @@ setTimeout(()=>{
     setTimeout(()=>{
         document.getElementById("loading-screen-left-panel").style.left = "-100%";
         document.getElementById("loading-screen-right-panel").style.left = "calc(100% + 5px)";
-    }, 1000)
+    }, 2000)
 
 }, 1000)

@@ -43,7 +43,7 @@ canvas{
 
 .loading-screen-break-strip{
     z-index: 2;
-    transition: all 1s;
+    transition: all 1.5s;
     position: absolute;
     width: 10px;
     height: 0px;
@@ -74,7 +74,7 @@ canvas{
 }
 
 #loading-screen-left-panel{
-    transition-duration: 2s;
+    transition-duration: 3s;
 
     left:0%;
 
@@ -82,7 +82,7 @@ canvas{
 }
 
 #loading-screen-right-panel{
-    transition-duration: 1.5s;
+    transition-duration: 2s;
 
     left:50%;  
 
