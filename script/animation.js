@@ -6,6 +6,9 @@ class AnimationController{
     }
 
     add(animation){
+        if(typeof animation.startTime === "undefined"){
+            console.log("! animation added to controller but not initialized");
+        }
         this.animations.push(animation);
     }
 
@@ -35,6 +38,7 @@ const animationController = new AnimationController();
 class Animation{
 
     constructor(start, end, duration, update_fct, end_fct, args){
+        console.log("new animation created");
         this.start = start;
         this.end = end;
 
@@ -43,9 +47,23 @@ class Animation{
         this.update_fct = update_fct;
 
         this.end_fct = end_fct;
+        if(typeof this.end_fct === "undefined"){
+            console.log("end fct is undefined");
+        }
+
         this.ended = false;
 
         this.args = args;
+
+        this.isLooping = false;
+    }
+
+    animationStop(){
+        this.ended = true;
+    }
+
+    setIsLooping(isLooping){
+        this.isLooping = isLooping;
     }
 
     setParams(start, end, args){
@@ -66,10 +84,12 @@ class Animation{
         this.args = args;
     }
 
-    init(){
+    init(toAdd=true){
         this.startTime = Date.now();
         this.ended = false;
-        animationController.add(this);
+        if(toAdd){
+            animationController.add(this);
+        }
     }
 
     animationEnd(timeDifference){
@@ -78,6 +98,10 @@ class Animation{
             this.end_fct(this);
         } else {
             this.update(timeDifference);
+        }
+
+        if(this.isLooping){
+            this.init(false);
         }
     }
 
@@ -101,6 +125,7 @@ let cameraAnimation = new Animation(0, 0,
         animation.args.camera.position.set(position.x + animation.args.diff, position.y, position.z);
     }, 
     (animation) => {
+        console.log("cam anim end");
         let position = animation.end;
         animation.args.camera.position.set(position.x + animation.args.diff, position.y, position.z);
 
