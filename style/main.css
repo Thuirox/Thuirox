@@ -28,7 +28,6 @@ canvas{
 }
 
 #loading-screen{
-    transition: opacity 1s;
     transition-timing-function: ease-in;
     position: absolute;
     z-index: 1;
