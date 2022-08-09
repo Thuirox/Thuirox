@@ -1,14 +1,3 @@
-:root{
-    --gold-color: #F6BB62;
-    --gold-color-light: #f6CA62;
-    --gold-color-very-light: #fcecc6;
-    --silver-color: #bdbdbd;
-    --silver-color-light: #ececec;
-    --nearly-black:#0F2226;
-    --bottom-color:#1A2623;
-    --top-color:#455854;
-}
-
 html, body{
     margin: 0;
     height: 100%;
@@ -36,4 +25,112 @@ canvas{
     background-color: white;
     color: black;
     padding: 0px 10px;
+}
+
+#loading-screen{
+    transition: opacity 1s;
+    transition-timing-function: ease-in;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin:0px;
+    padding: 0px;
+    overflow: hidden;
+}
+
+.loading-screen-break-strip{
+    z-index: 2;
+    transition: all 1s;
+    position: absolute;
+    width: 10px;
+    height: 0px;
+    background-color: black;
+
+}
+
+#loading-screen-break-strip__top{
+    left: calc(100% - 5px);
+    top: 0%;
+}
+
+#loading-screen-break-strip__bottom{
+    left: -5px;
+    bottom: 0%;
+}
+
+
+.loading-screen-panel{
+    transition: all;
+    position: absolute;
+    top:0%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(22deg, rgba(31,6,13,1) 0%, rgba(119,51,68,1) 52%, rgba(148,91,104,1) 100%);
+    background-size: 200% 100%;
+
+}
+
+#loading-screen-left-panel{
+    transition-duration: 2s;
+
+    left:0%;
+
+    background-position: 0% 0%;
+}
+
+#loading-screen-right-panel{
+    transition-duration: 1.5s;
+
+    left:50%;  
+
+    background-position: -100% 0%;
+}
+
+#loading-screen-text{
+    white-space: nowrap;
+    z-index: 3;
+    transition: all 2s;
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translate(-50%, -50%);
+
+    padding: 0px 10px;
+    text-align: center;
+    color: whitesmoke;
+    font-family: 'Cinzel', sans-serif;;
+}
+
+#loading-screen-text::before{
+    z-index: 0;
+    position: absolute;
+    display: inline-block;
+    background-color: black;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 500px;
+    border-radius: 100% 100%;
+    content: "";
+}
+
+@media only screen and (max-width: 500px) {
+    #loading-screen-text::before{
+        width: 100vw;
+        height: 100vw;
+    }
+  }
+
+#loading-screen-text-name{
+    position: relative;
+    font-size: 30px;
+}
+
+#loading-screen-text-role{
+    position: relative;
+    font-size: 20px;
 }

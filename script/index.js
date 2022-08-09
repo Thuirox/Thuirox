@@ -387,6 +387,11 @@ function main() {
     }
 
     function setupDeviceOrientationControls(){
+        /**
+         * Angles value in scene:
+         *  "Anthony Bayet" labels is in 90 90 0
+         *  Next room is in 270 90 0
+         */
         // Init device orientation controls
         var setObjectQuaternion = function() {
 
@@ -441,5 +446,14 @@ function main() {
     }
 }
 
-
 main()
+setTimeout(()=>{
+    document.getElementById("loading-screen-break-strip__top").style.height = "100%";
+    document.getElementById("loading-screen-break-strip__bottom").style.height = "100%";
+    
+    setTimeout(()=>{
+        document.getElementById("loading-screen-left-panel").style.left = "-100%";
+        document.getElementById("loading-screen-right-panel").style.left = "calc(100% + 5px)";
+    }, 1000)
+
+}, 1000)
