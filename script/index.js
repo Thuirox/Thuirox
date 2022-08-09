@@ -4,6 +4,7 @@ import { setupManualControls } from './manualControls.js';
 import { THREEx } from './libs/threex.domevents.js';
 import { setupInteractions } from './interaction.js';
 import { gyroControl, setupGyroControls } from './gyroControls.js'
+import { animationController, cameraAnimation } from './animation.js'
 
 function main() {
     const canvas = document.querySelector('#c');
@@ -44,17 +45,21 @@ function main() {
     
         this.controls.target.set(x, y, z);
         // camera.position.set(x + xDiff, y, z);
-        cameraDirection = {
-            startPosition: {
-                x:camera.position.x,
-                y:camera.position.y,
-                z:camera.position.z
-            },
-            endPosition: {x:x, y:y, z:z},
-            startTime: Date.now(),
-            duration: 1000,
-            diff: xDiff
-        }
+        cameraAnimation.setParams({
+            x:camera.position.x,
+            y:camera.position.y,
+            z:camera.position.z
+        }, 
+        {
+            x:x, 
+            y:y, 
+            z:z
+        }, 
+        { 
+            camera:camera, 
+            diff:xDiff 
+        });
+        cameraAnimation.init();
     
     };
     
@@ -81,30 +86,7 @@ function main() {
             controls.update();
         }
 
-        // Update camera
-        cameraDirection
-        let currentTime = Date.now();
-        if(cameraDirection.duration != 0){
-            let differenceTime = currentTime - cameraDirection.startTime;
-
-            let position;
-            let ratio;
-
-            if(differenceTime > cameraDirection.duration){
-                position = cameraDirection.endPosition;
-                cameraDirection.duration = 0;
-            } else {
-                ratio = differenceTime / cameraDirection.duration;
-                position = {
-                    x: cameraDirection.startPosition.x + (cameraDirection.endPosition.x - cameraDirection.startPosition.x) * ratio,
-                    y: cameraDirection.startPosition.y + (cameraDirection.endPosition.y - cameraDirection.startPosition.y) * ratio,
-                    z: cameraDirection.startPosition.z + (cameraDirection.endPosition.z - cameraDirection.startPosition.z) * ratio
-                };
-            }
-
-            camera.position.set(position.x + cameraDirection.diff, position.y, position.z);
-        }
-       
+        animationController.update();
        
         renderer.render(scene, camera);
        
