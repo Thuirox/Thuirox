@@ -67,7 +67,12 @@ canvas{
     top:0%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(22deg, rgba(31,6,13,1) 0%, rgba(119,51,68,1) 52%, rgba(148,91,104,1) 100%);
+    /* background: linear-gradient(22deg, rgba(31,6,13,1) 0%, rgba(119,51,68,1) 52%, rgba(148,91,104,1) 100%); Too similar to first room */
+    /* background: linear-gradient(22deg, rgba(142,142,142,1) 0%, rgba(227,181,164,1) 52%, rgba(227,129,92,1) 100%); Too light in camparison to first room */
+    /* background: linear-gradient(22deg, rgba(215,199,192,1) 0%, rgba(227,181,164,1) 52%, rgba(226,157,131,1) 100%); still too light */
+    background: linear-gradient(22deg, rgba(148,148,148,1) 0%, rgba(186,146,131,1) 52%, rgba(182,109,82,1) 100%);
+
+
     background-size: 200% 100%;
 
 }
