@@ -28,7 +28,7 @@ function main() {
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     camera.position.set(-0.001, 0, 0);
     // camera.position.set(40, 20, 20); // camera out of balls
-    // camera.position.set(7, 7, 7); // camera in first ball but out of cube
+    camera.position.set(7, 7, 7); // camera in first ball but out of cube
     
     const domEvents = new THREEx.DomEvents(camera, canvas);
 
@@ -38,7 +38,7 @@ function main() {
 
     camera.controls = controls;
 
-    camera.updateCameraPosition = function(x, y, z) {
+    camera.goTo = function(x, y, z) {
         let xDiff = 0.001;
         if(camera.position.x - x < 0){
             xDiff = -xDiff;
@@ -134,7 +134,7 @@ setTimeout(()=>{
             startButton.style.opacity = currentOpacity;
 
             startButton.classList.remove("start-button-animation");
-            
+
             startButtonContainer.style.opacity = 0;
         
             // Loading screen animation
