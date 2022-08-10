@@ -111,7 +111,21 @@ function main() {
 
 main()
 
+const contactButton = document.getElementById("contact-button");
+const modalContainer = document.getElementById("modal-container");
+const modal = document.getElementById("modal");
+const cross = document.getElementById("cross");
 
+function toggleModal() {
+    modalContainer.classList.toggle("invisible");
+}
+
+contactButton.onclick = toggleModal;
+modalContainer.onclick = toggleModal;
+cross.onclick = toggleModal;
+modal.onclick = (e) => {
+    e.stopPropagation();
+}
 
 const startButton = document.getElementById("loading-screen-text-start");
 const startButtonContainer = document.getElementById("loading-screen-text-start-container");
