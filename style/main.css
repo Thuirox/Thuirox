@@ -1,3 +1,8 @@
+:root{
+    --start-button-opacity-low: 0.5;
+    --start-button-opacity-high: 0.8;
+}
+
 html, body{
     margin: 0;
     height: 100%;
@@ -122,19 +127,70 @@ canvas{
     content: "";
 }
 
+#loading-screen-text p{
+    position:relative;
+}
+
 @media only screen and (max-width: 500px) {
     #loading-screen-text::before{
         width: 100vw;
         height: 100vw;
     }
-  }
+}
 
 #loading-screen-text-name{
-    position: relative;
     font-size: 30px;
 }
 
 #loading-screen-text-role{
-    position: relative;
     font-size: 20px;
+}
+
+#loading-screen-text-start{
+    padding-top: 30px;
+    font-size: 20px;
+    opacity: 0;
+    transition: transform 0.2s ease-in, opacity 2s ease;
+}
+
+#loading-screen-text-start-container{
+    transition: opacity 1.2s ease;
+}
+
+#loading-screen-text-start:hover{
+    transform: scale(1.02);
+}
+
+.start-button-animation{
+    -webkit-animation: breathing 2.5s ease-out infinite normal;
+    animation: breathing 2.5s ease-out infinite normal;
+    animation-direction: alternate;
+}
+
+@-webkit-keyframes breathing {
+    0% {
+      opacity: var(--start-button-opacity-high);
+    }
+
+    30% {
+      opacity: var(--start-button-opacity-high);
+    }
+  
+    100% {
+      opacity: var(--start-button-opacity-low);
+    }
+}
+
+@keyframes breathing {
+    0% {
+      opacity: var(--start-button-opacity-high);
+    }
+
+    30% {
+      opacity: var(--start-button-opacity-high);
+    }
+  
+    100% {
+      opacity: var(--start-button-opacity-low);
+    }
 }
