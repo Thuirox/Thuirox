@@ -6,6 +6,7 @@
 html, body{
     margin: 0;
     height: 100%;
+    font-family: 'Cinzel', sans-serif;
 }
 
 canvas{
@@ -66,6 +67,20 @@ canvas{
     bottom: 0%;
 }
 
+#contact-button{
+    white-space: nowrap;
+    font-size: 24px;
+    padding: 15px 20px;
+    z-index: 2;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 40px;
+    background: linear-gradient(22deg, rgba(182,109,82,1) 0%, rgba(186,146,131,1) 52%, rgba(186,146,131,1) 100%);
+    border: 2px solid rgb(83, 50, 38);
+}
+
 
 .loading-screen-panel{
     transition: all;
@@ -111,7 +126,6 @@ canvas{
     padding: 0px 10px;
     text-align: center;
     color: whitesmoke;
-    font-family: 'Cinzel', sans-serif;;
 }
 
 #loading-screen-text::before{
