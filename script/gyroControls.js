@@ -87,7 +87,7 @@ var gyroOffset = {
 }
 
 function updateGyroOffset(){
-    gyroOffset.alpha = 90 - deviceOrientation.alpha;
+    gyroOffset.alpha = 270 - deviceOrientation.alpha;
 }
 
 
