@@ -193,11 +193,6 @@ function setupScene(scene, camera_, renderer){
 
     createText(scene);
 
-    let nbStars = 500;
-    let radius = 10;
-
-    generateStars(scene, nbStars, radius);
-    generateLights(scene);
 
     // Global light
     const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
@@ -206,81 +201,7 @@ function setupScene(scene, camera_, renderer){
     renderer.render(scene, camera);
 }
 
-function generateLights(scene){
-    
 
-    const sphereGeometry = new THREE.SphereGeometry( 2, 10, 10 );
-    const sphereMaterial = new THREE.MeshBasicMaterial({
-        color: 0x0000FF
-    });
-    const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
-    // scene.add(sphere);
-
-    
-    const color = 0xFFFFFF;
-    const intensity = 1;
-    const sun = new THREE.PointLight(color, intensity, 30);
-    scene.add(sun);
-}
-
-function generateStars(scene, nbStars, radius){
-    let baseGeometry = new THREE.BufferGeometry();
-
-    let pointsMaterial = new THREE.PointsMaterial({
-        size: 0.04,
-        opacity: 0.7,
-        color: 0xaaaaaa
-    })
-
-
-    let positions = [];
-
-    function getPoint() {
-        // Source: https://karthikkaranth.me/blog/generating-random-points-in-a-sphere/
-        var u = Math.random();
-        var v = Math.random();
-        var theta = u * 2.0 * Math.PI;
-        var phi = Math.acos(2.0 * v - 1.0);
-        var r = Math.cbrt(Math.random() + 0.1);
-        var sinTheta = Math.sin(theta);
-        var cosTheta = Math.cos(theta);
-        var sinPhi = Math.sin(phi);
-        var cosPhi = Math.cos(phi);
-        var x = r * sinPhi * cosTheta;
-        var y = r * sinPhi * sinTheta;
-        var z = r * cosPhi;
-        return {x: x, y: y, z: z};
-    }
-
-    for (let i = 0; i < nbStars; i++) {
-
-        let point = getPoint();
-        let x = point.x * radius;
-        let y = point.y * radius;
-        let z = point.z * radius;
-
-        positions.push(x, y, z);
-
-
-    }
-
-    baseGeometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-
-    // baseGeometry.computeBoundingSphere();
-
-    let points = new THREE.Points(baseGeometry, pointsMaterial);
-    scene.add(points);
-
-}
-
-class Room{
-    constructor(scene, center, color){
-        this.scene = scene;
-        this.center = center;
-        this.color = color;
-
-    }
-}
 
 
 export { setupScene };
