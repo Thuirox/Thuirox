@@ -5,7 +5,7 @@ import { Animation, animationController } from '../animation.js';
 
 class BallsOfLight{
 
-    constructor(scene, camera, renderer, nbBalls = 30){
+    constructor(scene, camera, renderer, nbBalls = 10){
         this.scene = scene;
         this.camera = camera;
         this.renderer = renderer;
@@ -13,6 +13,8 @@ class BallsOfLight{
 
         this.sphereRadius = 15;
         this.sphereNbSegments = 70;
+        
+        this.ballsOfLightRadius = 1;
     }
     
     init(){
@@ -73,7 +75,7 @@ class BallsOfLight{
 
     ballsOfLight(ballIndex = 0){
         const nbSegments = 30;
-        const sphereRadius = 0.5;
+        const sphereRadius = this.ballsOfLightRadius;
         const radiusPosition = this.sphereRadius - sphereRadius - 0.1;
 
         const angleY = (Math.PI / (this.nbBalls / 2)) * ballIndex;
