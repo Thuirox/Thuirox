@@ -5,10 +5,14 @@ import { Animation, animationController } from '../animation.js';
 
 class BallsOfLight{
 
-    constructor(scene, camera, renderer){
+    constructor(scene, camera, renderer, nbBalls = 30){
         this.scene = scene;
         this.camera = camera;
         this.renderer = renderer;
+        this.nbBalls = nbBalls;
+
+        this.sphereRadius = 15;
+        this.sphereNbSegments = 70;
     }
     
     init(){
@@ -33,7 +37,7 @@ class BallsOfLight{
 
         const exitPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), center.x + 14);
 
-        const sphereGeometry = new THREE.SphereGeometry( 15, 70, 70 );
+        const sphereGeometry = new THREE.SphereGeometry( this.sphereRadius, this.sphereNbSegments, this.sphereNbSegments );
         const sphereMaterial = new THREE.MeshPhongMaterial({
             side: THREE.DoubleSide,
             color: roomColor,
@@ -49,17 +53,24 @@ class BallsOfLight{
 
         this.createSquare(roomColor, center)
 
-        this.ballsOfLight(8, 8, 0);
-        this.ballsOfLight(-8, 8, 0);
-        this.ballsOfLight(-8, -8, 0);
-        this.ballsOfLight(8, -8, 0);
+
+        for(let ballIndex = 0; ballIndex < this.nbBalls; ballIndex++){
+            this.ballsOfLight(ballIndex);
+        }
+
 
 
     }
 
-    ballsOfLight(x = 0, y = 0, z = 0){
+    ballsOfLight(ballIndex = 0){
         const nbSegments = 30;
-        const sphereRadius = 1;
+        const sphereRadius = 0.5;
+        const radiusPosition = this.sphereRadius - sphereRadius - 0.1;
+
+        const angleY = (Math.PI / (this.nbBalls / 2)) * ballIndex;
+        if(angleY > Math.PI - Math.PI/6 && angleY < Math.PI + Math.PI/6){
+            return;
+        }
     
         const sphereGeometry = new THREE.SphereGeometry( sphereRadius, nbSegments, nbSegments );
         const sphereMaterial = new THREE.MeshPhongMaterial({
@@ -67,23 +78,30 @@ class BallsOfLight{
             color: 0xffffff
         });
         const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
-        sphere.position.x = x;
-        sphere.position.y = y;
-        sphere.position.z = z;
         this.scene.add(sphere);
+        
+        const axis = new THREE.Vector3(-1, 0, 0);
+        const rotationAxisY = new THREE.Vector3(0, 1, 0);
+
+        // Test to move vertical the balls
+        // const rotationAxisZ = new THREE.Vector3(0, 0, 1);
+        // const angleZ = ballIndex * Math.PI / 8;
+        // axis.applyAxisAngle( rotationAxisZ, angleZ );
+
+        axis.applyAxisAngle( rotationAxisY, angleY );
+        sphere.translateOnAxis( axis, radiusPosition );
     
         // Light
         const color = 0xFFFFFF;
         const intensity = 0.8;
     
-        const pointLight = new THREE.PointLight( color, intensity, 8 );
-        pointLight.position.set(x, y, 0);
+        const pointLight = new THREE.PointLight( color, intensity, sphereRadius * 20 );
+
         this.scene.add(pointLight);
+        
+        pointLight.translateOnAxis( axis, radiusPosition );
     
-    
-        // const sphereSize = 1;
-        // const pointLightHelper = new THREE.PointLightHelper( pointLight, sphereSize );
-        // this.scene.add( pointLightHelper );
+
     }
 
 
@@ -94,7 +112,7 @@ class BallsOfLight{
         const exitPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), center.x + 14);
         const entryPlane = new THREE.Plane(new THREE.Vector3(1, 0, 0), -center.x + 14);
 
-        const sphereGeometry = new THREE.SphereGeometry( 15, 70, 70 );
+        const sphereGeometry = new THREE.SphereGeometry( this.sphereRadius, this.sphereNbSegments, this.sphereNbSegments );
         const sphereMaterial = new THREE.MeshPhongMaterial({
             side: THREE.DoubleSide,
             color: roomColor,
