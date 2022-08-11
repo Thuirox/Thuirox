@@ -12,9 +12,6 @@ class BallsOfLight{
         this.nbBalls = nbBalls;
 
         this.sphereRadius = 15;
-        this.sphereNbSegments = 70;
-
-        this.ballsOfLightRadius = 1;
     }
     
     init(){
@@ -49,38 +46,8 @@ class BallsOfLight{
         square.init();
 
         room.addSquare(square);
-        
-        for(let ballIndex = 0; ballIndex < this.nbBalls; ballIndex++){
-            this.ballsOfLight(ballIndex);
-        }
-    }
 
-    ballsOfLight(ballIndex = 0){
-        const nbSegments = 30;
-        const radiusPosition = this.sphereRadius - this.ballsOfLightRadius - 0.1;
-
-        const angleY = (Math.PI / (this.nbBalls / 2)) * ballIndex;
-        if(angleY > Math.PI - Math.PI/6 && angleY < Math.PI + Math.PI/6){
-            return;
-        }
-    
-        const sphereGeometry = new THREE.SphereGeometry( this.ballsOfLightRadius, nbSegments, nbSegments );
-        const sphereMaterial = new THREE.MeshBasicMaterial({
-            side: THREE.BackSide,
-            color: 0xffffff
-        });
-        const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
-        this.scene.add(sphere);
-        
-        const axis = new THREE.Vector3(-1, 0, 0);
-        const rotationAxisY = new THREE.Vector3(0, 1, 0);
-
-        const rotationAxisZ = new THREE.Vector3(0, 0, 1);
-        const angleZ = Math.PI / 20 * Math.sin((ballIndex) * (4 * Math.PI / this.nbBalls));
-        axis.applyAxisAngle( rotationAxisZ, angleZ );
-
-        axis.applyAxisAngle( rotationAxisY, angleY );
-        sphere.translateOnAxis( axis, radiusPosition );
+        room.addBallsOfLight(this.nbBalls);
     }
 
 
@@ -93,6 +60,8 @@ class BallsOfLight{
         room.addEntry();
 
         room.init();
+
+        room.addBallsOfLight(this.nbBalls);
 
         
         const square = new SquareRoom(this.scene, this.camera, center, roomColor);
@@ -119,17 +88,26 @@ class SphereRoom{
         this.clippingPlanesOffset = 1;
 
         this.sphereNbSegments = 70;
+        this.ballsOfLightNbSegments = 30;
+
+        this.ballsOfLightRadius = 1;
+
+        this.isEntry = false;
+        this.isExit = false;
     }
 
     addEntry(){
         this.entryPlane = new THREE.Plane(new THREE.Vector3(1, 0, 0), -this.center.x + this.radius - this.clippingPlanesOffset);
         this.clippingPlanes.push(this.entryPlane);
 
+        this.isEntry = true;
     }
 
     addExit(){
         this.exitPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), this.center.x + this.radius - this.clippingPlanesOffset);
         this.clippingPlanes.push(this.exitPlane);
+
+        this.isExit = true;
     }
 
     initLights(){
@@ -169,6 +147,54 @@ class SphereRoom{
     addSquare(square){
         this.square = square;
         this.square.addParent(this);
+    }
+
+    addBallsOfLight(nbBalls){
+        const radiusPosition = this.radius - this.ballsOfLightRadius - 0.1;
+
+        for(let ballIndex = 0; ballIndex < nbBalls; ballIndex++){
+            this.addBallOfLight(ballIndex, nbBalls, radiusPosition);
+        }
+    }
+
+    addBallOfLight(ballIndex, nbBalls, radiusPosition){
+        const angleY = (Math.PI / (nbBalls / 2)) * ballIndex;
+
+        if(this.isExit){
+            if(angleY > Math.PI - Math.PI/6 && angleY < Math.PI + Math.PI/6){
+                return;
+            }
+        }
+
+        if(this.isEntry){
+            if(angleY > - Math.PI/6 && angleY < Math.PI/6){
+                return;
+            }
+        }
+    
+        const sphereGeometry = new THREE.SphereGeometry( this.ballsOfLightRadius, this.ballsOfLightNbSegments, this.ballsOfLightNbSegments );
+        const sphereMaterial = new THREE.MeshBasicMaterial({
+            side: THREE.BackSide,
+            color: 0xffffff,
+            // transparent: true,
+            // opacity: 0.7
+        });
+        const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+        sphere.position.x = this.center.x;
+        sphere.position.y = this.center.y;
+        sphere.position.z = this.center.z;
+        this.scene.add(sphere);
+        
+        const axis = new THREE.Vector3(-1, 0, 0);
+        const rotationAxisY = new THREE.Vector3(0, 1, 0);
+
+        const rotationAxisZ = new THREE.Vector3(0, 0, 1);
+        const angleZ = Math.PI / 20 * Math.sin((ballIndex) * (4 * Math.PI / nbBalls));
+        axis.applyAxisAngle( rotationAxisZ, angleZ );
+
+        axis.applyAxisAngle( rotationAxisY, angleY );
+        sphere.translateOnAxis( axis, radiusPosition );
+
     }
 }
 
