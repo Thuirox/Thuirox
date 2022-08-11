@@ -81,14 +81,6 @@ class BallsOfLight{
 
         axis.applyAxisAngle( rotationAxisY, angleY );
         sphere.translateOnAxis( axis, radiusPosition );
-    
-        // Light
-        // const color = 0xFFFFFF;
-        // const intensity = 0.8;
-    
-        // const pointLight = new THREE.PointLight( color, intensity, sphereRadius * 20 );
-        // this.scene.add(pointLight);
-        // pointLight.translateOnAxis( axis, radiusPosition );
     }
 
 
