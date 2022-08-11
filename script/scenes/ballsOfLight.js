@@ -13,7 +13,7 @@ class BallsOfLight{
 
         this.sphereRadius = 15;
         this.sphereNbSegments = 70;
-        
+
         this.ballsOfLightRadius = 1;
     }
     
@@ -36,38 +36,20 @@ class BallsOfLight{
     createFirstRoom(){
         const center = { x:0, y:0, z:0 };
         const roomColor = 0x0B0014;
+        const room = new SphereRoom(this.scene, this.camera, center, this.sphereRadius, roomColor);
 
-        const exitPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), center.x + 14);
+        room.addExit();
 
-        const sphereGeometry = new THREE.SphereGeometry( this.sphereRadius, this.sphereNbSegments, this.sphereNbSegments );
-        const sphereMaterial = new THREE.MeshPhongMaterial({
-            side: THREE.DoubleSide,
-            color: roomColor,
-            clippingPlanes: [ exitPlane ],
-            clipShadows: true,
-            clipIntersection: false
-        });
-        const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
-        sphere.position.x = center.x;
-        sphere.position.y = center.y;
-        this.scene.add(sphere);
+        room.init();
 
-        // Light
-        const color = 0xFFFFFF;
-        const intensity = 1;
+        
+        const square = new SquareRoom(this.scene, this.camera, center, roomColor);
 
-        const sun = new THREE.PointLight(color, intensity, 30);
-        sun.position.set(center.x, center.y+10, center.z);
-        this.scene.add(sun);
+        square.setIsDoubleSided(false);
+        square.init();
 
-        const bottomLight = new THREE.PointLight(color, intensity, 20);
-        bottomLight.position.set(center.x, center.y-10, center.z);
-        this.scene.add(bottomLight);
-
-
-        this.createSquare(roomColor, center);
-
-
+        room.addSquare(square);
+        
         for(let ballIndex = 0; ballIndex < this.nbBalls; ballIndex++){
             this.ballsOfLight(ballIndex);
         }
@@ -75,15 +57,14 @@ class BallsOfLight{
 
     ballsOfLight(ballIndex = 0){
         const nbSegments = 30;
-        const sphereRadius = this.ballsOfLightRadius;
-        const radiusPosition = this.sphereRadius - sphereRadius - 0.1;
+        const radiusPosition = this.sphereRadius - this.ballsOfLightRadius - 0.1;
 
         const angleY = (Math.PI / (this.nbBalls / 2)) * ballIndex;
         if(angleY > Math.PI - Math.PI/6 && angleY < Math.PI + Math.PI/6){
             return;
         }
     
-        const sphereGeometry = new THREE.SphereGeometry( sphereRadius, nbSegments, nbSegments );
+        const sphereGeometry = new THREE.SphereGeometry( this.ballsOfLightRadius, nbSegments, nbSegments );
         const sphereMaterial = new THREE.MeshBasicMaterial({
             side: THREE.BackSide,
             color: 0xffffff
@@ -108,53 +89,117 @@ class BallsOfLight{
         // const pointLight = new THREE.PointLight( color, intensity, sphereRadius * 20 );
         // this.scene.add(pointLight);
         // pointLight.translateOnAxis( axis, radiusPosition );
-    
-
     }
 
 
     createSecondRoom(){
         const center = { x:28, y:0, z:0 };
         const roomColor = 0xD44D5C;
+        const room = new SphereRoom(this.scene, this.camera, center, this.sphereRadius, roomColor);
 
-        const exitPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), center.x + 14);
-        const entryPlane = new THREE.Plane(new THREE.Vector3(1, 0, 0), -center.x + 14);
+        room.addExit();
+        room.addEntry();
 
-        const sphereGeometry = new THREE.SphereGeometry( this.sphereRadius, this.sphereNbSegments, this.sphereNbSegments );
-        const sphereMaterial = new THREE.MeshPhongMaterial({
-            side: THREE.DoubleSide,
-            color: roomColor,
-            clippingPlanes: [ entryPlane, exitPlane ],
-            clipShadows: true,
-            clipIntersection: false
-        });
-        const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
-        sphere.position.x = center.x;
-        sphere.position.y = center.y;
-        this.scene.add(sphere);
+        room.init();
 
+        
+        const square = new SquareRoom(this.scene, this.camera, center, roomColor);
+
+        square.init();
+
+        room.addSquare(square);
+
+    }
+}
+
+class SphereRoom{
+    constructor(scene, camera, center, radius, color){
+        this.scene = scene;
+        this.camera = camera;
+
+        this.center = center;
+        this.radius = radius;
+
+        this.color = color;
+
+        this.clippingPlanes = [];
+
+        this.clippingPlanesOffset = 1;
+
+        this.sphereNbSegments = 70;
+    }
+
+    addEntry(){
+        this.entryPlane = new THREE.Plane(new THREE.Vector3(1, 0, 0), -this.center.x + this.radius - this.clippingPlanesOffset);
+        this.clippingPlanes.push(this.entryPlane);
+
+    }
+
+    addExit(){
+        this.exitPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), this.center.x + this.radius - this.clippingPlanesOffset);
+        this.clippingPlanes.push(this.exitPlane);
+    }
+
+    initLights(){
         // Light
         const color = 0xFFFFFF;
         const intensity = 1;
 
-        const sun = new THREE.PointLight(color, intensity, 30);
-        sun.position.set(center.x, center.y+10, center.z);
-        this.scene.add(sun);
+        this.topLight = new THREE.PointLight(color, intensity, 30);
+        this.topLight.position.set(this.center.x, this.center.y+10, this.center.z);
 
-        const bottomLight = new THREE.PointLight(color, intensity, 20);
-        bottomLight.position.set(center.x, center.y-10, center.z);
-        this.scene.add(bottomLight);
+        this.bottomLight = new THREE.PointLight(color, intensity, 20);
+        this.bottomLight.position.set(this.center.x, this.center.y-10, this.center.z);
+    }
 
-        
+    init(){
+        const sphereGeometry = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments );
 
-        this.createSquare(roomColor, center, false)
+        const sphereMaterial = new THREE.MeshPhongMaterial({
+            side: THREE.DoubleSide,
+            color: this.color,
+            clippingPlanes: this.clippingPlanes,
+            clipShadows: true,
+            clipIntersection: false
+        });
+        this.sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+        this.sphere.position.x = this.center.x;
+        this.sphere.position.y = this.center.y;
+        this.scene.add(this.sphere);
+
+        this.initLights();
+
+        this.scene.add(this.topLight);
+        this.scene.add(this.bottomLight);
 
     }
 
-    
-    createSquare(roomColor, center, isDoubleSided=false){
+    addSquare(square){
+        this.square = square;
+        this.square.addParent(this);
+    }
+}
+
+class SquareRoom{
+    constructor(scene, camera, center, color){
+        this.scene = scene;
+        this.center = center;
+        this.color = color;
+
+        this.camera = camera
+
+        this.isDoubleSided = true;
+
+        this.parent;
+    }
+
+    setIsDoubleSided(val){
+        this.isDoubleSided = val;
+    }
+
+    init(){
         let cubeFace;
-        if(isDoubleSided){
+        if(this.isDoubleSided){
             cubeFace = THREE.DoubleSide;
         } else {
             cubeFace = THREE.FrontSide;
@@ -166,40 +211,42 @@ class BallsOfLight{
         const boxDepth = boxSide;
         const cubeGeometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
         const cubeMaterial = new THREE.MeshPhongMaterial({
-            color: roomColor,
+            color: this.color,
             side: cubeFace
         });
     
-        const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        cube.rotateZ(Math.PI/4);
-        cube.rotateY(Math.PI/4);
-        cube.position.x = center.x;
-        cube.position.y = center.y;
-        this.scene.add(cube);
+        this.cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        this.cube.rotateZ(Math.PI/4);
+        this.cube.rotateY(Math.PI/4);
+        this.cube.position.x = this.center.x;
+        this.cube.position.y = this.center.y;
+        this.scene.add(this.cube);
     
     
-        let animation = new Animation(
+        this.animation = new Animation(
             0, Math.PI*0.001, 1000,
             (ratio, animation) => {
                 let v3 = new THREE.Vector3(1, 1, 1);
                 v3.normalize();
                 animation.args.cube.rotateOnAxis(v3, animation.end);
-            }, undefined, { cube: cube });
+            }, undefined, { cube: this.cube });
     
-        animation.setIsLooping(true);
-        animation.init();
+        this.animation.setIsLooping(true);
+        this.animation.init();
     
-        animationController.add(animation);
+        animationController.add(this.animation);
     
         const this_ = this;
-        addInteraction(cube, function(event){
-            debug_text.textContent = `Interacted x:${center.x}`;
-            console.log(`Interacted ${center.x}`);
-            this_.camera.goTo(center.x, center.y, center.z);
+        addInteraction(this.cube, function(event){
+            debug_text.textContent = `Interacted x:${this_.center.x}`;
+            console.log(`Interacted ${this_.center.x}`);
+            this_.camera.goTo(this_.center.x, this_.center.y, this_.center.z);
         });
     }
 
-    
+    addParent(parent){
+        this.parent = parent;
+    }
 }
 
 
