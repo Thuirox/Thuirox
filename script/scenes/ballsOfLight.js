@@ -19,8 +19,10 @@ class BallsOfLight{
     }
 
     setupScene(){
-        this.createFirstRoom();
-        this.createSecondRoom();
+        const firstRoom = this.createFirstRoom();
+        const secondRoom = this.createSecondRoom();
+
+        firstRoom.setNext(secondRoom);
     
     
         // Global light
@@ -48,6 +50,8 @@ class BallsOfLight{
         room.addSquare(square);
 
         room.addBallsOfLight(this.nbBalls);
+
+        return room;
     }
 
 
@@ -66,15 +70,56 @@ class BallsOfLight{
         
         const square = new SquareRoom(this.scene, this.camera, center, roomColor);
 
+        square.setIsDoubleSided(false);
         square.init();
 
         room.addSquare(square);
 
+        return room;
+
     }
 }
 
-class SphereRoom{
+class Chain{
+    constructor(){
+        this.next = null;
+        this.previous = null;
+    }
+
+    setPrevious(previous, toSet = true){
+        this.removePrevious();
+        this.previous = previous;
+        if(toSet){
+            this.previous.setNext(this, false);
+        }
+    }
+
+    setNext(next, toSet = true){
+        this.next = next;
+        if(toSet){
+            this.next.setPrevious(this, false);
+        }
+    }
+
+    removeNext(toSet = true){
+        if(toSet && this.next != null){
+            this.next.removePrevious(false);
+        }
+        this.next = null;
+    }
+
+    removePrevious(toSet = true){
+        if(toSet && this.previous != null){
+            this.previous.removeNext(false);
+        }
+        this.previous = null;
+    }
+}
+
+class SphereRoom extends Chain{
     constructor(scene, camera, center, radius, color){
+        super();
+
         this.scene = scene;
         this.camera = camera;
 
@@ -109,6 +154,7 @@ class SphereRoom{
 
         this.isExit = true;
     }
+    
 
     initLights(){
         // Light
@@ -120,6 +166,32 @@ class SphereRoom{
 
         this.bottomLight = new THREE.PointLight(color, intensity, 20);
         this.bottomLight.position.set(this.center.x, this.center.y-10, this.center.z);
+    }
+
+    turnOffLights(){
+        const lightAnimation = new Animation(
+            1, 0, 500,
+            (ratio, animation) => {
+                this.topLight.intensity = 1 - ratio;
+                this.bottomLight.intensity = 1 - ratio;
+            }, undefined);
+    
+        lightAnimation.init();
+    
+        animationController.add(lightAnimation);
+    }
+
+    turnOnLights(){
+        const lightAnimation = new Animation(
+            1, 0, 500,
+            (ratio, animation) => {
+                this.topLight.intensity = ratio;
+                this.bottomLight.intensity = ratio;
+            }, undefined);
+    
+        lightAnimation.init();
+    
+        animationController.add(lightAnimation);
     }
 
     init(){
@@ -246,19 +318,22 @@ class SquareRoom{
             (ratio, animation) => {
                 let v3 = new THREE.Vector3(1, 1, 1);
                 v3.normalize();
-                animation.args.cube.rotateOnAxis(v3, animation.end);
-            }, undefined, { cube: this.cube });
+                this.cube.rotateOnAxis(v3, animation.end);
+            }, undefined);
     
         this.animation.setIsLooping(true);
         this.animation.init();
     
         animationController.add(this.animation);
     
-        const this_ = this;
-        addInteraction(this.cube, function(event){
-            debug_text.textContent = `Interacted x:${this_.center.x}`;
-            console.log(`Interacted ${this_.center.x}`);
-            this_.camera.goTo(this_.center.x, this_.center.y, this_.center.z);
+        addInteraction(this.cube, (event) => {
+            debug_text.textContent = `Interacted x:${this.center.x}`;
+            console.log(`Interacted ${this.center.x}`);
+            this.camera.goTo(this.center.x, this.center.y, this.center.z);
+            
+            this.parent.turnOffLights();
+            this.parent.next?.turnOnLights();
+            this.parent.previous?.turnOnLights();
         });
     }
 
