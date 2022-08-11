@@ -50,8 +50,20 @@ class BallsOfLight{
         sphere.position.y = center.y;
         this.scene.add(sphere);
 
+        // Light
+        const color = 0xFFFFFF;
+        const intensity = 1;
 
-        this.createSquare(roomColor, center)
+        const sun = new THREE.PointLight(color, intensity, 30);
+        sun.position.set(center.x, center.y+10, center.z);
+        this.scene.add(sun);
+
+        const bottomLight = new THREE.PointLight(color, intensity, 20);
+        bottomLight.position.set(center.x, center.y-10, center.z);
+        this.scene.add(bottomLight);
+
+
+        this.createSquare(roomColor, center);
 
 
         for(let ballIndex = 0; ballIndex < this.nbBalls; ballIndex++){
@@ -73,7 +85,7 @@ class BallsOfLight{
         }
     
         const sphereGeometry = new THREE.SphereGeometry( sphereRadius, nbSegments, nbSegments );
-        const sphereMaterial = new THREE.MeshPhongMaterial({
+        const sphereMaterial = new THREE.MeshBasicMaterial({
             side: THREE.BackSide,
             color: 0xffffff
         });
@@ -92,14 +104,12 @@ class BallsOfLight{
         sphere.translateOnAxis( axis, radiusPosition );
     
         // Light
-        const color = 0xFFFFFF;
-        const intensity = 0.8;
+        // const color = 0xFFFFFF;
+        // const intensity = 0.8;
     
-        const pointLight = new THREE.PointLight( color, intensity, sphereRadius * 20 );
-
-        this.scene.add(pointLight);
-        
-        pointLight.translateOnAxis( axis, radiusPosition );
+        // const pointLight = new THREE.PointLight( color, intensity, sphereRadius * 20 );
+        // this.scene.add(pointLight);
+        // pointLight.translateOnAxis( axis, radiusPosition );
     
 
     }
@@ -139,12 +149,18 @@ class BallsOfLight{
 
         
 
-        this.createSquare(roomColor, center)
+        this.createSquare(roomColor, center, true)
 
     }
 
     
-    createSquare(roomColor, center){
+    createSquare(roomColor, center, isDoubleFaced=false){
+        let cubeFace;
+        if(isDoubleFaced){
+            cubeFace = THREE.DoubleSide;
+        } else {
+            cubeFace = THREE.FrontSide;
+        }
         // Click point
         const boxSide = 7.5;
         const boxWidth = boxSide;
@@ -152,7 +168,8 @@ class BallsOfLight{
         const boxDepth = boxSide;
         const cubeGeometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
         const cubeMaterial = new THREE.MeshPhongMaterial({
-            color:roomColor
+            color: roomColor,
+            side: cubeFace
         });
     
         const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
