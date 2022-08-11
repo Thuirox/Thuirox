@@ -69,9 +69,6 @@ class BallsOfLight{
         for(let ballIndex = 0; ballIndex < this.nbBalls; ballIndex++){
             this.ballsOfLight(ballIndex);
         }
-
-
-
     }
 
     ballsOfLight(ballIndex = 0){
@@ -95,10 +92,9 @@ class BallsOfLight{
         const axis = new THREE.Vector3(-1, 0, 0);
         const rotationAxisY = new THREE.Vector3(0, 1, 0);
 
-        // Test to move vertical the balls
-        // const rotationAxisZ = new THREE.Vector3(0, 0, 1);
-        // const angleZ = ballIndex * Math.PI / 8;
-        // axis.applyAxisAngle( rotationAxisZ, angleZ );
+        const rotationAxisZ = new THREE.Vector3(0, 0, 1);
+        const angleZ = Math.PI / 20 * Math.sin((ballIndex) * (4 * Math.PI / this.nbBalls));
+        axis.applyAxisAngle( rotationAxisZ, angleZ );
 
         axis.applyAxisAngle( rotationAxisY, angleY );
         sphere.translateOnAxis( axis, radiusPosition );
@@ -149,14 +145,14 @@ class BallsOfLight{
 
         
 
-        this.createSquare(roomColor, center, true)
+        this.createSquare(roomColor, center, false)
 
     }
 
     
-    createSquare(roomColor, center, isDoubleFaced=false){
+    createSquare(roomColor, center, isDoubleSided=false){
         let cubeFace;
-        if(isDoubleFaced){
+        if(isDoubleSided){
             cubeFace = THREE.DoubleSide;
         } else {
             cubeFace = THREE.FrontSide;
@@ -185,7 +181,7 @@ class BallsOfLight{
             (ratio, animation) => {
                 let v3 = new THREE.Vector3(1, 1, 1);
                 v3.normalize();
-                animation.args.cube.rotateOnAxis(v3, animation.end)
+                animation.args.cube.rotateOnAxis(v3, animation.end);
             }, undefined, { cube: cube });
     
         animation.setIsLooping(true);
