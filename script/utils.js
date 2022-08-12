@@ -27,6 +27,13 @@ function isMobile(){
     return isMobile;
 }
 
+function addRandomness(value, portion=0.1){
+    const valPortion = value * portion;
+    const portionToRemove = valPortion / 2;
+
+    return value - portionToRemove + valPortion * Math.random();
+}
+
 
 class Chain{
     constructor(){
@@ -64,4 +71,4 @@ class Chain{
     }
 }
 
-export { isMobile, Chain }
+export { isMobile, Chain, addRandomness }
