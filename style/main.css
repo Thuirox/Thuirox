@@ -152,8 +152,8 @@ canvas{
 
 @media only screen and (max-width: 500px) {
     #loading-screen-text::before{
-        width: 100vw;
-        height: 100vw;
+        width: 95vw;
+        height: 95vw;
     }
 }
 
