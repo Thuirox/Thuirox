@@ -85,70 +85,6 @@ canvas{
     cursor: pointer;
 }
 
-#modal-container{
-    background-color: rgba(0, 0, 0, 0.425);
-
-    transition: opacity 0.2s;
-    opacity: 0;
-    pointer-events: none;
-
-    position: absolute;
-    z-index: 3;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    margin:0px;
-    padding: 0px;
-    overflow: hidden;
-}
-
-#modal{
-    text-align: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 1;
-    background: linear-gradient(22deg, rgb(207, 172, 159) 0%, rgb(247, 228, 221) 52%, rgba(247, 228, 221) 100%);
-    padding: 100px 50px;
-    
-    /* border-radius: 2000px; */
-}
-
-#cross{
-    position: absolute;
-    top: 15px;
-    right: 10px;
-
-    width:30px;
-    height:30px;
-    opacity: 0.4;
-
-
-    cursor: pointer;
-
-}
-#cross:hover {
-  opacity: 0.7;
-}
-
-#cross:before, #cross:after {
-    position: absolute;
-    top:0px;
-    right:50%;
-    content: '';
-    height: 30px;
-    width: 2px;
-    background-color: black;
-}
-#cross:before {
-    transform: rotate(45deg);
-}
-#cross:after {
-    transform: rotate(-45deg);
-}
-
 
 .loading-screen-panel{
     transition: all;
@@ -185,11 +121,11 @@ canvas{
 #loading-screen-text{
     white-space: nowrap;
     z-index: 3;
-    transition: all 2s;
+    transition: all 1s cubic-bezier(0.87, 0.03, 0.97, 0.74);
     position: absolute;
-    top: 50%;
-    left: 100%;
-    transform: translate(-50%, -50%);
+    bottom: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
 
     padding: 0px 10px;
     text-align: center;
