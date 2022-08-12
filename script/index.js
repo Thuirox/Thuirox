@@ -26,7 +26,7 @@ function main() {
     const near = 0.1;
     const far = 250;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set(-0.001, 0, 0);
+    camera.position.set(0, 0, 0.001);
     // camera.position.set(40, 20, 20); // camera out of balls
     // camera.position.set(7, 7, 7); // camera in first ball but out of cube
     
