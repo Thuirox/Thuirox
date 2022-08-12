@@ -27,4 +27,41 @@ function isMobile(){
     return isMobile;
 }
 
-export { isMobile }
+
+class Chain{
+    constructor(){
+        this.next = null;
+        this.previous = null;
+    }
+
+    setPrevious(previous, toSet = true){
+        this.removePrevious();
+        this.previous = previous;
+        if(toSet){
+            this.previous.setNext(this, false);
+        }
+    }
+
+    setNext(next, toSet = true){
+        this.next = next;
+        if(toSet){
+            this.next.setPrevious(this, false);
+        }
+    }
+
+    removeNext(toSet = true){
+        if(toSet && this.next != null){
+            this.next.removePrevious(false);
+        }
+        this.next = null;
+    }
+
+    removePrevious(toSet = true){
+        if(toSet && this.previous != null){
+            this.previous.removeNext(false);
+        }
+        this.previous = null;
+    }
+}
+
+export { isMobile, Chain }
