@@ -1,5 +1,5 @@
 import * as THREE from './libs/three.module.js';
-import { setupScene } from './scene.js';
+import { setupScene } from './scene/scene.js';
 import { setupManualControls } from './manualControls.js';
 import { THREEx } from './libs/threex.domevents.js';
 import { setupInteractions } from './interaction.js';
