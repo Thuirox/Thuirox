@@ -1,6 +1,6 @@
 import * as THREE from '../libs/three.module.js';
 import { addInteraction } from '../interaction.js';
-import { Animation, animationController } from '../animation.js';
+import { Animation, animationController, DifferedAnimation } from '../animation.js';
 import { Chain, addRandomness } from '../utils.js';
 
 
@@ -66,12 +66,17 @@ class PopulatedRooms{
         imageDesktop.init(() => {
             imageDesktop.addAnimation();
         });
+        room.addImage(imageDesktop);
+
         let imageMobile = new Image(this.scene, "../../images/whenisnextlolclash/indexMobile.png", {x:-4, y:-3.5, z:-8}, 3, 1);
         imageMobile.init(() => {
             imageMobile.addAnimation();
         });
+        room.addImage(imageMobile);
+
         let imageTitle = new Image(this.scene, "../../images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8);
         imageTitle.init();
+        room.addImage(imageTitle);
 
         
 
@@ -80,8 +85,6 @@ class PopulatedRooms{
     }
 
     
-
-
     createSecondRoom(){
         const center = { x:28, y:0, z:0 };
         const roomColor = 0xD44D5C;
@@ -150,8 +153,20 @@ class SphereRoom extends Chain{
         this.isExit = true;
     }
 
-    addImageFolder(folderPath){
+    addImage(image){
+        this.images.push(image);
+    }
 
+    showImages(){
+        this.images.forEach((image) => {
+            image.show();
+        });
+    }
+
+    hideImages(){
+        this.images.forEach((image) => {
+            image.hide({ x: image.position.x, y: -20, z: image.position.z });
+        });
     }
 
     init(){
@@ -186,6 +201,8 @@ class Image{
         this.path = path;
 
         this.position = position;
+        this.initialPosition = position;
+
         this.size = size;
 
         this.opacity = opacity;
@@ -220,6 +237,51 @@ class Image{
         callback();
     }
 
+    hide(targetPosition){
+        this.moveTo(targetPosition);
+    }
+
+    show(){
+        this.moveTo(this.initialPosition, 500, 1000);
+    }
+
+    setPosition(position){
+        this.position = position;
+        this.mesh.position.set(position.x, position.y, position.z);
+    }
+
+    moveTo(targetPosition, duration = 2000, differedDuration = 0){
+        let sourcePosition = {
+            x: this.position.x, 
+            y: this.position.y, 
+            z: this.position.z
+        };
+
+
+        const imageAnimation = new Animation(
+            null, null, duration,
+            (ratio, animation) => {
+                
+                let position = {
+                    x: sourcePosition.x + (targetPosition.x - sourcePosition.x) * ratio,
+                    y: sourcePosition.y + (targetPosition.y - sourcePosition.y) * ratio,
+                    z: sourcePosition.z + (targetPosition.z - sourcePosition.z) * ratio
+                };
+                this.setPosition(position);
+            }, 
+            (animation) => {
+                let position = targetPosition;
+                this.setPosition(position);
+            }
+        );
+
+        const differedAnimation =  new DifferedAnimation(imageAnimation, differedDuration)
+        differedAnimation.init();
+    
+        animationController.add(differedAnimation);
+
+    }
+
     addAnimation(){
         
         let offsetX = 0;
@@ -235,14 +297,24 @@ class Image{
             (ratio, animation) => {
                 if(ratio < 0.5){
                     let relativeRatio = ratio / 0.5;
-                    this.mesh.position.set(this.position.x + offsetX * relativeRatio, this.position.y + offsetY * relativeRatio, this.position.z);
+                    let position = {
+                        x:animation.args.image.position.x + offsetX * relativeRatio, 
+                        y:animation.args.image.position.y + offsetY * relativeRatio, 
+                        z:animation.args.image.position.z
+                    }
+                    animation.args.image.mesh.position.set(position.x, position.y, position.z);
 
                 } else {
                     let relativeRatio = (ratio - 0.5) / 0.5;
-                    this.mesh.position.set(this.position.x + offsetX * (1-relativeRatio), this.position.y + offsetY * (1-relativeRatio), this.position.z);
 
+                    let position = {
+                        x:animation.args.image.position.x + offsetX * (1-relativeRatio), 
+                        y:animation.args.image.position.y + offsetY * (1-relativeRatio), 
+                        z:animation.args.image.position.z
+                    }
+                    animation.args.image.mesh.position.set(position.x, position.y, position.z);
                 }
-            }, undefined);
+            }, undefined, { image: this });
     
         imageAnimation.init();
         imageAnimation.setIsLooping(true);
@@ -302,7 +374,7 @@ class LightManager{
 }
 
 class SquareRoom{
-    constructor(scene, camera, center, color){
+    constructor(scene, camera, center, color, squareSideLength=4.5){
         this.scene = scene;
         this.center = center;
         this.color = color;
@@ -313,7 +385,7 @@ class SquareRoom{
 
         this.parent;
 
-        this.squareSideLength = 4.5;
+        this.squareSideLength = squareSideLength;
     }
 
     setIsDoubleSided(val){
@@ -364,9 +436,9 @@ class SquareRoom{
             console.log(`Interacted ${this.center.x}`);
             this.camera.goTo(this.center.x, this.center.y, this.center.z);
             
-            // this.parent.lightManager.turnOffLights();
-            // this.parent.next?.lightManager.turnOnLights();
-            // this.parent.previous?.lightManager.turnOnLights();
+            this.parent.showImages();
+            this.parent.next?.hideImages();
+            this.parent.previous?.hideImages();
         });
     }
 
