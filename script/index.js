@@ -115,8 +115,16 @@ const modalContainer = document.getElementById("modal-container");
 const modal = document.getElementById("modal");
 const cross = document.getElementById("cross");
 
+var modalContainerVisible = false;
 function toggleModal() {
-    modalContainer.classList.toggle("invisible");
+    if(!modalContainerVisible){
+        modalContainer.style.opacity = 1;
+        modalContainer.style.pointerEvents = "auto";
+    } else {
+        modalContainer.style.opacity = 0;
+        modalContainer.style.pointerEvents = "none";
+    }
+    modalContainerVisible = !modalContainerVisible;
 }
 
 contactButton.onclick = toggleModal;

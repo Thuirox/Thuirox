@@ -81,10 +81,16 @@ canvas{
     /* background: linear-gradient(22deg, rgba(207, 172, 159, 0.644) 0%, rgb(247, 228, 221) 35%, rgb(247, 228, 221) 52%, rgb(247, 228, 221) 72%, rgba(247, 228, 221, 0.719) 100%); */
     /* border: 1px solid rgb(77, 50, 41); */
     box-shadow: 5px 5px 15px rgba(114, 80, 68, 0.295);
+
+    cursor: pointer;
 }
 
 #modal-container{
     background-color: rgba(0, 0, 0, 0.425);
+
+    transition: opacity 0.2s;
+    opacity: 0;
+    pointer-events: none;
 
     position: absolute;
     z-index: 3;
@@ -106,12 +112,13 @@ canvas{
     opacity: 1;
     background: linear-gradient(22deg, rgb(207, 172, 159) 0%, rgb(247, 228, 221) 52%, rgba(247, 228, 221) 100%);
     padding: 100px 50px;
+    
     /* border-radius: 2000px; */
 }
 
 #cross{
     position: absolute;
-    top: 10px;
+    top: 15px;
     right: 10px;
 
     width:30px;
@@ -140,11 +147,6 @@ canvas{
 }
 #cross:after {
     transform: rotate(-45deg);
-}
-
-
-.invisible{
-    display:none;
 }
 
 
@@ -274,4 +276,12 @@ canvas{
     100% {
       opacity: var(--start-button-opacity-low);
     }
+}
+
+.unselectable{
+   -moz-user-select: none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
 }
