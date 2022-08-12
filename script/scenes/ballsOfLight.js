@@ -3,6 +3,15 @@ import { addInteraction } from '../interaction.js';
 import { Animation, animationController } from '../animation.js';
 
 
+const colors = [
+    0x773344,
+    0xE3B5A4,
+    0xF5E9E2,
+    0x0B0014,
+    0xD44D5C
+]
+
+
 class BallsOfLight{
 
     constructor(scene, camera, renderer, nbBalls = 10){
@@ -34,7 +43,8 @@ class BallsOfLight{
 
     createFirstRoom(){
         const center = { x:0, y:0, z:0 };
-        const roomColor = 0x0B0014;
+        // const roomColor = 0x0B0014;
+        const roomColor = colors[1];
         const room = new SphereRoom(this.scene, this.camera, center, this.sphereRadius, roomColor);
 
         room.addExit();
