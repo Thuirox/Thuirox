@@ -1,7 +1,7 @@
 import * as THREE from '../libs/three.module.js';
 import { addInteraction } from '../interaction.js';
 import { Animation, animationController } from '../animation.js';
-import { Chain } from '../utils.js';
+import { Chain, addRandomness } from '../utils.js';
 
 
 const colors = [
@@ -57,14 +57,29 @@ class PopulatedRooms{
         const square = new SquareRoom(this.scene, this.camera, center, roomColor);
 
         square.setIsDoubleSided(false);
+
         square.init();
 
         room.addSquare(square);
 
-        room.addImage("../../images/whenisnextlolclash/index.png")
+        let imageDesktop = new Image(this.scene, "../../images/whenisnextlolclash/index.png", {x:4, y:2.2, z:-8}, 7, 1);
+        imageDesktop.init(() => {
+            imageDesktop.addAnimation();
+        });
+        let imageMobile = new Image(this.scene, "../../images/whenisnextlolclash/indexMobile.png", {x:-4, y:-3.5, z:-8}, 3, 1);
+        imageMobile.init(() => {
+            imageMobile.addAnimation();
+        });
+        let imageTitle = new Image(this.scene, "../../images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8);
+        imageTitle.init();
+
+        
+
 
         return room;
     }
+
+    
 
 
     createSecondRoom(){
@@ -139,31 +154,6 @@ class SphereRoom extends Chain{
 
     }
 
-    async addImage(imagePath){
-        let texture = await loader.loadAsync(imagePath);
-        // ! the material isn't double sided
-        let material = new THREE.MeshBasicMaterial({
-            map: texture,
-            transparent: true,
-            opacity: 0.7
-        });
-          
-        // create a plane geometry for the image with a width of 10
-        // and a height that preserves the image's aspect ratio
-        let geometry = new THREE.PlaneGeometry(10, 10);
-        
-        // combine our image geometry and material into a mesh
-        let mesh = new THREE.Mesh(geometry, material);
-
-        mesh.scale.set(1.0, texture.image.height / texture.image.width, 1.0);
-        
-        // set the position of the image mesh in the x,y,z dimensions
-        mesh.position.set(0, 0, -6)
-        
-        // add the image to the scene
-        this.scene.add(mesh);
-    }
-
     init(){
         const sphereGeometry = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments );
 
@@ -188,6 +178,77 @@ class SphereRoom extends Chain{
         this.square.addParent(this);
     }
 
+}
+
+class Image{
+    constructor(scene, path, position, size=5, opacity=0.7){
+        this.scene = scene;
+        this.path = path;
+
+        this.position = position;
+        this.size = size;
+
+        this.opacity = opacity;
+    }
+
+
+    async init(callback=()=>{}){
+        let texture = await loader.loadAsync(this.path);
+        // texture.minFilter = THREE.LinearMipmapLinearFilter;
+
+        // ! the material isn't double sided
+        let material = new THREE.MeshBasicMaterial({
+            map: texture,
+            transparent: true,
+            opacity: this.opacity
+        });
+          
+        let geometry = new THREE.PlaneGeometry(this.size, this.size);
+        
+        // combine our image geometry and material into a mesh
+        this.mesh = new THREE.Mesh(geometry, material);
+
+        // Scale mesh to match image ratio
+        this.mesh.scale.set(1, texture.image.height / texture.image.width, 1.0);
+        
+        // set the position of the image mesh in the x,y,z dimensions
+        this.mesh.position.set(this.position.x, this.position.y, this.position.z);
+        
+        // add the image to the scene
+        this.scene.add(this.mesh);
+
+        callback();
+    }
+
+    addAnimation(){
+        
+        let offsetX = 0;
+        let offsetY = 0.2;
+
+        offsetY = addRandomness(offsetY, 0.5);
+
+        let animationDuration = 5000;
+        // animationDuration = addRandomness(animationDuration, 0.5)
+        
+        const imageAnimation = new Animation(
+            1, 0, animationDuration,
+            (ratio, animation) => {
+                if(ratio < 0.5){
+                    let relativeRatio = ratio / 0.5;
+                    this.mesh.position.set(this.position.x + offsetX * relativeRatio, this.position.y + offsetY * relativeRatio, this.position.z);
+
+                } else {
+                    let relativeRatio = (ratio - 0.5) / 0.5;
+                    this.mesh.position.set(this.position.x + offsetX * (1-relativeRatio), this.position.y + offsetY * (1-relativeRatio), this.position.z);
+
+                }
+            }, undefined);
+    
+        imageAnimation.init();
+        imageAnimation.setIsLooping(true);
+    
+        animationController.add(imageAnimation);
+    }
 }
 
 class LightManager{
@@ -251,6 +312,8 @@ class SquareRoom{
         this.isDoubleSided = true;
 
         this.parent;
+
+        this.squareSideLength = 4.5;
     }
 
     setIsDoubleSided(val){
@@ -265,7 +328,7 @@ class SquareRoom{
             cubeFace = THREE.FrontSide;
         }
         // Click point
-        const boxSide = 7.5;
+        const boxSide = this.squareSideLength;
         const boxWidth = boxSide;
         const boxHeight = boxSide;
         const boxDepth = boxSide;
