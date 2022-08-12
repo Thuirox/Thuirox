@@ -1,5 +1,5 @@
 import * as THREE from './libs/three.module.js';
-import { debug_text, gyroButton } from "./const.js";
+import { cameraInitialAngleDeg, debug_text, gyroButton } from "./const.js";
 
 var gyroControl = false;
 var camera;
@@ -87,7 +87,7 @@ var gyroOffset = {
 }
 
 function updateGyroOffset(){
-    gyroOffset.alpha = 270 - deviceOrientation.alpha;
+    gyroOffset.alpha = cameraInitialAngleDeg - deviceOrientation.alpha;
 }
 
 

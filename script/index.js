@@ -5,6 +5,7 @@ import { THREEx } from './libs/threex.domevents.js';
 import { setupInteractions } from './interaction.js';
 import { gyroControl, setupGyroControls } from './gyroControls.js'
 import { animationController, cameraAnimation } from './animation.js'
+import { cameraInitialPosition } from './const.js';
 
 function main() {
     const canvas = document.querySelector('#c');
@@ -16,9 +17,6 @@ function main() {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.localClippingEnabled = true;
-
-    let cameraDirection = {duration:0};
-
     
 
     // camera setup
@@ -27,7 +25,7 @@ function main() {
     const near = 0.1;
     const far = 250;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set(0, 0, 0.001);
+    camera.position.set(cameraInitialPosition.x, cameraInitialPosition.y, cameraInitialPosition.z);
     // camera.position.set(40, 20, 20); // camera out of balls
     // camera.position.set(7, 7, 7); // camera in first ball but out of cube
     
