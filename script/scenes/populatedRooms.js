@@ -57,9 +57,9 @@ class PopulatedRooms{
         const square = new SquareRoom(this.scene, this.camera, center, roomColor);
 
         square.setIsDoubleSided(false);
-        // square.init();
+        square.init();
 
-        // room.addSquare(square);
+        room.addSquare(square);
 
         room.addImage("../../images/whenisnextlolclash/index.png")
 
@@ -145,16 +145,12 @@ class SphereRoom extends Chain{
         let material = new THREE.MeshBasicMaterial({
             map: texture,
             transparent: true,
-            opacity: 0.7,
-            side: THREE.DoubleSide
+            opacity: 0.7
         });
           
         // create a plane geometry for the image with a width of 10
         // and a height that preserves the image's aspect ratio
-        // let geometry = new THREE.PlaneGeometry(10, 10);
-        const phiLength = Math.PI * 0.2;
-        const thetaLength = phiLength * texture.image.height / texture.image.width;
-        let geometry = new THREE.SphereGeometry(20, 30, 30, -Math.PI/2 - phiLength/2, phiLength, Math.PI / 2 - thetaLength/2, thetaLength);
+        let geometry = new THREE.PlaneGeometry(10, 10);
         
         // combine our image geometry and material into a mesh
         let mesh = new THREE.Mesh(geometry, material);
@@ -162,7 +158,7 @@ class SphereRoom extends Chain{
         mesh.scale.set(1.0, texture.image.height / texture.image.width, 1.0);
         
         // set the position of the image mesh in the x,y,z dimensions
-        mesh.position.set(0, 0, 15)
+        mesh.position.set(0, 0, -6)
         
         // add the image to the scene
         this.scene.add(mesh);
