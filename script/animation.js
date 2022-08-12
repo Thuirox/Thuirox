@@ -113,6 +113,18 @@ class Animation{
 
 }
 
+class DifferedAnimation extends Animation{
+    constructor(nextAnimation, differedDuration){
+        super(null, null, differedDuration, 
+            () => {}, 
+            () => {
+                nextAnimation.init();
+                animationController.add(nextAnimation);
+            }
+        );
+    }
+}
+
 let cameraAnimation = new Animation(0, 0,
     1000, 
     (ratio, animation) => {
@@ -134,4 +146,4 @@ let cameraAnimation = new Animation(0, 0,
         diff: null
 });
 
-export { animationController, Animation, cameraAnimation }
+export { animationController, Animation, cameraAnimation, DifferedAnimation }
