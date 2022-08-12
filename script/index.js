@@ -165,6 +165,7 @@ setTimeout(()=>{
             setTimeout(()=>{
                 document.getElementById("loading-screen-left-panel").style.left = "-100%";
                 document.getElementById("loading-screen-right-panel").style.left = "calc(100% + 5px)";
+                document.getElementById("loading-screen-text").style.bottom = "150%";
                 loadingScreen.style.pointerEvents = "none";
                 
             }, 1000)
