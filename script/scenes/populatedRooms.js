@@ -298,23 +298,23 @@ class Image{
                 if(ratio < 0.5){
                     let relativeRatio = ratio / 0.5;
                     let position = {
-                        x:animation.args.image.position.x + offsetX * relativeRatio, 
-                        y:animation.args.image.position.y + offsetY * relativeRatio, 
-                        z:animation.args.image.position.z
+                        x:this.position.x + offsetX * relativeRatio, 
+                        y:this.position.y + offsetY * relativeRatio, 
+                        z:this.position.z
                     }
-                    animation.args.image.mesh.position.set(position.x, position.y, position.z);
+                    this.mesh.position.set(position.x, position.y, position.z);
 
                 } else {
                     let relativeRatio = (ratio - 0.5) / 0.5;
 
                     let position = {
-                        x:animation.args.image.position.x + offsetX * (1-relativeRatio), 
-                        y:animation.args.image.position.y + offsetY * (1-relativeRatio), 
-                        z:animation.args.image.position.z
+                        x:this.position.x + offsetX * (1-relativeRatio), 
+                        y:this.position.y + offsetY * (1-relativeRatio), 
+                        z:this.position.z
                     }
-                    animation.args.image.mesh.position.set(position.x, position.y, position.z);
+                    this.mesh.position.set(position.x, position.y, position.z);
                 }
-            }, undefined, { image: this });
+            });
     
         imageAnimation.init();
         imageAnimation.setIsLooping(true);
