@@ -1,6 +1,7 @@
 import * as THREE from '../libs/three.module.js';
 import { addInteraction } from '../interaction.js';
 import { Animation, animationController } from '../animation.js';
+import { Chain } from '../utils.js';
 
 
 const colors = [
@@ -10,6 +11,7 @@ const colors = [
     0x0B0014,
     0xD44D5C
 ]
+
 
 
 class PopulatedRooms{
@@ -59,6 +61,8 @@ class PopulatedRooms{
 
         room.addSquare(square);
 
+        room.addImage("../../images/whenisnextlolclash/index.png")
+
         return room;
     }
 
@@ -86,41 +90,7 @@ class PopulatedRooms{
     }
 }
 
-class Chain{
-    constructor(){
-        this.next = null;
-        this.previous = null;
-    }
-
-    setPrevious(previous, toSet = true){
-        this.removePrevious();
-        this.previous = previous;
-        if(toSet){
-            this.previous.setNext(this, false);
-        }
-    }
-
-    setNext(next, toSet = true){
-        this.next = next;
-        if(toSet){
-            this.next.setPrevious(this, false);
-        }
-    }
-
-    removeNext(toSet = true){
-        if(toSet && this.next != null){
-            this.next.removePrevious(false);
-        }
-        this.next = null;
-    }
-
-    removePrevious(toSet = true){
-        if(toSet && this.previous != null){
-            this.previous.removeNext(false);
-        }
-        this.previous = null;
-    }
-}
+const loader = new THREE.TextureLoader();
 
 class SphereRoom extends Chain{
     constructor(scene, camera, center, radius, color){
@@ -147,6 +117,8 @@ class SphereRoom extends Chain{
         this.isExit = false;
 
         this.lightManager =  new LightManager(this.scene, this.center);
+
+        this.images = [];
     }
 
     addEntry(){
@@ -161,6 +133,35 @@ class SphereRoom extends Chain{
         this.clippingPlanes.push(this.exitPlane);
 
         this.isExit = true;
+    }
+
+    addImageFolder(folderPath){
+
+    }
+
+    async addImage(imagePath){
+        let texture = await loader.loadAsync(imagePath);
+        // ! the material isn't double sided
+        let material = new THREE.MeshBasicMaterial({
+            map: texture,
+            transparent: true,
+            opacity: 0.7
+        });
+          
+        // create a plane geometry for the image with a width of 10
+        // and a height that preserves the image's aspect ratio
+        let geometry = new THREE.PlaneGeometry(10, 10);
+        
+        // combine our image geometry and material into a mesh
+        let mesh = new THREE.Mesh(geometry, material);
+
+        mesh.scale.set(1.0, texture.image.height / texture.image.width, 1.0);
+        
+        // set the position of the image mesh in the x,y,z dimensions
+        mesh.position.set(0, 0, -6)
+        
+        // add the image to the scene
+        this.scene.add(mesh);
     }
 
     init(){
@@ -300,9 +301,9 @@ class SquareRoom{
             console.log(`Interacted ${this.center.x}`);
             this.camera.goTo(this.center.x, this.center.y, this.center.z);
             
-            this.parent.lightManager.turnOffLights();
-            this.parent.next?.lightManager.turnOnLights();
-            this.parent.previous?.lightManager.turnOnLights();
+            // this.parent.lightManager.turnOffLights();
+            // this.parent.next?.lightManager.turnOnLights();
+            // this.parent.previous?.lightManager.turnOnLights();
         });
     }
 
@@ -310,6 +311,7 @@ class SquareRoom{
         this.parent = parent;
     }
 }
+
 
 
 export { PopulatedRooms };
