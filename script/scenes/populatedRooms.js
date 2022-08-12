@@ -54,32 +54,29 @@ class PopulatedRooms{
         room.init();
 
         
-        const square = new SquareRoom(this.scene, this.camera, center, roomColor);
+        const square = new SquareRoom(room, this.camera, { x:0, y:0, z:0 }, roomColor);
 
         square.setIsDoubleSided(false);
 
         square.init();
 
-        room.addSquare(square);
-
         let imageDesktop = new Image(this.scene, "../../images/whenisnextlolclash/index.png", {x:4, y:2.2, z:-8}, 7, 1);
         imageDesktop.init(() => {
             imageDesktop.addAnimation();
+            room.addImage(imageDesktop);
         });
-        room.addImage(imageDesktop);
 
         let imageMobile = new Image(this.scene, "../../images/whenisnextlolclash/indexMobile.png", {x:-4, y:-3.5, z:-8}, 3, 1);
         imageMobile.init(() => {
             imageMobile.addAnimation();
+            room.addImage(imageMobile);
         });
-        room.addImage(imageMobile);
 
         let imageTitle = new Image(this.scene, "../../images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8);
-        imageTitle.init();
-        room.addImage(imageTitle);
-
+        imageTitle.init(() => {
+            room.addImage(imageTitle);
+        });
         
-
 
         return room;
     }
@@ -88,7 +85,9 @@ class PopulatedRooms{
     createSecondRoom(){
         const center = { x:28, y:0, z:0 };
         const roomColor = 0xD44D5C;
-        const room = new SphereRoom(this.scene, this.camera, center, this.sphereRadius, roomColor);
+        const pivot = new THREE.Object3D();
+        this.scene.add(pivot);
+        const room = new SphereRoom(pivot, this.camera, center, this.sphereRadius, roomColor);
 
         room.addExit();
         room.addEntry();
@@ -96,12 +95,12 @@ class PopulatedRooms{
         room.init();
 
         
-        const square = new SquareRoom(this.scene, this.camera, center, roomColor);
+        const square = new SquareRoom(room, this.camera, { x:0, y:0, z:0 }, roomColor);
 
         square.setIsDoubleSided(false);
         square.init();
 
-        room.addSquare(square);
+        // pivot.rotateY(1);
 
         return room;
 
@@ -134,7 +133,7 @@ class SphereRoom extends Chain{
         this.isEntry = false;
         this.isExit = false;
 
-        this.lightManager =  new LightManager(this.scene, this.center);
+        this.lightManager =  null;
 
         this.images = [];
     }
@@ -155,6 +154,7 @@ class SphereRoom extends Chain{
 
     addImage(image){
         this.images.push(image);
+        this.mesh.add(image.mesh);
     }
 
     showImages(){
@@ -179,18 +179,18 @@ class SphereRoom extends Chain{
             clipShadows: true,
             clipIntersection: false
         });
-        this.sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
-        this.sphere.position.x = this.center.x;
-        this.sphere.position.y = this.center.y;
-        this.scene.add(this.sphere);
+        this.mesh = new THREE.Mesh( sphereGeometry, sphereMaterial );
+        this.mesh.position.x = this.center.x;
+        this.mesh.position.y = this.center.y;
+        this.scene.add(this.mesh);
 
+        this.lightManager = new LightManager(this.mesh, { x:0, y:0, z:0 })
         this.lightManager.initLights();
 
     }
 
     addSquare(square){
         this.square = square;
-        this.square.addParent(this);
     }
 
 }
@@ -324,9 +324,9 @@ class Image{
 }
 
 class LightManager{
-    constructor(scene, center){
+    constructor(parent, center){
         this.center = center;
-        this.scene = scene;
+        this.parent = parent;
 
     }
     
@@ -342,8 +342,8 @@ class LightManager{
         this.bottomLight = new THREE.PointLight(color, intensity, 20);
         this.bottomLight.position.set(this.center.x, this.center.y-10, this.center.z);
 
-        this.scene.add(this.topLight);
-        this.scene.add(this.bottomLight);
+        this.parent.add(this.topLight);
+        this.parent.add(this.bottomLight);
     }
 
     turnOffLights(){
@@ -374,8 +374,8 @@ class LightManager{
 }
 
 class SquareRoom{
-    constructor(scene, camera, center, color, squareSideLength=4.5){
-        this.scene = scene;
+    constructor(parent, camera, center, color, squareSideLength=4.5){
+        this.parent = parent;
         this.center = center;
         this.color = color;
 
@@ -386,6 +386,10 @@ class SquareRoom{
         this.parent;
 
         this.squareSideLength = squareSideLength;
+
+        this.mesh = null;
+
+        this.parent.addSquare(this);
     }
 
     setIsDoubleSided(val){
@@ -410,12 +414,12 @@ class SquareRoom{
             side: cubeFace
         });
     
-        this.cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        this.cube.rotateZ(Math.PI/4);
-        this.cube.rotateY(Math.PI/4);
-        this.cube.position.x = this.center.x;
-        this.cube.position.y = this.center.y;
-        this.scene.add(this.cube);
+        this.mesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        this.mesh.rotateZ(Math.PI/4);
+        this.mesh.rotateY(Math.PI/4);
+        this.mesh.position.x = this.center.x;
+        this.mesh.position.y = this.center.y;
+        this.parent.mesh.add(this.mesh);
     
     
         this.animation = new Animation(
@@ -423,7 +427,7 @@ class SquareRoom{
             (ratio, animation) => {
                 let v3 = new THREE.Vector3(1, 1, 1);
                 v3.normalize();
-                this.cube.rotateOnAxis(v3, animation.end);
+                this.mesh.rotateOnAxis(v3, animation.end);
             }, undefined);
     
         this.animation.setIsLooping(true);
@@ -431,19 +435,18 @@ class SquareRoom{
     
         animationController.add(this.animation);
     
-        addInteraction(this.cube, (event) => {
+        addInteraction(this.mesh, (event) => {
             debug_text.textContent = `Interacted x:${this.center.x}`;
             console.log(`Interacted ${this.center.x}`);
-            this.camera.goTo(this.center.x, this.center.y, this.center.z);
+
+            let v3 = new THREE.Vector3();
+            let targetPosition = this.mesh.getWorldPosition(v3);
+            this.camera.goTo(targetPosition.x, targetPosition.y, targetPosition.z);
             
             this.parent.showImages();
             this.parent.next?.hideImages();
             this.parent.previous?.hideImages();
         });
-    }
-
-    addParent(parent){
-        this.parent = parent;
     }
 }
 
