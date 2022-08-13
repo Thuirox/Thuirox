@@ -20,8 +20,8 @@ class CustomScene{
     }
 
     setupScene(){
-        const firstRoom = this.createFirstRoom();
-        const secondRoom = this.createSecondRoom();
+        const firstRoom = this.createFirstRoom(null);
+        const secondRoom = this.createSecondRoom(firstRoom.mesh);
         const thirdRoom = this.createThirdRoom(secondRoom.mesh);
 
         secondRoom.setCenter({ x:28, y:0, z:0 });
@@ -42,6 +42,8 @@ class CustomScene{
     createFirstRoom(){
         const center = { x:0, y:0, z:0 };
         // const roomColor = 0x0B0014;
+        // const roomColor = 0xF6BB62; // Text Color
+        // const roomColor = 0x1A2623; // Project Background Color
         const roomColor = colors[0];
         const room = new Room(this.scene, this.camera, center, this.sphereRadius, roomColor);
 
@@ -78,10 +80,10 @@ class CustomScene{
     }
 
     
-    createSecondRoom(){
+    createSecondRoom(pivot){
         const center = { x:0, y:0, z:0 };
         const roomColor = 0x340500;
-        const pivot = new THREE.Object3D();
+        // const pivot = new THREE.Object3D();
         this.scene.add(pivot);
         const room = new Room(pivot, this.camera, center, this.sphereRadius, roomColor);
 

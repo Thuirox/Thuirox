@@ -18,11 +18,11 @@ const loader = new THREE.TextureLoader();
 
 
 const colors = [
-    0x773344,
+    // 0x773344,
     0xE3B5A4,
+    0xD44D5C,
     0xF5E9E2,
-    0x0B0014,
-    0xD44D5C
+    // 0x0B0014,
 ]
 
 export { debug_text, gyroButton, cameraInitialAngleRad, cameraInitialAngleDeg, cameraInitialPosition, loader, colors }
