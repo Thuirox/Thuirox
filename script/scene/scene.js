@@ -22,10 +22,14 @@ class CustomScene{
     setupScene(){
         const firstRoom = this.createFirstRoom();
         const secondRoom = this.createSecondRoom();
+        const thirdRoom = this.createThirdRoom(secondRoom.mesh);
 
         secondRoom.setCenter({ x:28, y:0, z:0 });
+        thirdRoom.setCenter({ x:28, y:0, z:0 });
 
         firstRoom.setNext(secondRoom);
+        secondRoom.setNext(thirdRoom);
+    
     
     
         // Global light
@@ -38,7 +42,7 @@ class CustomScene{
     createFirstRoom(){
         const center = { x:0, y:0, z:0 };
         // const roomColor = 0x0B0014;
-        const roomColor = colors[1];
+        const roomColor = colors[0];
         const room = new Room(this.scene, this.camera, center, this.sphereRadius, roomColor);
 
         room.addExit();
@@ -76,7 +80,7 @@ class CustomScene{
     
     createSecondRoom(){
         const center = { x:0, y:0, z:0 };
-        const roomColor = 0xD44D5C;
+        const roomColor = 0x340500;
         const pivot = new THREE.Object3D();
         this.scene.add(pivot);
         const room = new Room(pivot, this.camera, center, this.sphereRadius, roomColor);
@@ -92,7 +96,67 @@ class CustomScene{
         square.setIsDoubleSided(false);
         square.init();
 
-        // pivot.rotateY(1);
+        // pivot.rotateY(0.5);
+
+        
+
+        
+
+        let a = async () => {
+            let imageChara = new Panel(this.scene, "../../images/theCodingOfIsaac/character.png", {x:-3, y:-2, z:-8}, 2, 1);
+            await imageChara.init(() => {
+                imageChara.addAnimation();
+                room.addImage(imageChara);
+            });
+    
+            // let imageMap = new Panel(this.scene, "../../images/theCodingOfIsaac/map.png", {x:4, y:-3.5, z:-8}, 6, 1);
+            // imageMap.init(() => {
+            //     imageMap.addAnimation();
+            //     room.addImage(imageMap);
+            // });
+    
+            let imageTutorial = new Panel(this.scene, "../../images/theCodingOfIsaac/tutorial.png", {x:3, y:-1, z:-9.5}, 8, 1);
+            await imageTutorial.init(() => {
+                imageTutorial.addAnimation();
+                room.addImage(imageTutorial);
+            });
+    
+            let imageRoom = new Panel(this.scene, "../../images/theCodingOfIsaac/room.png", {x:-4, y:2.5, z:-10}, 7, 1);
+            await imageRoom.init(() => {
+                imageRoom.addAnimation();
+                room.addImage(imageRoom);
+            });
+    
+            let imageTitle = new Panel(this.scene, "../../images/theCodingOfIsaac/title.png", {x:0, y:0, z:-9}, 8, 1);
+            await imageTitle.init(() => {
+                room.addImage(imageTitle);
+            });
+            room.hideImages();
+        };
+        a();
+
+
+        return room;
+
+    }
+
+    
+    createThirdRoom(pivot){
+        const center = { x:0, y:0, z:0 };
+        const roomColor = colors[2];
+
+        const room = new Room(pivot, this.camera, center, this.sphereRadius, roomColor);
+
+        room.addEntry();
+
+        room.init();
+        
+        const square = new Transporter(room, this.camera, { x:0, y:0, z:0 }, roomColor);
+
+        square.setIsDoubleSided(false);
+        square.init();
+
+        // pivot.rotateY(0.5);
 
         return room;
 
