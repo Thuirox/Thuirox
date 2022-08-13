@@ -32,17 +32,19 @@ class Room extends Chain{
         this.lightManager =  null;
 
         this.images = [];
+
+        this.openAngle = Math.PI/8;
     }
 
     addEntry(){
         // -x side
-        this.openAngleEntry = Math.PI/7;
+        this.openAngleEntry = this.openAngle;
         this.isEntry = true;
     }
 
     addExit(){
         // +x side
-        this.openAngleExit = Math.PI/7;
+        this.openAngleExit = this.openAngle;
         this.isExit = true;
     }
 
