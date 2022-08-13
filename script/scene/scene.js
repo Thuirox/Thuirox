@@ -23,6 +23,8 @@ class CustomScene{
         const firstRoom = this.createFirstRoom();
         const secondRoom = this.createSecondRoom();
 
+        secondRoom.setCenter({ x:28, y:0, z:0 });
+
         firstRoom.setNext(secondRoom);
     
     
@@ -73,7 +75,7 @@ class CustomScene{
 
     
     createSecondRoom(){
-        const center = { x:28, y:0, z:0 };
+        const center = { x:0, y:0, z:0 };
         const roomColor = 0xD44D5C;
         const pivot = new THREE.Object3D();
         this.scene.add(pivot);

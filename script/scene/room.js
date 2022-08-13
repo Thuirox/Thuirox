@@ -25,6 +25,9 @@ class Room extends Chain{
 
         this.isEntry = false;
         this.isExit = false;
+        
+        this.openAngleEntry = 0;
+        this.openAngleExit = 0;
 
         this.lightManager =  null;
 
@@ -32,16 +35,14 @@ class Room extends Chain{
     }
 
     addEntry(){
-        this.entryPlane = new THREE.Plane(new THREE.Vector3(1, 0, 0), -this.center.x + this.radius - this.clippingPlanesOffset);
-        this.clippingPlanes.push(this.entryPlane);
-
+        // -x side
+        this.openAngleEntry = Math.PI/7;
         this.isEntry = true;
     }
 
     addExit(){
-        this.exitPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), this.center.x + this.radius - this.clippingPlanesOffset);
-        this.clippingPlanes.push(this.exitPlane);
-
+        // +x side
+        this.openAngleExit = Math.PI/7;
         this.isExit = true;
     }
 
@@ -63,22 +64,38 @@ class Room extends Chain{
     }
 
     init(){
-        const sphereGeometry = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments );
+        this.mesh = new THREE.Object3D();
+        this.scene.add(this.mesh);
+
+        
+        const halfSphereGeometry1 = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, Math.PI, this.openAngleEntry, Math.PI  - this.openAngleExit - this.openAngleEntry );
+        const halfSphereGeometry2 = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments, Math.PI, Math.PI, this.openAngleEntry, Math.PI  - this.openAngleExit - this.openAngleEntry );
 
         const sphereMaterial = new THREE.MeshPhongMaterial({
             side: THREE.DoubleSide,
             color: this.color,
-            clippingPlanes: this.clippingPlanes,
             clipShadows: true,
             clipIntersection: false
         });
-        this.mesh = new THREE.Mesh( sphereGeometry, sphereMaterial );
-        this.mesh.position.x = this.center.x;
-        this.mesh.position.y = this.center.y;
-        this.scene.add(this.mesh);
+        this.meshHalf1 = new THREE.Mesh( halfSphereGeometry1, sphereMaterial );
+        this.meshHalf2 = new THREE.Mesh( halfSphereGeometry2, sphereMaterial );
+
+        this.meshHalf1.rotateZ(Math.PI / 2);
+        this.meshHalf2.rotateZ(Math.PI / 2);
+
+        this.mesh.add(this.meshHalf1);
+        this.mesh.add(this.meshHalf2);
 
         this.lightManager = new LightManager(this.mesh, { x:0, y:0, z:0 })
         this.lightManager.initLights();
+
+    }
+
+    setCenter(center){
+        this.center = center;
+        this.mesh.position.x = this.center.x;
+        this.mesh.position.y = this.center.y;
+        this.mesh.position.z = this.center.z;
 
     }
 
