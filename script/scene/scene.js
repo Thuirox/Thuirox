@@ -117,13 +117,13 @@ class CustomScene{
             //     room.addImage(imageMap);
             // });
     
-            let imageTutorial = new Panel(this.scene, "https://thuirox.github.io/Thuirox/images/theCodingOfIsaac/tutorial.png", {x:3, y:-1, z:-9.5}, 8, 1);
+            let imageTutorial = new Panel(this.scene, "../../images/theCodingOfIsaac/tutorial.png", {x:5, y:-1, z:-11.5}, 8, 1);
             await imageTutorial.init(() => {
                 imageTutorial.addAnimation();
                 room.addImage(imageTutorial);
             });
     
-            let imageRoom = new Panel(this.scene, "https://thuirox.github.io/Thuirox/images/theCodingOfIsaac/room.png", {x:-4, y:2.5, z:-10}, 7, 1);
+            let imageRoom = new Panel(this.scene, "https://thuirox.github.io/Thuirox/images/theCodingOfIsaac/room.png", {x:-5, y:1.5, z:-10}, 7, 1);
             await imageRoom.init(() => {
                 imageRoom.addAnimation();
                 room.addImage(imageRoom);
