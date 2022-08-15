@@ -58,7 +58,7 @@ class CustomScene{
 
         square.init();
 
-        let imageDesktop = new Panel(this.scene, "images/whenisnextlolclash/index.png", {x:4, y:2.2, z:-8}, 7, 1);
+        let imageDesktop = new Panel(this.scene, "images/whenisnextlolclash/index.png", {x:4, y:2.2, z:-7}, 7, 1);
         imageDesktop.init(() => {
             imageDesktop.addAnimation();
             room.addImage(imageDesktop);
@@ -70,7 +70,7 @@ class CustomScene{
             room.addImage(imageMobile);
         });
 
-        let imageTitle = new Panel(this.scene, "images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8);
+        let imageTitle = new Panel(this.scene, "images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8, 1);
         imageTitle.init(() => {
             room.addImage(imageTitle);
         });
