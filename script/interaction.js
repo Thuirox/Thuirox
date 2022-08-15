@@ -68,9 +68,10 @@ function setupTriggerOnUp(){
     // When cursor up, trigger interaction if no movement in between.
     let endFunction = (event) => {
         if(typeof targetElement !== "undefined"){
-            if(!move){
-                targetFct();
-            }
+            // if(!move){
+            //     targetFct();
+            // }
+            targetFct();
             console.log("touchend global");
             targetElement = undefined;
         }
