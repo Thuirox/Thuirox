@@ -62,7 +62,6 @@ function setupCancelOnMove(){
         }
 
         // Style pointer as cursor when hovering a clickable object
-        
         if(!modalContainer.classList.contains("active")){
             var mouse = new THREE.Vector2();
             mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -96,14 +95,10 @@ function setupTriggerOnUp(){
     };
 
     
-
     window.addEventListener("mouseup", endFunction, false);
     window.addEventListener("touchend", endFunction, false);
-
-
-    
-
 }
+
 
 function setupInteractions(domEvents_, camera_){
     domEvents = domEvents_;
