@@ -5,7 +5,7 @@ import { THREEx } from './libs/threex.domevents.js';
 import { setupInteractions } from './interaction.js';
 import { gyroControl, setupGyroControls } from './gyroControls.js'
 import { animationController, cameraAnimation } from './animation.js'
-import { cameraInitialPosition } from './const.js';
+import { cameraInitialPosition, imageContainer, modalContainer } from './const.js';
 
 function main() {
     const canvas = document.querySelector('#c');
@@ -31,7 +31,7 @@ function main() {
     
     const domEvents = new THREEx.DomEvents(camera, canvas);
 
-    setupInteractions(domEvents);
+    setupInteractions(domEvents, camera);
 
     const controls = setupManualControls(camera, canvas);
 
@@ -111,25 +111,31 @@ function main() {
 main()
 
 const contactButton = document.getElementById("contact-button");
-const modalContainer = document.getElementById("modal-container");
 const modal = document.getElementById("modal");
 const cross = document.getElementById("cross");
 
-var modalContainerVisible = false;
-function toggleModal() {
-    if(!modalContainerVisible){
-        modalContainer.style.opacity = 1;
-        modalContainer.style.pointerEvents = "auto";
-    } else {
-        modalContainer.style.opacity = 0;
-        modalContainer.style.pointerEvents = "none";
-    }
-    modalContainerVisible = !modalContainerVisible;
+
+imageContainer.onclick = () => {
+    imageContainer.style.opacity = 0;
+    imageContainer.style.pointerEvents = "none";
+} 
+
+
+function displayContactModal(){
+    modalContainer.style.opacity = 1;
+    modalContainer.style.pointerEvents = "auto";
+    modalContainer.classList.add("active");
+}
+function hideContactModal(){
+    modalContainer.style.opacity = 0;
+    modalContainer.style.pointerEvents = "none";
+    modalContainer.classList.remove("active");
 }
 
-contactButton.onclick = toggleModal;
-modalContainer.onclick = toggleModal;
-cross.onclick = toggleModal;
+contactButton.onclick = displayContactModal;
+modalContainer.onclick = hideContactModal;
+cross.onclick = hideContactModal;
+
 modal.onclick = (e) => {
     e.stopPropagation();
 }

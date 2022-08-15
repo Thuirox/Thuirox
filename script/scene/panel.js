@@ -1,7 +1,8 @@
 import * as THREE from '../libs/three.module.js';
-import { loader } from '../const.js';
+import { imageContainer, loader } from '../const.js';
 import { addRandomness } from '../utils.js';
 import { Animation, animationController, DifferedAnimation } from '../animation.js';
+import { addInteraction } from '../interaction.js';
 
 class Panel{
     constructor(scene, path, position, size=5, opacity=0.7){
@@ -41,6 +42,13 @@ class Panel{
         
         // add the image to the scene
         this.scene.add(this.mesh);
+
+        addInteraction(this.mesh, () => {
+            
+            imageContainer.style.opacity = 1;
+            imageContainer.style.pointerEvents = "auto";
+            imageContainer.style.backgroundImage = 'url(' + this.path + ')';
+        })
 
         callback();
     }

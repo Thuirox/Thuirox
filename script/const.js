@@ -4,6 +4,10 @@ const debug_text = document.getElementById("debug_text");
 
 const gyroButton = document.getElementById("gyro-button");
 
+
+const imageContainer = document.getElementById("image-container");
+const modalContainer = document.getElementById("modal-container");
+
 const cameraInitialPosition = {
     x: 0,
     y: 0,
@@ -25,4 +29,4 @@ const colors = [
     // 0x0B0014,
 ]
 
-export { debug_text, gyroButton, cameraInitialAngleRad, cameraInitialAngleDeg, cameraInitialPosition, loader, colors }
+export { debug_text, gyroButton, cameraInitialAngleRad, cameraInitialAngleDeg, cameraInitialPosition, loader, colors, imageContainer, modalContainer }
