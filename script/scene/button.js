@@ -125,6 +125,8 @@ class WebsiteButton extends RedirectButton{
     constructor(parent, position, size=5, url=""){
         super(parent, position, size, "images/redirect.png", url);
 
+        this.text = "live demo";
+
     }
 }
 
