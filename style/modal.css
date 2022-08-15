@@ -95,3 +95,29 @@
 .modal-button-cancel{
     background-color: rgb(192, 43, 43);
 }
+
+#image-container{
+    z-index: 4;
+
+    transition: opacity 0.4s;
+    opacity: 0;
+
+    background-size: contain;
+    background-repeat: no-repeat no-repeat;
+    background-position: center center;
+    background-color: rgba(0, 0, 0, 0.329);
+
+    pointer-events: none;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin:0px;
+    padding: 0px;
+
+    overflow: hidden;
+
+    cursor: pointer;
+}
