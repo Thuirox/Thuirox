@@ -7,11 +7,12 @@ var camera;
 var clickableElements = [];
 var targetElement = undefined;
 var targetFct = undefined;
+var startPosition = undefined;
 
 
 function addInteraction(object, fct){
     let setupFunction = (event) => {
-        console.log("interaction event started")
+        console.log("interaction event started");
         move = false;
         targetElement = object;
         targetFct = fct;
@@ -20,7 +21,13 @@ function addInteraction(object, fct){
     domEvents.addEventListener(object, "mousedown", setupFunction, false);
 
     // Touchend not detected correctly when it is on a three js object (but work on global document). Using touchstart instead.
-    domEvents.addEventListener(object, "touchstart", setupFunction, false);
+    domEvents.addEventListener(object, "touchstart", (event)=>{
+        startPosition = {
+            x:event.origDomEvent.changedTouches[0].screenX,
+            y:event.origDomEvent.changedTouches[0].screenY
+        };
+        setupFunction(event);
+    }, false);
 
     clickableElements.push(object);
 
@@ -29,10 +36,22 @@ function addInteraction(object, fct){
 function setupCancelOnMove(){
     // When cursor move, cancel interaction
     window.addEventListener("touchmove", function(event){
-        if(!move){
-            console.log("touch move");
-            move = true;
+        let endPosition = {
+            x:event.changedTouches[0].screenX,
+            y:event.changedTouches[0].screenY
         }
+
+        if(typeof startPosition !== "undefined"){
+            let a = startPosition.x - endPosition.x;
+            let b = startPosition.y - endPosition.y;
+            let dist = Math.sqrt( a*a + b*b );
+    
+            if(dist > 20 && !move){
+                console.log("touch move");
+                move = true;
+            }
+        }
+
     });
 
 
@@ -68,10 +87,9 @@ function setupTriggerOnUp(){
     // When cursor up, trigger interaction if no movement in between.
     let endFunction = (event) => {
         if(typeof targetElement !== "undefined"){
-            // if(!move){
-            //     targetFct();
-            // }
-            targetFct();
+            if(!move){
+                targetFct();
+            }
             console.log("touchend global");
             targetElement = undefined;
         }
