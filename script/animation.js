@@ -1,3 +1,4 @@
+import { debugAnimation } from "./const.js";
 
 class AnimationController{
 
@@ -38,7 +39,7 @@ const animationController = new AnimationController();
 class Animation{
 
     constructor(start, end, duration, update_fct, end_fct, args){
-        console.log("new animation created");
+        if(debugAnimation) console.log("new animation created");
         this.start = start;
         this.end = end;
 
@@ -48,7 +49,7 @@ class Animation{
 
         this.end_fct = end_fct;
         if(typeof this.end_fct === "undefined"){
-            console.log("end fct is undefined");
+            if(debugAnimation) console.log("end fct is undefined");
         }
 
         this.ended = false;

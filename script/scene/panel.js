@@ -1,8 +1,9 @@
 import * as THREE from '../libs/three.module.js';
-import { imageContainer, loader } from '../const.js';
+import { loader } from '../const.js';
 import { addRandomness } from '../utils.js';
 import { Animation, animationController, DifferedAnimation } from '../animation.js';
 import { addInteraction } from '../interaction.js';
+import { imageContainer } from '../modal.js';
 
 class Panel{
     constructor(parent, path, position, size=5, opacity=0.7){

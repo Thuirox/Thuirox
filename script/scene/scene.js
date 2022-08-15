@@ -3,6 +3,7 @@ import { Panel } from "./panel.js";
 import { Transporter } from "./transporter.js";
 import { Room } from "./room.js";
 import { colors } from "../const.js";
+import { GithubButton, WebsiteButton } from './button.js';
 
 class CustomScene{
 
@@ -58,21 +59,31 @@ class CustomScene{
 
         square.init();
 
-        let imageDesktop = new Panel(this.scene, "images/whenisnextlolclash/index.png", {x:4, y:2.2, z:-7}, 7, 1);
+        let imageDesktop = new Panel(room, "images/whenisnextlolclash/index.png", {x:4, y:2.2, z:-7}, 7, 1);
         imageDesktop.init(() => {
             imageDesktop.addAnimation();
             room.addImage(imageDesktop);
         });
 
-        let imageMobile = new Panel(this.scene, "images/whenisnextlolclash/indexMobile.png", {x:-4, y:-3.5, z:-8}, 3, 1);
+        let imageMobile = new Panel(room, "images/whenisnextlolclash/indexMobile.png", {x:-4, y:-3.5, z:-8}, 3, 1);
         imageMobile.init(() => {
             imageMobile.addAnimation();
             room.addImage(imageMobile);
         });
 
-        let imageTitle = new Panel(this.scene, "images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8, 1);
+        let imageTitle = new Panel(room, "images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8, 1);
         imageTitle.init(() => {
             room.addImage(imageTitle);
+        });
+
+        const githubButton = new GithubButton(room, {x:-1.5, y:-6, z:-6}, 1, "https://github.com/Thuirox/whenisnextlolclash", "whenisnextlolclash");
+        githubButton.init(() => {
+            room.addImage(githubButton);
+        });
+
+        const websiteButton = new WebsiteButton(room, {x:1.5, y:-6, z:-6}, 1, "https://thuirox.github.io/whenisnextlolclash/");
+        websiteButton.init(() => {
+            room.addImage(websiteButton);
         });
         
 
@@ -105,34 +116,40 @@ class CustomScene{
         
 
         let a = async () => {
-            let imageChara = new Panel(this.scene, "images/theCodingOfIsaac/character.png", {x:-3, y:-2, z:-8}, 2, 1);
+            let imageChara = new Panel(room, "images/theCodingOfIsaac/character.png", {x:-3, y:-2, z:-8}, 2, 1);
             await imageChara.init(() => {
                 imageChara.addAnimation();
                 room.addImage(imageChara);
             });
     
-            // let imageMap = new Panel(this.scene, "images/theCodingOfIsaac/map.png", {x:4, y:-3.5, z:-8}, 6, 1);
+            // let imageMap = new Panel(room, "images/theCodingOfIsaac/map.png", {x:4, y:-3.5, z:-8}, 6, 1);
             // imageMap.init(() => {
             //     imageMap.addAnimation();
             //     room.addImage(imageMap);
             // });
     
-            let imageTutorial = new Panel(this.scene, "images/theCodingOfIsaac/tutorial.png", {x:5, y:-1, z:-11.5}, 8, 1);
+            let imageTutorial = new Panel(room, "images/theCodingOfIsaac/tutorial.png", {x:5, y:-1, z:-11.5}, 8, 1);
             await imageTutorial.init(() => {
                 imageTutorial.addAnimation();
                 room.addImage(imageTutorial);
             });
     
-            let imageRoom = new Panel(this.scene, "images/theCodingOfIsaac/room.png", {x:-5, y:1.5, z:-10}, 7, 1);
+            let imageRoom = new Panel(room, "images/theCodingOfIsaac/room.png", {x:-5, y:1.5, z:-10}, 7, 1);
             await imageRoom.init(() => {
                 imageRoom.addAnimation();
                 room.addImage(imageRoom);
             });
     
-            let imageTitle = new Panel(this.scene, "images/theCodingOfIsaac/title.png", {x:0, y:0, z:-9}, 8, 1);
+            let imageTitle = new Panel(room, "images/theCodingOfIsaac/title.png", {x:0, y:0, z:-9}, 8, 1);
             await imageTitle.init(() => {
                 room.addImage(imageTitle);
             });
+
+            const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/snail-unamur/Yo-kai-watch", "The Coding of Isaac");
+            await githubButton.init(() => {
+                room.addImage(githubButton);
+            });
+
             room.hideImages();
         };
         a();

@@ -5,7 +5,8 @@ import { THREEx } from './libs/threex.domevents.js';
 import { setupInteractions } from './interaction.js';
 import { gyroControl, setupGyroControls } from './gyroControls.js'
 import { animationController, cameraAnimation } from './animation.js'
-import { cameraInitialPosition, imageContainer, modalContainer } from './const.js';
+import { cameraInitialPosition } from './const.js';
+import { loadingScreenSetup } from './loadingScreen.js';
 
 function main() {
     const canvas = document.querySelector('#c');
@@ -108,74 +109,7 @@ function main() {
 
 }
 
-main()
+main();
 
-const contactButton = document.getElementById("contact-button");
-const modal = document.getElementById("modal");
-const cross = document.getElementById("cross");
-
-
-imageContainer.onclick = () => {
-    imageContainer.style.opacity = 0;
-    imageContainer.style.pointerEvents = "none";
-} 
-
-
-function displayContactModal(){
-    modalContainer.style.opacity = 1;
-    modalContainer.style.pointerEvents = "auto";
-    modalContainer.classList.add("active");
-}
-function hideContactModal(){
-    modalContainer.style.opacity = 0;
-    modalContainer.style.pointerEvents = "none";
-    modalContainer.classList.remove("active");
-}
-
-contactButton.onclick = displayContactModal;
-modalContainer.onclick = hideContactModal;
-cross.onclick = hideContactModal;
-
-modal.onclick = (e) => {
-    e.stopPropagation();
-}
-
-const startButton = document.getElementById("loading-screen-text-start");
-const startButtonContainer = document.getElementById("loading-screen-text-start-container");
-const loadingScreen = document.getElementById("loading-screen");
-
-setTimeout(()=>{
-    startButton.style.opacity = "0.8";
-
-    const startButtonAnimationTimeout = setTimeout(()=>{
-        startButton.classList.add("start-button-animation");
-
-    }, 2000)
-
-    setTimeout(()=>{
-        startButton.style.cursor = "pointer";
-
-        loadingScreen.onclick = () => {
-            clearTimeout(startButtonAnimationTimeout);
-            let currentOpacity = getComputedStyle(startButton).opacity;
-            startButton.style.opacity = currentOpacity;
-
-            startButton.classList.remove("start-button-animation");
-
-            startButtonContainer.style.opacity = 0;
-        
-            // Loading screen animation
-            document.getElementById("loading-screen-break-strip__top").style.height = "100%";
-            document.getElementById("loading-screen-break-strip__bottom").style.height = "100%";
-            
-            setTimeout(()=>{
-                document.getElementById("loading-screen-left-panel").style.left = "-100%";
-                document.getElementById("loading-screen-right-panel").style.left = "calc(100% + 5px)";
-                document.getElementById("loading-screen-text").style.bottom = "150%";
-                loadingScreen.style.pointerEvents = "none";
-                
-            }, 1000)
-        }
-    }, 300);
-}, 700);
+loadingScreenSetup();
 

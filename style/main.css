@@ -19,7 +19,9 @@ canvas{
     z-index: 1;
 }
 
-.active{}
+.active{
+    content: "";
+}
 
 #gyro-button{
     background-color: #F6BB62;

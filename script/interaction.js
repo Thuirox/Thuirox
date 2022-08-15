@@ -1,5 +1,6 @@
 import * as THREE from './libs/three.module.js';
-import { modalContainer } from './const.js';
+import { debugMove } from './const.js';
+import { contactModalContainer, redirectModalContainer } from './modal.js';
 
 var move = false;
 var domEvents;
@@ -12,7 +13,7 @@ var startPosition = undefined;
 
 function addInteraction(object, fct){
     let setupFunction = (event) => {
-        console.log("interaction event started");
+        if(debugMove) console.log("interaction event started");
         move = false;
         targetElement = object;
         targetFct = fct;
@@ -47,7 +48,7 @@ function setupCancelOnMove(){
             let dist = Math.sqrt( a*a + b*b );
     
             if(dist > 20 && !move){
-                console.log("touch move");
+                if(debugMove) console.log("touch move");
                 move = true;
             }
         }
@@ -57,12 +58,12 @@ function setupCancelOnMove(){
 
     window.addEventListener("mousemove", function(event){
         if(!move){
-            console.log("mouse move");
+            if(debugMove) console.log("mouse move");
             move = true;
         }
 
         // Style pointer as cursor when hovering a clickable object
-        if(!modalContainer.classList.contains("active")){
+        if(!contactModalContainer.classList.contains("active") && !redirectModalContainer.classList.contains("active")){
             var mouse = new THREE.Vector2();
             mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
             mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
@@ -85,11 +86,13 @@ function setupTriggerOnUp(){
 
     // When cursor up, trigger interaction if no movement in between.
     let endFunction = (event) => {
+            
+        document.body.style.cursor = 'default';
         if(typeof targetElement !== "undefined"){
             if(!move){
                 targetFct();
             }
-            console.log("touchend global");
+            if(debugMove) console.log("touchend global");
             targetElement = undefined;
         }
     };
@@ -105,7 +108,6 @@ function setupInteractions(domEvents_, camera_){
     camera = camera_;
 
     setupTriggerOnUp();
-
     setupCancelOnMove();
 }
 

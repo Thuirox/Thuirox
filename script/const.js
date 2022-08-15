@@ -2,11 +2,12 @@ import * as THREE from './libs/three.module.js';
 
 const debug_text = document.getElementById("debug_text");
 
+const debugMove = false;
+const debugAnimation = false;
+const debugModal = false;
+
 const gyroButton = document.getElementById("gyro-button");
 
-
-const imageContainer = document.getElementById("image-container");
-const modalContainer = document.getElementById("modal-container");
 
 const cameraInitialPosition = {
     x: 0,
@@ -29,4 +30,15 @@ const colors = [
     // 0x0B0014,
 ]
 
-export { debug_text, gyroButton, cameraInitialAngleRad, cameraInitialAngleDeg, cameraInitialPosition, loader, colors, imageContainer, modalContainer }
+export { 
+    debug_text, 
+    gyroButton, 
+    cameraInitialAngleRad, 
+    cameraInitialAngleDeg, 
+    cameraInitialPosition, 
+    loader, 
+    colors, 
+    debugMove, 
+    debugAnimation,
+    debugModal
+}
