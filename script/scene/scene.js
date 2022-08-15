@@ -58,19 +58,19 @@ class CustomScene{
 
         square.init();
 
-        let imageDesktop = new Panel(this.scene, "../../images/whenisnextlolclash/index.png", {x:4, y:2.2, z:-8}, 7, 1);
+        let imageDesktop = new Panel(this.scene, "../images/whenisnextlolclash/index.png", {x:4, y:2.2, z:-8}, 7, 1);
         imageDesktop.init(() => {
             imageDesktop.addAnimation();
             room.addImage(imageDesktop);
         });
 
-        let imageMobile = new Panel(this.scene, "../../images/whenisnextlolclash/indexMobile.png", {x:-4, y:-3.5, z:-8}, 3, 1);
+        let imageMobile = new Panel(this.scene, "../images/whenisnextlolclash/indexMobile.png", {x:-4, y:-3.5, z:-8}, 3, 1);
         imageMobile.init(() => {
             imageMobile.addAnimation();
             room.addImage(imageMobile);
         });
 
-        let imageTitle = new Panel(this.scene, "../../images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8);
+        let imageTitle = new Panel(this.scene, "../images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8);
         imageTitle.init(() => {
             room.addImage(imageTitle);
         });
@@ -105,31 +105,31 @@ class CustomScene{
         
 
         let a = async () => {
-            let imageChara = new Panel(this.scene, "../../images/theCodingOfIsaac/character.png", {x:-3, y:-2, z:-8}, 2, 1);
+            let imageChara = new Panel(this.scene, "../images/theCodingOfIsaac/character.png", {x:-3, y:-2, z:-8}, 2, 1);
             await imageChara.init(() => {
                 imageChara.addAnimation();
                 room.addImage(imageChara);
             });
     
-            // let imageMap = new Panel(this.scene, "../../images/theCodingOfIsaac/map.png", {x:4, y:-3.5, z:-8}, 6, 1);
+            // let imageMap = new Panel(this.scene, "../images/theCodingOfIsaac/map.png", {x:4, y:-3.5, z:-8}, 6, 1);
             // imageMap.init(() => {
             //     imageMap.addAnimation();
             //     room.addImage(imageMap);
             // });
     
-            let imageTutorial = new Panel(this.scene, "../../images/theCodingOfIsaac/tutorial.png", {x:5, y:-1, z:-11.5}, 8, 1);
+            let imageTutorial = new Panel(this.scene, "../images/theCodingOfIsaac/tutorial.png", {x:5, y:-1, z:-11.5}, 8, 1);
             await imageTutorial.init(() => {
                 imageTutorial.addAnimation();
                 room.addImage(imageTutorial);
             });
     
-            let imageRoom = new Panel(this.scene, "../../images/theCodingOfIsaac/room.png", {x:-5, y:1.5, z:-10}, 7, 1);
+            let imageRoom = new Panel(this.scene, "../images/theCodingOfIsaac/room.png", {x:-5, y:1.5, z:-10}, 7, 1);
             await imageRoom.init(() => {
                 imageRoom.addAnimation();
                 room.addImage(imageRoom);
             });
     
-            let imageTitle = new Panel(this.scene, "../../images/theCodingOfIsaac/title.png", {x:0, y:0, z:-9}, 8, 1);
+            let imageTitle = new Panel(this.scene, "../images/theCodingOfIsaac/title.png", {x:0, y:0, z:-9}, 8, 1);
             await imageTitle.init(() => {
                 room.addImage(imageTitle);
             });
