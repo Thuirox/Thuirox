@@ -5,8 +5,8 @@ import { Animation, animationController, DifferedAnimation } from '../animation.
 import { addInteraction } from '../interaction.js';
 
 class Panel{
-    constructor(scene, path, position, size=5, opacity=0.7){
-        this.scene = scene;
+    constructor(parent, path, position, size=5, opacity=0.7){
+        this.parent = parent;
         this.path = path;
 
         this.position = position;
@@ -40,8 +40,9 @@ class Panel{
         // set the position of the image mesh in the x,y,z dimensions
         this.mesh.position.set(this.position.x, this.position.y, this.position.z);
         
-        // add the image to the scene
-        this.scene.add(this.mesh);
+        // add the image to the parent
+        this.parent.mesh.add(this.mesh);
+        this.mesh.lookAt(this.parent.center.x, this.parent.center.y, this.parent.center.z);
 
         addInteraction(this.mesh, () => {
             

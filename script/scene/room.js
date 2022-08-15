@@ -50,8 +50,6 @@ class Room extends Chain{
 
     addImage(image){
         this.images.push(image);
-        this.mesh.add(image.mesh);
-        image.mesh.lookAt(this.center.x, this.center.y, this.center.z);
     }
 
     showImages(){
