@@ -79,22 +79,26 @@ class Chain{
 
 var cameraPositionOffset = new Vector3();
 
-updateCameraPositionOffset(2*angleBetweenSphere)
+updateCameraPositionOffsetAngle(2*angleBetweenSphere)
 
 var cameraAngleRadOffset = Math.atan2(cameraPositionOffset.x, cameraPositionOffset.z);
 var cameraAngleDegOffset = cameraAngleRadOffset * 180/Math.PI;
 
 updateCameraAngleOffset(cameraAngleDegOffset);
 
-function updateCameraPositionOffset(angle){
+function updateCameraPositionOffsetAngle(angle){
     let positionOffset = new Vector3( 0, 0, 0.001 );
 
-    let axisY = new Vector3(0, 1, 0);
+    let axisY = new Vector3( 0, 1, 0 );
 
     positionOffset.applyAxisAngle( axisY, angle );
 
-    cameraPositionOffset = positionOffset;
+    return updateCameraPositionOffsetPoint(positionOffset);
+}
 
+
+function updateCameraPositionOffsetPoint(vector){
+    cameraPositionOffset = vector;
 
     cameraAngleRadOffset = Math.atan2(cameraPositionOffset.x, cameraPositionOffset.z);
     cameraAngleDegOffset = cameraAngleRadOffset * 180/Math.PI;
@@ -107,6 +111,4 @@ function updateCameraPositionOffset(angle){
 
 
 
-
-
-export { isMobile, Chain, addRandomness, updateCameraPositionOffset, cameraPositionOffset, cameraAngleDegOffset }
+export { isMobile, Chain, addRandomness, updateCameraPositionOffsetAngle, updateCameraPositionOffsetPoint, cameraPositionOffset, cameraAngleDegOffset }

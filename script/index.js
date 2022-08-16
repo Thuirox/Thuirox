@@ -5,7 +5,7 @@ import { THREEx } from './libs/threex.domevents.js';
 import { setupInteractions } from './interaction.js';
 import { gyroControl, setupGyroControls, updateGyro } from './gyroControls.js'
 import { animationController, cameraAnimation } from './animation.js'
-import { cameraAngleDegOffset, cameraPositionOffset, updateCameraPositionOffset } from './utils.js';
+import { cameraAngleDegOffset, cameraPositionOffset, updateCameraPositionOffsetAngle, updateCameraPositionOffsetPoint } from './utils.js';
 import { loadingScreenSetup } from './loadingScreen.js';
 import { cameraInitialPosition } from './const.js';
 import { transportController } from './scene/transporter.js';
@@ -33,7 +33,6 @@ function main() {
         cameraInitialPosition.y + cameraPositionOffset.y, 
         cameraInitialPosition.z + cameraPositionOffset.z
     );
-    console.log(camera.position)
     // camera.position.set(40, 20, 20); // camera out of balls
     // camera.position.set(7, 7, 7); // camera in first ball but out of cube
     
@@ -49,7 +48,6 @@ function main() {
     camera.goToRoom = function(room) {
 
         let titleWorldPosition = room.mesh.localToWorld(new THREE.Vector3(0, 0, -8));
-        console.log("destination", titleWorldPosition)
         // Target the title emplacement of the target room
         this.controls.target.set(titleWorldPosition.x, titleWorldPosition.y, titleWorldPosition.z);
 
@@ -57,19 +55,14 @@ function main() {
         let targetPosition = new THREE.Vector3();
         room.mesh.getWorldPosition(targetPosition);
 
-        let quat = new THREE.Quaternion();
-        room.mesh.getWorldQuaternion(quat);
-
-        let euler = new THREE.Euler();
-        euler = euler.setFromQuaternion(quat);
-
         let startAngleGyro = cameraAngleDegOffset;
 
-        // console.log(room)
-        console.log(euler.y, targetPosition)
 
-        updateCameraPositionOffset(euler.y);
 
+        const offsetPointWorld = room.mesh.localToWorld( new THREE.Vector3( 0, 0, -0.001 ) );
+        const offsetPoint = new THREE.Vector3().copy(targetPosition);
+
+        updateCameraPositionOffsetPoint( offsetPoint.sub( offsetPointWorld ) );
         
         cameraAnimation.setParams({
             x: camera.position.x,
@@ -108,6 +101,8 @@ function main() {
             pos.z + cameraPositionOffset.z
         );
         controls.target.set(pos.x, pos.y, pos.z);
+        // controls.target.set(0, 0, 0);
+        // camera.position.set(120, 20, 20); // camera out of balls
     });
 
 

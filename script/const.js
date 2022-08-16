@@ -9,7 +9,7 @@ const debugModal = false;
 const gyroButton = document.getElementById("gyro-button");
 
 
-const cameraInitialPosition = { x:-295, y:0, z:0 };
+const cameraInitialPosition = { x:0, y:0, z:0 };
 
 
 const angleBetweenSphere = 0.1 * Math.PI;
