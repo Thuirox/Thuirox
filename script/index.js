@@ -3,7 +3,7 @@ import { setupScene } from './scene/scene.js';
 import { setupManualControls } from './manualControls.js';
 import { THREEx } from './libs/threex.domevents.js';
 import { setupInteractions } from './interaction.js';
-import { gyroControl, setupGyroControls } from './gyroControls.js'
+import { gyroControl, setupGyroControls, updateGyro } from './gyroControls.js'
 import { animationController, cameraAnimation } from './animation.js'
 import { cameraInitialPosition } from './const.js';
 import { loadingScreenSetup } from './loadingScreen.js';
@@ -65,7 +65,7 @@ function main() {
     };
     
 
-    const updateGyro = setupGyroControls(camera, controls);
+    setupGyroControls(camera, controls);
 
 
     const scene = new THREE.Scene();
