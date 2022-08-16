@@ -81,7 +81,7 @@ class CustomScene{
     
             let title = new Panel(room, "images/justabayet/title.png", {x:0, y:0, z:-8}, 7, 1);
             title.init(() => {
-                room.addImage(title);
+                // room.addImage(title);
             });
     
             const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/Thuirox/Thuirox", "justabayet");
@@ -139,7 +139,7 @@ class CustomScene{
     
             let imageTitle = new Panel(room, "images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8, 1);
             await imageTitle.init(() => {
-                room.addImage(imageTitle);
+                // room.addImage(imageTitle);
             });
     
             const githubButton = new GithubButton(room, {x:-1.5, y:-6, z:-6}, 1, "https://github.com/Thuirox/whenisnextlolclash", "whenisnextlolclash");
@@ -212,7 +212,7 @@ class CustomScene{
     
             let imageTitle = new Panel(room, "images/theCodingOfIsaac/title.png", {x:0, y:0, z:-9}, 8, 1);
             await imageTitle.init(() => {
-                room.addImage(imageTitle);
+                // room.addImage(imageTitle);
             });
 
             const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/snail-unamur/Yo-kai-watch", "The Coding of Isaac");
