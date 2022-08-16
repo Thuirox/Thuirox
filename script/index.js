@@ -5,7 +5,7 @@ import { THREEx } from './libs/threex.domevents.js';
 import { setupInteractions } from './interaction.js';
 import { gyroControl, setupGyroControls, updateGyro } from './gyroControls.js'
 import { animationController, cameraAnimation } from './animation.js'
-import { cameraInitialPosition } from './const.js';
+import { cameraAngleDegOffset, cameraPositionOffset, updateCameraPositionOffset } from './utils.js';
 import { loadingScreenSetup } from './loadingScreen.js';
 
 function main() {
@@ -26,7 +26,7 @@ function main() {
     const near = 0.1;
     const far = 250;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set(cameraInitialPosition.x, cameraInitialPosition.y, cameraInitialPosition.z);
+    camera.position.set(cameraPositionOffset.x, cameraPositionOffset.y, cameraPositionOffset.z);
     // camera.position.set(40, 20, 20); // camera out of balls
     // camera.position.set(7, 7, 7); // camera in first ball but out of cube
     
@@ -38,30 +38,50 @@ function main() {
 
     camera.controls = controls;
 
-    camera.goTo = function(x, y, z) {
-        let xDiff = 0.001;
-        if(camera.position.x - x < 0){
-            xDiff = -xDiff;
-        }
-    
-        this.controls.target.set(x, y, z);
-        // camera.position.set(x + xDiff, y, z);
+
+    camera.goToRoom = function(room) {
+
+        let targetCamera = room.mesh.localToWorld(new THREE.Vector3(0, 0, -8));
+        console.log(targetCamera)
+        // Target the title emplacement of the target room
+        this.controls.target.set(targetCamera.x, targetCamera.y, targetCamera.z);
+
+
+        let targetPosition = new THREE.Vector3();
+        room.mesh.getWorldPosition(targetPosition);
+
+        let quat = new THREE.Quaternion();
+        room.mesh.getWorldQuaternion(quat);
+        let euler = new THREE.Euler();
+        euler = euler.setFromQuaternion(quat);
+
+        let startAngleGyro = cameraAngleDegOffset;
+
+        updateCameraPositionOffset(euler.y);
+
+        console.log(startAngleGyro, cameraAngleDegOffset)
+
+        
         cameraAnimation.setParams({
-            x:camera.position.x,
-            y:camera.position.y,
-            z:camera.position.z
+            x: camera.position.x,
+            y: camera.position.y,
+            z: camera.position.z,
+            angle: startAngleGyro
         }, 
         {
-            x:x, 
-            y:y, 
-            z:z
+            x:targetPosition.x, 
+            y:targetPosition.y, 
+            z:targetPosition.z,
+            angle: cameraAngleDegOffset
         }, 
         { 
-            camera:camera, 
-            diff:xDiff 
+            camera: camera, 
+            offset: cameraPositionOffset,
+            controls: controls
         });
+
         cameraAnimation.init();
-    
+
     };
     
 

@@ -1,5 +1,5 @@
 import * as THREE from './libs/three.module.js';
-import { cameraInitialAngleDeg, debug_text, gyroButton } from "./const.js";
+import { debug_text, gyroButton } from "./const.js";
 import { Animation } from './animation.js';
 
 var gyroControl = false;
@@ -132,7 +132,7 @@ var updateGyroFull = function(){
             // If previous animation running. Set params, init.
             gyroCameraAnimation.init(false);
         }
-        
+
     } else {
         setObjectQuaternion(camera.quaternion, alpha, beta, gamma, orient);
     }
@@ -163,9 +163,17 @@ var gyroOffset = {
 }
 
 function updateGyroOffset(){
-    gyroOffset.alpha = cameraInitialAngleDeg - deviceOrientation.alpha;
+    gyroOffset.alpha = cameraAngleOffset - deviceOrientation.alpha;
+}
+
+var cameraAngleOffset = 0;
+
+function updateCameraAngleOffset(value){
+    gyroOffset.alpha += value - cameraAngleOffset;
+    cameraAngleOffset = value;
+
 }
 
 
 
-export { setupGyroControls, gyroControl, updateGyro }
+export { setupGyroControls, gyroControl, updateGyro, updateCameraAngleOffset }

@@ -1,3 +1,7 @@
+import { Vector3 } from "./libs/three.module.js";
+import { angleBetweenSphere } from "./const.js";
+import { updateCameraAngleOffset } from "./gyroControls.js";
+
 function isMobile(){
     // Check if the user is usign a mobile device. https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
     let isMobile;
@@ -71,4 +75,38 @@ class Chain{
     }
 }
 
-export { isMobile, Chain, addRandomness }
+
+
+var cameraPositionOffset = new Vector3();
+
+updateCameraPositionOffset(2*angleBetweenSphere)
+
+var cameraAngleRadOffset = Math.atan2(cameraPositionOffset.x, cameraPositionOffset.z);
+var cameraAngleDegOffset = cameraAngleRadOffset * 180/Math.PI;
+
+updateCameraAngleOffset(cameraAngleDegOffset);
+
+function updateCameraPositionOffset(angle){
+    let positionOffset = new Vector3( 0, 0, 0.001 );
+
+    let axisY = new Vector3(0, 1, 0);
+
+    positionOffset.applyAxisAngle( axisY, angle );
+
+    cameraPositionOffset = positionOffset;
+
+
+    cameraAngleRadOffset = Math.atan2(cameraPositionOffset.x, cameraPositionOffset.z);
+    cameraAngleDegOffset = cameraAngleRadOffset * 180/Math.PI;
+
+    return cameraPositionOffset;
+}
+
+
+
+
+
+
+
+
+export { isMobile, Chain, addRandomness, updateCameraPositionOffset, cameraPositionOffset, cameraAngleDegOffset }

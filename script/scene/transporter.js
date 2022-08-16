@@ -68,9 +68,7 @@ class Transporter{
             debug_text.textContent = `Interacted x:${this.center.x}`;
             console.log(`Interacted ${this.center.x}`);
 
-            let v3 = new THREE.Vector3();
-            let targetPosition = this.mesh.getWorldPosition(v3);
-            this.camera.goTo(targetPosition.x, targetPosition.y, targetPosition.z);
+            this.camera.goToRoom(this.parent);
             
             this.parent.showImages();
             tranportController.currentRoom?.hideImages();

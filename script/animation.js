@@ -1,4 +1,5 @@
 import { debugAnimation } from "./const.js";
+import { updateCameraAngleOffset } from "./gyroControls.js";
 
 class AnimationController{
 
@@ -139,16 +140,30 @@ let cameraAnimation = new Animation(0, 0,
             y: animation.start.y + (animation.end.y - animation.start.y) * ratio,
             z: animation.start.z + (animation.end.z - animation.start.z) * ratio
         };
-        animation.args.camera.position.set(position.x + animation.args.diff, position.y, position.z);
+        animation.args.camera.position.set(
+            position.x + animation.args.offset.x, 
+            position.y + animation.args.offset.y, 
+            position.z + animation.args.offset.z
+        );
+
+        let angle = animation.start.angle + (animation.end.angle - animation.start.angle) * ratio
+        updateCameraAngleOffset(angle);
     }, 
     (animation) => {
         console.log("cam anim end");
         let position = animation.end;
-        animation.args.camera.position.set(position.x + animation.args.diff, position.y, position.z);
+        animation.args.camera.position.set(
+            position.x + animation.args.offset.x, 
+            position.y + animation.args.offset.y, 
+            position.z + animation.args.offset.z
+        );
+        animation.args.controls.target.set(position.x, position.y, position.z);
 
+        updateCameraAngleOffset(animation.end.angle);
     }, { 
         camera: null,
-        diff: null
+        offset: null,
+        controls: null
 });
 
 export { animationController, Animation, cameraAnimation, DifferedAnimation }
