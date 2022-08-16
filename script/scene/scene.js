@@ -1,8 +1,8 @@
 import * as THREE from '../libs/three.module.js';
 import { Panel } from "./panel.js";
-import { Transporter, tranportController } from "./transporter.js";
+import { Transporter, transportController } from "./transporter.js";
 import { Room } from "./room.js";
-import { colors } from "../const.js";
+import { cameraInitialPosition, colors } from "../const.js";
 import { GithubButton, WebsiteButton } from './button.js';
 
 class CustomScene{
@@ -16,20 +16,21 @@ class CustomScene{
         this.sphereRadius = 15;
     }
     
-    init(){
-        this.setupScene();
-    }
+    async init(callback){
+        const justabayetRoom = await this.createJustABayetRoom(this.scene);
+        const clashRoom = await this.createClashRoom(justabayetRoom.mesh);
+        const yokaiRoom = await this.createYokaiRoom(clashRoom.mesh);
+        const thirdRoom = await this.createThirdRoom(yokaiRoom.mesh);
 
-    async setupScene(){
-        const firstRoom = this.createFirstRoom(null);
-        const secondRoom = await this.createSecondRoom(firstRoom.mesh);
-        const thirdRoom = this.createThirdRoom(secondRoom.mesh);
-
-        secondRoom.setCenter({ x:28, y:0, z:0 });
+        justabayetRoom.setCenter(cameraInitialPosition);
+        console.log(justabayetRoom)
+        console.log(justabayetRoom.mesh.getWorldPosition(new THREE.Vector3()));
+        clashRoom.setCenter({ x:28, y:0, z:0 });
+        yokaiRoom.setCenter({ x:28, y:0, z:0 });
         thirdRoom.setCenter({ x:28, y:0, z:0 });
 
-        firstRoom.setNext(secondRoom);
-        secondRoom.setNext(thirdRoom);
+        clashRoom.setNext(yokaiRoom);
+        yokaiRoom.setNext(thirdRoom);
     
     
     
@@ -39,17 +40,71 @@ class CustomScene{
     
         this.renderer.render(this.scene, this.camera);
 
-        tranportController.currentRoom = firstRoom;
+        transportController.currentRoom = justabayetRoom;
+
+        callback();
     }
 
-    createFirstRoom(){
+
+    async createJustABayetRoom(pivot){
+        const center = { x:0, y:0, z:0 };
+
+        const roomColor = 0x0B0014;
+        const room = new Room(pivot, this.camera, center, this.sphereRadius, roomColor);
+
+        room.addExit();
+
+        room.init();
+
+        
+        const square = new Transporter(room, this.camera, { x:0, y:0, z:0 }, roomColor);
+
+        square.setIsDoubleSided(false);
+
+        square.init();
+
+
+
+        let awaitFunction = async () => {
+
+            let whenisnextlolclash = new Panel(room, "images/justabayet/whenisnextlolclash.png", {x:5.5, y:1.2, z:-9}, 3, 1);
+            whenisnextlolclash.init(() => {
+                whenisnextlolclash.addAnimation();
+                room.addImage(whenisnextlolclash);
+            });
+
+            let thecodingofisaac = new Panel(room, "images/justabayet/thecodingofisaac.png", {x:-5, y:2.2, z:-9}, 5, 1);
+            thecodingofisaac.init(() => {
+                thecodingofisaac.addAnimation();
+                room.addImage(thecodingofisaac);
+            });
+    
+            let title = new Panel(room, "images/justabayet/title.png", {x:0, y:0, z:-8}, 7, 1);
+            title.init(() => {
+                room.addImage(title);
+            });
+    
+            const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/Thuirox/Thuirox", "justabayet");
+            githubButton.init(() => {
+                room.addImage(githubButton);
+            });
+        };
+
+        await awaitFunction();
+        
+
+        return room;
+    }
+
+    async createClashRoom(pivot){
         const center = { x:0, y:0, z:0 };
         // const roomColor = 0x0B0014;
         // const roomColor = 0xF6BB62; // Text Color
         // const roomColor = 0x1A2623; // Project Background Color
         const roomColor = colors[0];
-        const room = new Room(this.scene, this.camera, center, this.sphereRadius, roomColor);
+        const room = new Room(pivot, this.camera, center, this.sphereRadius, roomColor);
 
+        room.addEntry();
         room.addExit();
 
         room.init();
@@ -68,40 +123,46 @@ class CustomScene{
         //     room.addImage(imageDesktop);
         // });
 
-        let imageDesktop = new Panel(room, "images/whenisnextlolclash/index.png", {x:4, y:2.2, z:-7}, 7, 1);
-        
-        imageDesktop.init(() => {
-            imageDesktop.addAnimation();
-            room.addImage(imageDesktop);
-        });
+        let awaitFunction = async () => {
 
-        let imageMobile = new Panel(room, "images/whenisnextlolclash/indexMobile.png", {x:-4, y:-3.5, z:-8}, 3, 1);
-        imageMobile.init(() => {
-            imageMobile.addAnimation();
-            room.addImage(imageMobile);
-        });
+            let imageDesktop = new Panel(room, "images/whenisnextlolclash/index.png", {x:4, y:2.2, z:-7}, 7, 1);
+            await imageDesktop.init(() => {
+                imageDesktop.addAnimation();
+                room.addImage(imageDesktop);
+            });
+    
+            let imageMobile = new Panel(room, "images/whenisnextlolclash/indexMobile.png", {x:-4, y:-3.5, z:-8}, 3, 1);
+            await imageMobile.init(() => {
+                imageMobile.addAnimation();
+                room.addImage(imageMobile);
+            });
+    
+            let imageTitle = new Panel(room, "images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8, 1);
+            await imageTitle.init(() => {
+                room.addImage(imageTitle);
+            });
+    
+            const githubButton = new GithubButton(room, {x:-1.5, y:-6, z:-6}, 1, "https://github.com/Thuirox/whenisnextlolclash", "whenisnextlolclash");
+            await githubButton.init(() => {
+                room.addImage(githubButton);
+            });
+    
+            const websiteButton = new WebsiteButton(room, {x:1.5, y:-6, z:-6}, 1, "https://thuirox.github.io/whenisnextlolclash/");
+            await websiteButton.init(() => {
+                room.addImage(websiteButton);
+            });
 
-        let imageTitle = new Panel(room, "images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8, 1);
-        imageTitle.init(() => {
-            room.addImage(imageTitle);
-        });
+            room.hideImages();
+        };
 
-        const githubButton = new GithubButton(room, {x:-1.5, y:-6, z:-6}, 1, "https://github.com/Thuirox/whenisnextlolclash", "whenisnextlolclash");
-        githubButton.init(() => {
-            room.addImage(githubButton);
-        });
-
-        const websiteButton = new WebsiteButton(room, {x:1.5, y:-6, z:-6}, 1, "https://thuirox.github.io/whenisnextlolclash/");
-        websiteButton.init(() => {
-            room.addImage(websiteButton);
-        });
+        await awaitFunction();
         
 
         return room;
     }
 
     
-    async createSecondRoom(pivot){
+    async createYokaiRoom(pivot){
         const center = { x:0, y:0, z:0 };
         const roomColor = 0x340500;
 
@@ -169,7 +230,7 @@ class CustomScene{
     }
 
     
-    createThirdRoom(pivot){
+    async createThirdRoom(pivot){
         const center = { x:0, y:0, z:0 };
         const roomColor = colors[2];
 
@@ -190,9 +251,9 @@ class CustomScene{
     }
 }
 
-function setupScene(scene, camera, renderer){
+function setupScene(scene, camera, renderer, callback){
     let scene3D = new CustomScene(scene, camera, renderer);
-    scene3D.init();
+    scene3D.init(callback);
 }
 
 export { setupScene };
