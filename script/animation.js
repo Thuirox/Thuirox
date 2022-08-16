@@ -150,7 +150,6 @@ let cameraAnimation = new Animation(0, 0,
         updateCameraAngleOffset(angle);
     }, 
     (animation) => {
-        console.log("cam anim end");
         let position = animation.end;
         animation.args.camera.position.set(
             position.x + animation.args.offset.x, 
