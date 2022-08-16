@@ -1,6 +1,6 @@
 import * as THREE from '../libs/three.module.js';
 import { Panel } from "./panel.js";
-import { Transporter } from "./transporter.js";
+import { Transporter, tranportController } from "./transporter.js";
 import { Room } from "./room.js";
 import { colors } from "../const.js";
 import { GithubButton, WebsiteButton } from './button.js';
@@ -20,9 +20,9 @@ class CustomScene{
         this.setupScene();
     }
 
-    setupScene(){
+    async setupScene(){
         const firstRoom = this.createFirstRoom(null);
-        const secondRoom = this.createSecondRoom(firstRoom.mesh);
+        const secondRoom = await this.createSecondRoom(firstRoom.mesh);
         const thirdRoom = this.createThirdRoom(secondRoom.mesh);
 
         secondRoom.setCenter({ x:28, y:0, z:0 });
@@ -38,6 +38,8 @@ class CustomScene{
         this.scene.add(ambientLight);
     
         this.renderer.render(this.scene, this.camera);
+
+        tranportController.currentRoom = firstRoom;
     }
 
     createFirstRoom(){
@@ -66,6 +68,13 @@ class CustomScene{
         //     room.addImage(imageDesktop);
         // });
 
+        let imageDesktop = new Panel(room, "images/whenisnextlolclash/index.png", {x:4, y:2.2, z:-7}, 7, 1);
+        
+        imageDesktop.init(() => {
+            imageDesktop.addAnimation();
+            room.addImage(imageDesktop);
+        });
+
         let imageMobile = new Panel(room, "images/whenisnextlolclash/indexMobile.png", {x:-4, y:-3.5, z:-8}, 3, 1);
         imageMobile.init(() => {
             imageMobile.addAnimation();
@@ -92,7 +101,7 @@ class CustomScene{
     }
 
     
-    createSecondRoom(pivot){
+    async createSecondRoom(pivot){
         const center = { x:0, y:0, z:0 };
         const roomColor = 0x340500;
 
@@ -152,7 +161,7 @@ class CustomScene{
 
             room.hideImages();
         };
-        a();
+        await a();
 
 
         return room;

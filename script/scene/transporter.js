@@ -3,7 +3,7 @@ import { Animation, animationController } from '../animation.js';
 import { addInteraction } from '../interaction.js';
 
 class Transporter{
-    constructor(parent, camera, center, color, squareSideLength=4.5){
+    constructor(parent, camera, center, color, squareSideLength=6.5){
         this.parent = parent;
         this.center = center;
         this.color = color;
@@ -73,10 +73,14 @@ class Transporter{
             this.camera.goTo(targetPosition.x, targetPosition.y, targetPosition.z);
             
             this.parent.showImages();
-            this.parent.next?.hideImages();
-            this.parent.previous?.hideImages();
+            tranportController.currentRoom?.hideImages();
+            tranportController.currentRoom = this.parent;
         });
     }
 }
 
-export { Transporter }
+const tranportController = {
+    currentRoom: null
+}
+
+export { Transporter, tranportController }
