@@ -19,10 +19,9 @@ class Room extends Chain{
 
         this.clippingPlanesOffset = 1;
 
-        this.sphereNbSegments = 70;
-        this.ballsOfLightNbSegments = 30;
-
-        this.ballsOfLightRadius = 1;
+        this.sphereNbSegments = 40;
+        this.capNbSegments = 10;
+        this.jointNbSegments = 10;
 
         this.isEntry = false;
         this.isExit = false;
@@ -94,11 +93,11 @@ class Room extends Chain{
 
         const entryOrifice = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, 2*Math.PI, this.openAngleEntry, orificeFullSize - this.openAngleEntry );
         const exitOrifice = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, 2*Math.PI, this.openAngleExit, orificeFullSize - this.openAngleExit );
-        const jointUpper = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, jointSizeAngle, 0, Math.PI);
-        const jointLower = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, jointSizeAngle, 0, Math.PI);
+        const jointUpper = new THREE.SphereGeometry( this.radius, 3, this.jointNbSegments, 0, jointSizeAngle, 0, Math.PI);
+        const jointLower = new THREE.SphereGeometry( this.radius, 3, this.jointNbSegments, 0, jointSizeAngle, 0, Math.PI);
 
         const capSize = Math.PI - orificeFullSize - 2* angleBetweenSphere;
-        const cap = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, 2 * Math.PI, 0, capSize);
+        const cap = new THREE.SphereGeometry( this.radius, this.capNbSegments, this.capNbSegments, 0, 2 * Math.PI, 0, capSize);
         
         const sphereMaterial = new THREE.MeshPhongMaterial({
             side: THREE.DoubleSide,
