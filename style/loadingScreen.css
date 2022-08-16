@@ -96,6 +96,12 @@
     color: whitesmoke;
 }
 
+@media only screen and (max-width: 500px) {
+    #loading-screen-text{
+        transition-duration: 0.5s;
+    }
+}
+
 #loading-screen-text::before{
     z-index: 0;
     position: absolute;
