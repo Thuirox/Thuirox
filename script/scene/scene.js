@@ -59,12 +59,12 @@ class CustomScene{
 
         square.init();
 
-        let imageDesktop = new Panel(room, "whenisnextlolclash-video", {x:4, y:2.2, z:-7}, 7, 1, true);
+        // let imageDesktop = new Panel(room, "whenisnextlolclash-video", {x:4, y:2.2, z:-7}, 7, 1, true);
         
-        imageDesktop.init(() => {
-            imageDesktop.addAnimation();
-            room.addImage(imageDesktop);
-        });
+        // imageDesktop.init(() => {
+        //     imageDesktop.addAnimation();
+        //     room.addImage(imageDesktop);
+        // });
 
         let imageMobile = new Panel(room, "images/whenisnextlolclash/indexMobile.png", {x:-4, y:-3.5, z:-8}, 3, 1);
         imageMobile.init(() => {
