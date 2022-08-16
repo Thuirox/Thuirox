@@ -34,6 +34,8 @@ class Room extends Chain{
         this.images = [];
 
         this.openAngle = Math.PI/8;
+
+        this.angleBetweenSphere = 0.1*Math.PI;
     }
 
     addEntry(){
@@ -66,26 +68,70 @@ class Room extends Chain{
 
     init(){
         this.mesh = new THREE.Object3D();
-        this.scene.add(this.mesh);
 
+        let pivotGlobalRotation = new THREE.Object3D();
+        this.scene.add(pivotGlobalRotation);
+
+        pivotGlobalRotation.add(this.mesh);
+
+        this.mesh.rotateY(this.angleBetweenSphere);
+        pivotGlobalRotation.rotateY(this.angleBetweenSphere);
+
+
+        let pivotSphereElements = new THREE.Object3D();
+
+
+        const jointSizeAngle = Math.PI - 2*this.openAngle - 0.1;
+
+        const orificeFullSize = (Math.PI / 2) - this.angleBetweenSphere;
+
+        const entryOrifice = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, 2*Math.PI, this.openAngleEntry, orificeFullSize - this.openAngleEntry );
+        const exitOrifice = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, 2*Math.PI, this.openAngleExit, orificeFullSize - this.openAngleExit );
+        const jointUpper = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, jointSizeAngle, 0, Math.PI);
+        const jointLower = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, jointSizeAngle, 0, Math.PI);
+
+        const capSize = Math.PI - orificeFullSize - 2* this.angleBetweenSphere;
+        const cap = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, 2 * Math.PI, 0, capSize);
         
-        const halfSphereGeometry1 = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, Math.PI, this.openAngleEntry, Math.PI  - this.openAngleExit - this.openAngleEntry );
-        const halfSphereGeometry2 = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments, Math.PI, Math.PI, this.openAngleEntry, Math.PI  - this.openAngleExit - this.openAngleEntry );
-
         const sphereMaterial = new THREE.MeshPhongMaterial({
             side: THREE.DoubleSide,
             color: this.color,
             clipShadows: true,
             clipIntersection: false
         });
-        this.meshHalf1 = new THREE.Mesh( halfSphereGeometry1, sphereMaterial );
-        this.meshHalf2 = new THREE.Mesh( halfSphereGeometry2, sphereMaterial );
+        this.meshEntryOrifice = new THREE.Mesh( entryOrifice, sphereMaterial );
+        this.meshExitOrifice = new THREE.Mesh( exitOrifice, sphereMaterial );
+        this.meshjointUpper = new THREE.Mesh( jointUpper, sphereMaterial );
+        this.meshjointLower = new THREE.Mesh( jointLower, sphereMaterial );
+        this.meshCap = new THREE.Mesh( cap, sphereMaterial );
 
-        this.meshHalf1.rotateZ(Math.PI / 2);
-        this.meshHalf2.rotateZ(Math.PI / 2);
 
-        this.mesh.add(this.meshHalf1);
-        this.mesh.add(this.meshHalf2);
+        this.mesh.add(pivotSphereElements);
+
+        pivotSphereElements.add(this.meshEntryOrifice);
+        pivotSphereElements.add(this.meshExitOrifice);
+        pivotSphereElements.add(this.meshjointUpper);
+        pivotSphereElements.add(this.meshjointLower);
+        pivotSphereElements.add(this.meshCap);
+
+
+        entryOrifice.rotateX(- this.angleBetweenSphere);
+
+        exitOrifice.rotateX(- Math.PI);
+        exitOrifice.rotateX(this.angleBetweenSphere);
+
+
+        pivotSphereElements.rotateZ(Math.PI / 2);
+
+        jointUpper.rotateZ(- Math.PI);
+        jointUpper.rotateY(jointSizeAngle / 2);
+        jointUpper.rotateX(Math.PI/2);
+
+        jointLower.rotateY(-jointSizeAngle / 2);
+        jointLower.rotateX(Math.PI/2);
+
+
+        cap.rotateX(Math.PI/2);
 
         this.lightManager = new LightManager(this.mesh, { x:0, y:0, z:0 })
         this.lightManager.initLights();

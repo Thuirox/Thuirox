@@ -95,8 +95,8 @@ class CustomScene{
     createSecondRoom(pivot){
         const center = { x:0, y:0, z:0 };
         const roomColor = 0x340500;
-        // const pivot = new THREE.Object3D();
-        this.scene.add(pivot);
+
+
         const room = new Room(pivot, this.camera, center, this.sphereRadius, roomColor);
 
         room.addExit();
@@ -110,7 +110,6 @@ class CustomScene{
         square.setIsDoubleSided(false);
         square.init();
 
-        // pivot.rotateY(0.5);
 
         
 
@@ -165,6 +164,7 @@ class CustomScene{
         const center = { x:0, y:0, z:0 };
         const roomColor = colors[2];
 
+
         const room = new Room(pivot, this.camera, center, this.sphereRadius, roomColor);
 
         room.addEntry();
@@ -175,8 +175,6 @@ class CustomScene{
 
         square.setIsDoubleSided(false);
         square.init();
-
-        // pivot.rotateY(0.5);
 
         return room;
 
