@@ -35,6 +35,12 @@ class Room extends Chain{
         this.images = [];
 
         this.openAngle = Math.PI/8;
+
+        this.toPivot = true;
+    }
+
+    setToPivot(val){
+        this.toPivot = val;
     }
 
     addEntry(){
@@ -73,8 +79,10 @@ class Room extends Chain{
 
         this.pivotGlobalRotation.add(this.mesh);
 
-        this.mesh.rotateY(angleBetweenSphere);
-        this.pivotGlobalRotation.rotateY(angleBetweenSphere);
+        if(this.toPivot){
+            this.mesh.rotateY(angleBetweenSphere);
+            this.pivotGlobalRotation.rotateY(angleBetweenSphere);
+        }
 
 
         this.pivotSphereElements = new THREE.Object3D();

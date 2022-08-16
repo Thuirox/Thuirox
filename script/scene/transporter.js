@@ -66,19 +66,19 @@ class Transporter{
     
         addInteraction(this.mesh, (event) => {
             debug_text.textContent = `Interacted x:${this.center.x}`;
-            console.log(`Interacted ${this.center.x}`);
+            console.log(`Interacted`, this);
 
             this.camera.goToRoom(this.parent);
             
             this.parent.showImages();
-            tranportController.currentRoom?.hideImages();
-            tranportController.currentRoom = this.parent;
+            transportController.currentRoom?.hideImages();
+            transportController.currentRoom = this.parent;
         });
     }
 }
 
-const tranportController = {
+const transportController = {
     currentRoom: null
 }
 
-export { Transporter, tranportController }
+export { Transporter, transportController }

@@ -1,5 +1,6 @@
 import { OrbitControls } from './libs/OrbitControls.js';
 import { isMobile } from './utils.js';
+import { cameraInitialPosition } from './const.js';
 
 
 function setupManualControls(camera, canvas){
@@ -19,7 +20,7 @@ function setupManualControls(camera, canvas){
     // reverse control
     controls.rotateSpeed *= -1;
 
-    controls.target.set(0, 0, 0);
+    controls.target.set(cameraInitialPosition.x, cameraInitialPosition.y, cameraInitialPosition.z);
 
     controls.update();
 
