@@ -9,11 +9,17 @@ const debugModal = false;
 const gyroButton = document.getElementById("gyro-button");
 
 
-const cameraInitialPosition = {
-    x: 0,
-    y: 0,
-    z: 0.001
-}
+const angleBetweenSphere = 0.1 * Math.PI;
+
+
+let cameraInitialPositionRequested = new THREE.Vector3( 0, 0, 0.001 );
+
+let axis = new THREE.Vector3(0, 1, 0);
+
+cameraInitialPositionRequested.applyAxisAngle( axis, 2*angleBetweenSphere );
+
+const cameraInitialPosition = cameraInitialPositionRequested;
+
 
 const cameraInitialAngleRad = Math.atan2(cameraInitialPosition.x, cameraInitialPosition.z);
 const cameraInitialAngleDeg = cameraInitialAngleRad * 180/Math.PI;
@@ -40,5 +46,6 @@ export {
     colors, 
     debugMove, 
     debugAnimation,
-    debugModal
+    debugModal,
+    angleBetweenSphere
 }
