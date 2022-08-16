@@ -65,8 +65,6 @@ class Transporter{
         animationController.add(this.animation);
     
         addInteraction(this.mesh, (event) => {
-            debug_text.textContent = `Interacted x:${this.center.x}`;
-            console.log(`Interacted`, this);
 
             this.camera.goToRoom(this.parent);
             
