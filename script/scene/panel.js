@@ -6,7 +6,7 @@ import { addInteraction } from '../interaction.js';
 import { imageContainer } from '../modal.js';
 
 class Panel{
-    constructor(parent, path, position, size=5, opacity=0.7){
+    constructor(parent, path, position, size=5, opacity=0.7, isVideo=false){
         this.parent = parent;
         this.path = path;
 
@@ -16,18 +16,43 @@ class Panel{
         this.size = size;
 
         this.opacity = opacity;
+
+        this.isVideo = isVideo;
     }
 
 
     async init(callback=()=>{}){
-        let texture = await loader.loadAsync(this.path);
-        // texture.minFilter = THREE.LinearMipmapLinearFilter;
+
+        let texture;
+        let width;
+        let height;
+        if(this.isVideo){
+            let video = document.getElementById(this.path);
+            video.muted = true; // Mute video to force play. Without this play raises a security error.
+            video.play();
+
+            // Best filtering method would be LinearMipmapLinearFilter like for images.
+            // But for some reasons when sets on videos, they stop working.
+            texture = new THREE.VideoTexture(video);
+            texture.minFilter = THREE.LinearFilter;
+            texture.maxFilter = THREE.LinearFilter;
+
+            width = texture.image.videoWidth;
+            height = texture.image.videoHeight;
+
+        } else {
+            texture = await loader.loadAsync(this.path);
+
+            width = texture.image.width;
+            height = texture.image.height;
+        }
 
         // ! the material isn't double sided
         let material = new THREE.MeshBasicMaterial({
             map: texture,
             transparent: true,
-            opacity: this.opacity
+            opacity: this.opacity,
+            side:THREE.DoubleSide
         });
           
         let geometry = new THREE.PlaneGeometry(this.size, this.size);
@@ -36,7 +61,7 @@ class Panel{
         this.mesh = new THREE.Mesh(geometry, material);
 
         // Scale mesh to match image ratio
-        this.mesh.scale.set(1, texture.image.height / texture.image.width, 1.0);
+        this.mesh.scale.set(1, height / width, 1.0);
         
         // set the position of the image mesh in the x,y,z dimensions
         this.mesh.position.set(this.position.x, this.position.y, this.position.z);
