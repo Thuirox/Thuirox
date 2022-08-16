@@ -23,8 +23,7 @@ class CustomScene{
         const thirdRoom = await this.createThirdRoom(yokaiRoom.mesh);
 
         justabayetRoom.setCenter(cameraInitialPosition);
-        console.log(justabayetRoom)
-        console.log(justabayetRoom.mesh.getWorldPosition(new THREE.Vector3()));
+        
         clashRoom.setCenter({ x:28, y:0, z:0 });
         yokaiRoom.setCenter({ x:28, y:0, z:0 });
         thirdRoom.setCenter({ x:28, y:0, z:0 });
