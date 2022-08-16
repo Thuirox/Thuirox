@@ -1,5 +1,6 @@
 import * as THREE from './libs/three.module.js';
 import { cameraInitialAngleDeg, debug_text, gyroButton } from "./const.js";
+import { Animation } from './animation.js';
 
 var gyroControl = false;
 var camera;
@@ -77,6 +78,7 @@ var setObjectQuaternion = function() {
     var q1 = new THREE.Quaternion( - Math.sqrt( 0.5 ), 0, 0, Math.sqrt( 0.5 ) ); // - PI/2 around the x-axis
 
     return function( quaternion, alpha, beta, gamma, orient ) {
+        
 
         euler.set( beta, alpha, - gamma, 'YXZ' ); // 'ZXY' for the device, but 'YXZ' for us
         quaternion.setFromEuler( euler ); // orient the device
@@ -91,6 +93,21 @@ const gyro_text = document.getElementById("gyro_text");
 
 var screenOrientation = 0;
 
+
+var gyroCameraAnimation = new Animation(0, 0,
+    100, 
+    (ratio, animation) => {
+        animation.args.camera.quaternion.slerp(animation.end, 0.5);
+    }, 
+    (animation) => {
+        animation.args.camera.quaternion = animation.end;
+    }, {
+        camera: null
+});
+
+
+let useGyroInterpolation = true;
+
 var updateGyroFull = function(){
     gyro_text.textContent = `${deviceOrientation.alpha.toFixed(1)}\n${deviceOrientation.beta.toFixed(1)}\n${deviceOrientation.gamma.toFixed(1)}`;
 
@@ -98,13 +115,41 @@ var updateGyroFull = function(){
     var beta = deviceOrientation.beta ? THREE.MathUtils.degToRad( deviceOrientation.beta + gyroOffset.beta ) : 0; // X'
     var gamma = deviceOrientation.gamma ? THREE.MathUtils.degToRad( deviceOrientation.gamma + gyroOffset.gamma ) : 0; // Y''
     var orient = screenOrientation ? THREE.MathUtils.degToRad( screenOrientation ) : 0; // O
+        
 
-    setObjectQuaternion( camera.quaternion, alpha, beta, gamma, orient );
+    if(useGyroInterpolation){
+        let targetQuaternion = new THREE.Quaternion(camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w);
+        setObjectQuaternion(targetQuaternion, alpha, beta, gamma, orient);
+    
+        // Trigger camera angle animation from current to target in X milliseconds.
+        gyroCameraAnimation.setParams(0, targetQuaternion, { camera:camera });
+    
+    
+        if(gyroCameraAnimation.isOver()){
+            // If previous animation stopped. Set params, init and add animation to controller.
+            gyroCameraAnimation.init();
+        } else {
+            // If previous animation running. Set params, init.
+            gyroCameraAnimation.init(false);
+        }
+        
+    } else {
+        setObjectQuaternion(camera.quaternion, alpha, beta, gamma, orient);
+    }
+
+
+
 }
+
+
+
 
 var updateGyroEmpty = function(){ 
     console.log("trying to update gyro controls. Without function set.")
 }
+
+
+
 
 var updateGyro = updateGyroEmpty;
 

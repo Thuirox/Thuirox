@@ -52,7 +52,7 @@ class Animation{
             if(debugAnimation) console.log("end fct is undefined");
         }
 
-        this.ended = false;
+        this.ended = true;
 
         this.args = args;
 
@@ -61,6 +61,10 @@ class Animation{
 
     animationStop(){
         this.ended = true;
+    }
+
+    isOver(){
+        return this.ended;
     }
 
     setIsLooping(isLooping){
