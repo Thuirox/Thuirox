@@ -49,6 +49,16 @@ class Transporter{
         this.mesh.position.x = this.center.x;
         this.mesh.position.y = this.center.y;
         this.parent.mesh.add(this.mesh);
+
+
+        const edges = new THREE.EdgesGeometry( cubeGeometry );
+
+        this.lines = new THREE.LineSegments( edges );
+        this.lines.material.transparent = true;
+        this.lines.material.opacity = 0.7;
+        this.lines.material.side = THREE.FrontSide;
+
+        this.mesh.add( this.lines );
     
     
         this.animation = new Animation(
@@ -65,18 +75,35 @@ class Transporter{
         animationController.add(this.animation);
     
         addInteraction(this.mesh, (event) => {
-
-            this.camera.goToRoom(this.parent);
-            
-            this.parent.showImages();
-            transportController.currentRoom?.hideImages();
-            transportController.currentRoom = this.parent;
+          
+            transportController.setCurrentRoom(this.parent);
         });
     }
 }
 
 const transportController = {
-    currentRoom: null
+    currentRoom: null,
+    setCurrentRoom: function (room) {
+        // If the camera is already going there, don't do again the animations.
+        if(this.currentRoom == room) return;
+
+        room.camera.goToRoom(room);
+
+        room.showImages();
+
+        room.square.mesh.remove(room.square.lines);
+
+        if(this.currentRoom){
+            this.currentRoom.hideImages();
+
+            // Display back the lines of the cube after a delay to avoid passing through with the camera.
+            new Animation(0, 0, 500, () => {}, (animation) => {
+                animation.args.room.square.mesh.add(animation.args.room.square.lines);
+                animation.args.room.square.lines.material.opacity = 0.7;
+            }, { room: this.currentRoom }).init();
+        }
+        this.currentRoom = room;
+    }
 }
 
 export { Transporter, transportController }

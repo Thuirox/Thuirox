@@ -40,7 +40,7 @@ class CustomScene{
     
         this.renderer.render(this.scene, this.camera);
 
-        transportController.currentRoom = justabayetRoom;
+        transportController.setCurrentRoom(justabayetRoom);
 
         callback();
     }
