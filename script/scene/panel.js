@@ -166,4 +166,43 @@ class Panel{
     }
 }
 
-export { Panel }
+class Title extends Panel{
+    constructor(parent, path, position, size=5, opacity=0.7){
+        super(parent, path, position, size, opacity, false);
+    }
+
+    async init(callback=()=>{}){
+        let texture = await loader.loadAsync(this.path);
+
+        let width = texture.image.width;
+        let height = texture.image.height;
+
+        // ! the material isn't double sided
+        let material = new THREE.MeshBasicMaterial({
+            map: texture,
+            transparent: true,
+            opacity: this.opacity,
+            side:THREE.DoubleSide
+        });
+          
+        let geometry = new THREE.PlaneGeometry(this.size, this.size);
+        
+        // combine our image geometry and material into a mesh
+        this.mesh = new THREE.Mesh(geometry, material);
+
+        // Scale mesh to match image ratio
+        this.mesh.scale.set(1, height / width, 1.0);
+        
+        // set the position of the image mesh in the x,y,z dimensions
+        this.mesh.position.set(this.position.x, this.position.y, this.position.z);
+        
+        // add the image to the parent
+        this.parent.mesh.add(this.mesh);
+
+        this.mesh.lookAt(this.parent.center.x, this.parent.center.y, this.parent.center.z);
+
+        callback();
+    }
+}
+
+export { Panel, Title }

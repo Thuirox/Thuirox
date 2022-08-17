@@ -1,8 +1,8 @@
 import * as THREE from '../libs/three.module.js';
-import { Panel } from "./panel.js";
+import { Panel, Title } from "./panel.js";
 import { Transporter, transportController } from "./transporter.js";
 import { Room } from "./room.js";
-import { cameraInitialPosition, colors } from "../const.js";
+import { cameraInitialPosition } from "../const.js";
 import { GithubButton, WebsiteButton } from './button.js';
 
 class CustomScene{
@@ -18,15 +18,13 @@ class CustomScene{
     
     async init(callback){
         const justabayetRoom = await this.createJustABayetRoom(this.scene);
-        justabayetRoom.setCenter(cameraInitialPosition);
-        
         const gesturesHeroRoom = await this.createGesturesHeroRoom(justabayetRoom.mesh);
-        gesturesHeroRoom.setCenter({ x:28, y:0, z:0 });
-
         const codingOfIsaacRoom = await this.createCodingOfIsaacRoom(gesturesHeroRoom.mesh);
-        codingOfIsaacRoom.setCenter({ x:28, y:0, z:0 });
-
         const clashRoom = await this.createClashRoom(codingOfIsaacRoom.mesh);
+
+        justabayetRoom.setCenter(cameraInitialPosition);
+        gesturesHeroRoom.setCenter({ x:28, y:0, z:0 });
+        codingOfIsaacRoom.setCenter({ x:28, y:0, z:0 });
         clashRoom.setCenter({ x:28, y:0, z:0 });
         
 
@@ -88,10 +86,8 @@ class CustomScene{
                 room.addImage(thecodingofisaac);
             });
     
-            let title = new Panel(room, "images/justabayet/title.png", {x:0, y:0, z:-8}, 7, 1);
-            title.init(() => {
-                // room.addImage(title);
-            });
+            let title = new Title(room, "images/justabayet/title.png", {x:0, y:0, z:-8}, 7, 1);
+            title.init();
     
             const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/Thuirox/Thuirox", "justabayet");
             githubButton.init(() => {
@@ -146,10 +142,8 @@ class CustomScene{
                 room.addImage(imageMobile);
             });
     
-            let imageTitle = new Panel(room, "images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8, 1);
-            await imageTitle.init(() => {
-                // room.addImage(imageTitle);
-            });
+            let imageTitle = new Title(room, "images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8, 1);
+            await imageTitle.init();
     
             const githubButton = new GithubButton(room, {x:-1.5, y:-6, z:-6}, 1, "https://github.com/Thuirox/whenisnextlolclash", "whenisnextlolclash");
             await githubButton.init(() => {
@@ -174,7 +168,6 @@ class CustomScene{
         const center = { x:0, y:0, z:0 };
         const roomColor = 0x340500;
 
-
         const room = new Room(pivot, this.camera, center, this.sphereRadius, roomColor);
 
         room.addExit();
@@ -189,22 +182,12 @@ class CustomScene{
         square.init();
 
 
-        
-
-        
-
         let a = async () => {
             let imageChara = new Panel(room, "images/theCodingOfIsaac/character.png", {x:-3, y:-2, z:-8}, 2, 1);
             await imageChara.init(() => {
                 imageChara.addAnimation();
                 room.addImage(imageChara);
             });
-    
-            // let imageMap = new Panel(room, "images/theCodingOfIsaac/map.png", {x:4, y:-3.5, z:-8}, 6, 1);
-            // imageMap.init(() => {
-            //     imageMap.addAnimation();
-            //     room.addImage(imageMap);
-            // });
     
             let imageTutorial = new Panel(room, "images/theCodingOfIsaac/tutorial.png", {x:5, y:-1, z:-11.5}, 8, 1);
             await imageTutorial.init(() => {
@@ -218,10 +201,8 @@ class CustomScene{
                 room.addImage(imageRoom);
             });
     
-            let imageTitle = new Panel(room, "images/theCodingOfIsaac/title.png", {x:0, y:0, z:-9}, 8, 1);
-            await imageTitle.init(() => {
-                // room.addImage(imageTitle);
-            });
+            let imageTitle = new Title(room, "images/theCodingOfIsaac/title.png", {x:0, y:0, z:-9}, 8, 1);
+            await imageTitle.init();
 
             const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/snail-unamur/Yo-kai-watch", "The Coding of Isaac");
             await githubButton.init(() => {
@@ -283,10 +264,8 @@ class CustomScene{
                 room.addImage(logo);
             });
     
-            let title = new Panel(room, "images/gesturesHero/title.png", {x:0, y:0, z:-9}, 8, 1);
-            await title.init(() => {
-                // room.addImage(title);
-            });
+            let title = new Title(room, "images/gesturesHero/title.png", {x:0, y:0, z:-9}, 8, 1);
+            await title.init();
 
 
             const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/GesturesHero/GesturesHero", "GesturesHero");
