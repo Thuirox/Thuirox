@@ -1,9 +1,11 @@
-### Hi there 👋
+[Don't click here ❗](https://justabayet.github.io/justabayet/)
 
-https://justabayet.github.io/justabayet/
 
-![alt text](https://github.com/justabayet/justabayet/blob/main/images/justabayet/title.png?raw=true)
-
+<p align="center">
+  <img src="https://github.com/justabayet/justabayet/blob/main/images/justabayet/title.png" />
+  
+  
+</p>
 
 
 <!--
