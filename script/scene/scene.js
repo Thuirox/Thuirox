@@ -18,18 +18,19 @@ class CustomScene{
     
     async init(callback){
         const justabayetRoom = await this.createJustABayetRoom(this.scene);
-        const clashRoom = await this.createClashRoom(justabayetRoom.mesh);
-        const yokaiRoom = await this.createYokaiRoom(clashRoom.mesh);
-        const thirdRoom = await this.createThirdRoom(yokaiRoom.mesh);
+        const gesturesHeroRoom = await this.createGesturesHeroRoom(justabayetRoom.mesh);
+        const codingOfIsaacRoom = await this.createCodingOfIsaacRoom(gesturesHeroRoom.mesh);
+        const clashRoom = await this.createClashRoom(codingOfIsaacRoom.mesh);
 
         justabayetRoom.setCenter(cameraInitialPosition);
         
+        gesturesHeroRoom.setCenter({ x:28, y:0, z:0 });
+        codingOfIsaacRoom.setCenter({ x:28, y:0, z:0 });
         clashRoom.setCenter({ x:28, y:0, z:0 });
-        yokaiRoom.setCenter({ x:28, y:0, z:0 });
-        thirdRoom.setCenter({ x:28, y:0, z:0 });
 
-        clashRoom.setNext(yokaiRoom);
-        yokaiRoom.setNext(thirdRoom);
+        justabayetRoom.setNext(gesturesHeroRoom);
+        gesturesHeroRoom.setNext(codingOfIsaacRoom);
+        codingOfIsaacRoom.setNext(clashRoom);
     
     
     
@@ -66,13 +67,20 @@ class CustomScene{
 
         let awaitFunction = async () => {
 
-            let whenisnextlolclash = new Panel(room, "images/justabayet/whenisnextlolclash.png", {x:5.5, y:1.2, z:-9}, 3, 1);
+            
+            let gesturesHero = new Panel(room, "images/gesturesHero/index.png", {x:4.5, y:-4, z:-9}, 6, 0.9);
+            await gesturesHero.init(() => {
+                gesturesHero.addAnimation();
+                room.addImage(gesturesHero);
+            });
+
+            let whenisnextlolclash = new Panel(room, "images/justabayet/whenisnextlolclash.png", {x:-5.5, y:1.5, z:-9}, 3, 1);
             whenisnextlolclash.init(() => {
                 whenisnextlolclash.addAnimation();
                 room.addImage(whenisnextlolclash);
             });
 
-            let thecodingofisaac = new Panel(room, "images/justabayet/thecodingofisaac.png", {x:-5, y:2.2, z:-9}, 5, 1);
+            let thecodingofisaac = new Panel(room, "images/justabayet/thecodingofisaac.png", {x:5, y:2.2, z:-9}, 5, 1);
             thecodingofisaac.init(() => {
                 thecodingofisaac.addAnimation();
                 room.addImage(thecodingofisaac);
@@ -100,11 +108,11 @@ class CustomScene{
         // const roomColor = 0x0B0014;
         // const roomColor = 0xF6BB62; // Text Color
         // const roomColor = 0x1A2623; // Project Background Color
-        const roomColor = colors[0];
+        // const roomColor = colors[0];
+        const roomColor = 0x455854;
         const room = new Room(pivot, this.camera, center, this.sphereRadius, roomColor);
 
         room.addEntry();
-        room.addExit();
 
         room.init();
 
@@ -160,8 +168,7 @@ class CustomScene{
         return room;
     }
 
-    
-    async createYokaiRoom(pivot){
+    async createCodingOfIsaacRoom(pivot){
         const center = { x:0, y:0, z:0 };
         const roomColor = 0x340500;
 
@@ -229,13 +236,15 @@ class CustomScene{
     }
 
     
-    async createThirdRoom(pivot){
+    async createGesturesHeroRoom(pivot){
         const center = { x:0, y:0, z:0 };
-        const roomColor = colors[2];
+        // const roomColor = colors[2];
+        const roomColor = 0x33CCCC;
 
 
         const room = new Room(pivot, this.camera, center, this.sphereRadius, roomColor);
 
+        room.addExit();
         room.addEntry();
 
         room.init();
@@ -244,6 +253,49 @@ class CustomScene{
 
         square.setIsDoubleSided(false);
         square.init();
+
+
+        let a = async () => {
+            let game = new Panel(room, "images/gesturesHero/index.png", {x:4, y:5, z:-10}, 8, 1);
+            await game.init(() => {
+                game.addAnimation();
+                room.addImage(game);
+            });
+    
+            let kikkFestivalPoster = new Panel(room, "images/gesturesHero/KIKKfestival.jpg", {x:-6.2, y:-1.6, z:-11.5}, 8, 1);
+            await kikkFestivalPoster.init(() => {
+                kikkFestivalPoster.addAnimation();
+                room.addImage(kikkFestivalPoster);
+            });
+    
+            let poster = new Panel(room, "images/gesturesHero/poster.png", {x:-5, y:5, z:-10}, 8, 1);
+            await poster.init(() => {
+                poster.addAnimation();
+                room.addImage(poster);
+            });
+
+    
+            let logo = new Panel(room, "images/gesturesHero/logo.png", {x:5, y:-2, z:-9.5}, 2, 1);
+            await logo.init(() => {
+                logo.addAnimation();
+                room.addImage(logo);
+            });
+    
+            let title = new Panel(room, "images/gesturesHero/title.png", {x:0, y:0, z:-9}, 8, 1);
+            await title.init(() => {
+                // room.addImage(title);
+            });
+
+
+            const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/GesturesHero/GesturesHero", "GesturesHero");
+            await githubButton.init(() => {
+                room.addImage(githubButton);
+            });
+
+            room.hideImages();
+        };
+        await a();
+
 
         return room;
 
