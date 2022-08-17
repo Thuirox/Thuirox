@@ -18,15 +18,17 @@ class CustomScene{
     
     async init(callback){
         const justabayetRoom = await this.createJustABayetRoom(this.scene);
-        const gesturesHeroRoom = await this.createGesturesHeroRoom(justabayetRoom.mesh);
-        const codingOfIsaacRoom = await this.createCodingOfIsaacRoom(gesturesHeroRoom.mesh);
-        const clashRoom = await this.createClashRoom(codingOfIsaacRoom.mesh);
-
         justabayetRoom.setCenter(cameraInitialPosition);
         
+        const gesturesHeroRoom = await this.createGesturesHeroRoom(justabayetRoom.mesh);
         gesturesHeroRoom.setCenter({ x:28, y:0, z:0 });
+
+        const codingOfIsaacRoom = await this.createCodingOfIsaacRoom(gesturesHeroRoom.mesh);
         codingOfIsaacRoom.setCenter({ x:28, y:0, z:0 });
+
+        const clashRoom = await this.createClashRoom(codingOfIsaacRoom.mesh);
         clashRoom.setCenter({ x:28, y:0, z:0 });
+        
 
         justabayetRoom.setNext(gesturesHeroRoom);
         gesturesHeroRoom.setNext(codingOfIsaacRoom);
