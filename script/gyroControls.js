@@ -100,7 +100,7 @@ var gyroCameraAnimation = new Animation(0, 0,
         animation.args.camera.quaternion.slerp(animation.end, 0.5);
     }, 
     (animation) => {
-        animation.args.camera.quaternion = animation.end;
+        animation.args.camera.quaternion.copy(animation.end);
     }, {
         camera: null
 });
@@ -111,11 +111,17 @@ let useGyroInterpolation = true;
 var updateGyroFull = function(){
     gyro_text.textContent = `${deviceOrientation.alpha.toFixed(1)}\n${deviceOrientation.beta.toFixed(1)}\n${deviceOrientation.gamma.toFixed(1)}`;
 
+
+
     var alpha = deviceOrientation.alpha ? THREE.MathUtils.degToRad( deviceOrientation.alpha + gyroOffset.alpha ) : 0; // Z
     var beta = deviceOrientation.beta ? THREE.MathUtils.degToRad( deviceOrientation.beta + gyroOffset.beta ) : 0; // X'
     var gamma = deviceOrientation.gamma ? THREE.MathUtils.degToRad( deviceOrientation.gamma + gyroOffset.gamma ) : 0; // Y''
     var orient = screenOrientation ? THREE.MathUtils.degToRad( screenOrientation ) : 0; // O
         
+    // There was a bug, when alpha reached 0 the camera jumped. This is a dead simple very dirty workaround fixing it.
+    if(alpha == 0){
+        return;
+    }
 
     if(useGyroInterpolation){
         let targetQuaternion = new THREE.Quaternion(camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w);
