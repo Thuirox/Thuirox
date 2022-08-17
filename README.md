@@ -6,7 +6,7 @@
   
 </p>
 
-[Don't click here](https://justabayet.github.io/justabayet/)
+[Don't click here ❕](https://justabayet.github.io/justabayet/)
 
 <!--
 **Thuirox/Thuirox** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
