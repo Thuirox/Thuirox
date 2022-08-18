@@ -1,3 +1,4 @@
+import { updateGyroOffset } from "./gyroControls.js";
 
 
 function loadingScreenSetup(){
@@ -31,6 +32,8 @@ function loadingScreenSetup(){
                 document.getElementById("loading-screen-break-strip__bottom").style.height = "100%";
                 
                 setTimeout(()=>{
+                    updateGyroOffset()
+
                     document.getElementById("loading-screen-left-panel").style.left = "-100%";
                     document.getElementById("loading-screen-right-panel").style.left = "calc(100% + 5px)";
                     document.getElementById("loading-screen-text").style.bottom = "150%";

@@ -182,4 +182,4 @@ function updateCameraAngleOffset(value){
 
 
 
-export { setupGyroControls, gyroControl, updateGyro, updateCameraAngleOffset }
+export { setupGyroControls, gyroControl, updateGyro, updateCameraAngleOffset, updateGyroOffset }
