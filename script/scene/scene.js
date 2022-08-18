@@ -89,7 +89,7 @@ class CustomScene{
             let title = new Title(room, "images/justabayet/title.png", {x:0, y:0, z:-8}, 7, 1);
             title.init();
     
-            const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/Thuirox/Thuirox", "justabayet");
+            const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/justabayet/justabayet", "justabayet");
             githubButton.init(() => {
                 room.addImage(githubButton);
             });
@@ -145,12 +145,12 @@ class CustomScene{
             let imageTitle = new Title(room, "images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8, 1);
             await imageTitle.init();
     
-            const githubButton = new GithubButton(room, {x:-1.5, y:-6, z:-6}, 1, "https://github.com/Thuirox/whenisnextlolclash", "whenisnextlolclash");
+            const githubButton = new GithubButton(room, {x:-1.5, y:-6, z:-6}, 1, "https://github.com/justabayet/whenisnextlolclash", "whenisnextlolclash");
             await githubButton.init(() => {
                 room.addImage(githubButton);
             });
     
-            const websiteButton = new WebsiteButton(room, {x:1.5, y:-6, z:-6}, 1, "https://thuirox.github.io/whenisnextlolclash/");
+            const websiteButton = new WebsiteButton(room, {x:1.5, y:-6, z:-6}, 1, "https://justabayet.github.io/whenisnextlolclash/");
             await websiteButton.init(() => {
                 room.addImage(websiteButton);
             });
