@@ -31,24 +31,6 @@
     bottom: 0%;
 }
 
-#contact-button{
-    white-space: nowrap;
-    font-size: 24px;
-    padding: 15px 20px;
-    z-index: 2;
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 20px;
-    background-color: rgb(247, 228, 221);
-    /* background: linear-gradient(22deg, rgba(207, 172, 159, 0.644) 0%, rgb(247, 228, 221) 35%, rgb(247, 228, 221) 52%, rgb(247, 228, 221) 72%, rgba(247, 228, 221, 0.719) 100%); */
-    /* border: 1px solid rgb(77, 50, 41); */
-    box-shadow: 5px 5px 15px rgba(114, 80, 68, 0.295);
-
-    cursor: pointer;
-}
-
 
 .loading-screen-panel{
     transition: all;
