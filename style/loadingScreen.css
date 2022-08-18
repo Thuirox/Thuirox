@@ -136,7 +136,7 @@
 }
 
 #loading-screen-text-start{
-    padding-top: 30px;
+    margin-top: 50px;
     font-size: 20px;
     opacity: 0;
     transition: transform 0.2s ease-in, opacity 2s ease;
