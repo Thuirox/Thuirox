@@ -102,7 +102,7 @@ class RedirectButton extends Button{
 
 
         let redirection = () => {
-            // console.log("redirect towards " + this.url);
+
             redirectModalText.innerHTML = this.text;
             redirectConfirmButton.href = this.url;
             displayRedirectModal();
@@ -117,7 +117,8 @@ class GithubButton extends RedirectButton{
     constructor(parent, position, size=5, repoPath="", repoName=""){
         super(parent, position, size, "images/github.png", repoPath);
 
-        this.text = repoName + " repository";
+        // this.text = repoName + " repository";
+        this.text = "Open the Github repo?";
     }
 }
 
@@ -125,7 +126,7 @@ class WebsiteButton extends RedirectButton{
     constructor(parent, position, size=5, url=""){
         super(parent, position, size, "images/redirect.png", url);
 
-        this.text = "live demo";
+        this.text = "Open the live demo?";
 
     }
 }
