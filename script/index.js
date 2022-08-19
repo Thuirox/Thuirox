@@ -10,7 +10,7 @@ import { loadingScreenSetup } from './loadingScreen.js';
 import { cameraInitialPosition } from './const.js';
 import { transportController } from './scene/transporter.js';
 
-function main() {
+async function main() {
     const canvas = document.querySelector('#c');
     const renderer = new THREE.WebGLRenderer({
         canvas,
@@ -91,7 +91,7 @@ function main() {
 
 
     const scene = new THREE.Scene();
-    setupScene(scene, camera, renderer, ()=>{
+    await setupScene(scene, camera, renderer, ()=>{
 
         let pos = transportController.currentRoom.mesh.getWorldPosition(new THREE.Vector3());
         
@@ -144,7 +144,7 @@ function main() {
 
 }
 
-main();
+await main();
 
 loadingScreenSetup();
 

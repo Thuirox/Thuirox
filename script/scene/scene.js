@@ -16,22 +16,22 @@ class CustomScene{
     }
     
     async init(callback){
-        const justabayetRoom = this.createJustABayetRoom(this.scene);
+        const justabayetRoom = await this.createJustABayetRoom(this.scene);
         justabayetRoom.setCenter(cameraInitialPosition);
 
-        const hackathonRoom = this.createHackathonRoom(justabayetRoom.mesh);
-        hackathonRoom.hideImages();
-        hackathonRoom.setCenter({ x:28, y:0, z:0 });
+        // const hackathonRoom = await this.createHackathonRoom(justabayetRoom.mesh);
+        // hackathonRoom.hideImages();
+        // hackathonRoom.setCenter({ x:28, y:0, z:0 });
         
-        const gesturesHeroRoom = this.createGesturesHeroRoom(hackathonRoom.mesh);
+        const gesturesHeroRoom = await this.createGesturesHeroRoom(justabayetRoom.mesh);
         gesturesHeroRoom.hideImages();
         gesturesHeroRoom.setCenter({ x:28, y:0, z:0 });
 
-        const codingOfIsaacRoom = this.createCodingOfIsaacRoom(gesturesHeroRoom.mesh);
+        const codingOfIsaacRoom = await this.createCodingOfIsaacRoom(gesturesHeroRoom.mesh);
         codingOfIsaacRoom.hideImages();
         codingOfIsaacRoom.setCenter({ x:28, y:0, z:0 });
 
-        const clashRoom = this.createClashRoom(codingOfIsaacRoom.mesh);
+        const clashRoom = await this.createClashRoom(codingOfIsaacRoom.mesh);
         clashRoom.hideImages();
         clashRoom.setCenter({ x:28, y:0, z:0 });
 
@@ -55,7 +55,7 @@ class CustomScene{
     }
 
 
-    createJustABayetRoom(pivot){
+    async createJustABayetRoom(pivot){
         const center = { x:0, y:0, z:0 };
 
         const roomColor = 0x0B0014;
@@ -76,22 +76,22 @@ class CustomScene{
 
             
         const gesturesHero = new Panel(room, "images/gesturesHero/index.png", {x:-4.5, y:-4, z:-9}, 6, 0.9);
-        gesturesHero.init(() => {
+        await gesturesHero.init(() => {
             gesturesHero.addAnimation();
         });
 
         const whenisnextlolclash = new Panel(room, "images/justabayet/whenisnextlolclash.png", {x:-5.5, y:1.5, z:-9}, 3, 1);
-        whenisnextlolclash.init(() => {
+        await whenisnextlolclash.init(() => {
             whenisnextlolclash.addAnimation();
         });
 
         const thecodingofisaac = new Panel(room, "images/justabayet/thecodingofisaac.png", {x:5, y:2.2, z:-9}, 5, 1);
-        thecodingofisaac.init(() => {
+        await thecodingofisaac.init(() => {
             thecodingofisaac.addAnimation();
         });
 
         const hackathon = new Panel(room, "images/hackathon/title.png", {x:6.5, y:-4, z:-9}, 7, 0.7);
-        hackathon.init(() => {
+        await hackathon.init(() => {
             hackathon.addAnimation();
         });
 
@@ -107,7 +107,7 @@ class CustomScene{
         return room;
     }
 
-    createClashRoom(pivot){
+    async createClashRoom(pivot){
         const center = { x:0, y:0, z:0 };
         // const roomColor = 0x0B0014;
         // const roomColor = 0xF6BB62; // Text Color
@@ -128,19 +128,19 @@ class CustomScene{
         square.init();
 
         // const videoDesktop = new Panel(room, "whenisnextlolclash-video", {x:4, y:2.2, z:-7}, 7, 1, true);
-        
+         
         // videoDesktop.init(() => {
         //     videoDesktop.addAnimation();
     
         // });
 
         const imageDesktop = new Panel(room, "images/whenisnextlolclash/index.png", {x:4, y:2.2, z:-7}, 7, 1);
-        imageDesktop.init(() => {
+        await imageDesktop.init(() => {
             imageDesktop.addAnimation();
         });
 
         const imageMobile = new Panel(room, "images/whenisnextlolclash/indexMobile.png", {x:-4, y:-3.5, z:-8}, 3, 1);
-        imageMobile.init(() => {
+        await imageMobile.init(() => {
             imageMobile.addAnimation();
         });
 
@@ -157,7 +157,7 @@ class CustomScene{
         return room;
     }
 
-    createHackathonRoom(pivot){
+    async createHackathonRoom(pivot){
         const center = { x:0, y:0, z:0 };
         const roomColor = 0x000000;
 
@@ -175,47 +175,48 @@ class CustomScene{
         square.init();
 
 
+        return room;
         const hpc2019 = new Panel(room, "images/hackathon/Hope_for_climate_2019.jpg", {x:0, y:-6, z:-11}, 7, 1);
-        hpc2019.init();
+        await hpc2019.init();
 
 
 
         const cow2019 = new Panel(room, "images/hackathon/COW_2019.jpg", {x:-8, y:0, z:-10}, 3, 1);
-        cow2019.init();
+        await cow2019.init();
 
         const cow2019a = new Panel(room, "images/hackathon/COW_2019_award.png", {x:-8, y:3, z:-10}, 4, 1);
-        cow2019a.init(() => {
-            cow2019a.addAnimation();
+        await cow2019a.init(() => {
+            // cow2019a.addAnimation();
         });
 
 
 
         const hyc2020 = new Panel(room, "images/hackathon/HYC_2020.png", {x:-3.5, y:5, z:-10}, 5, 1);
-        hyc2020.init();
+        await hyc2020.init();
 
         const hyc2020a = new Panel(room, "images/hackathon/HYC_2020_award.png", {x:-3.5, y:8, z:-10}, 6, 1);
-        hyc2020a.init(() => {
-            hyc2020a.addAnimation();
+        await hyc2020a.init(() => {
+            // hyc2020a.addAnimation();
         });
 
 
 
         const cow2021 = new Panel(room, "images/hackathon/COW_2021.png", {x:3.5, y:5, z:-10}, 4, 1);
-        cow2021.init();
+        await cow2021.init();
 
         const cow2021a = new Panel(room, "images/hackathon/COW_2021_award.png", {x:3.5, y:8, z:-10}, 4, 1);
-        cow2021a.init(() => {
-            cow2021a.addAnimation();
+        await cow2021a.init(() => {
+            // cow2021a.addAnimation();
         });
 
 
 
         const cow2020 = new Panel(room, "images/hackathon/COW_2020.jpg", {x:8, y:0, z:-10}, 3, 1);
-        cow2020.init();
+        await cow2020.init();
 
         const cow2020a = new Panel(room, "images/hackathon/COW_2020_award.png", {x:8, y:3, z:-10}, 5, 1);
-        cow2020a.init(() => {
-            cow2020a.addAnimation();
+        await cow2020a.init(() => {
+            // cow2020a.addAnimation();
         });
 
 
@@ -226,7 +227,7 @@ class CustomScene{
         return room;
     }
 
-    createCodingOfIsaacRoom(pivot){
+    async createCodingOfIsaacRoom(pivot){
         const center = { x:0, y:0, z:0 };
         const roomColor = 0x340500;
 
@@ -245,17 +246,17 @@ class CustomScene{
 
 
         const imageChara = new Panel(room, "images/theCodingOfIsaac/character.png", {x:-3, y:-2, z:-8}, 2, 1);
-        imageChara.init(() => {
+        await imageChara.init(() => {
             imageChara.addAnimation();
         });
 
         const imageTutorial = new Panel(room, "images/theCodingOfIsaac/tutorial.png", {x:5, y:-1, z:-11.5}, 8, 1);
-        imageTutorial.init(() => {
+        await imageTutorial.init(() => {
             imageTutorial.addAnimation();
         });
 
         const imageRoom = new Panel(room, "images/theCodingOfIsaac/room.png", {x:-5, y:1.5, z:-10}, 7, 1);
-        imageRoom.init(() => {
+        await imageRoom.init(() => {
             imageRoom.addAnimation();
         });
 
@@ -268,7 +269,7 @@ class CustomScene{
         return room;
     }
 
-    createGesturesHeroRoom(pivot){
+    async createGesturesHeroRoom(pivot){
         const center = { x:0, y:0, z:0 };
         // const roomColor = colors[2];
         const roomColor = 0x33CCCC;
@@ -288,23 +289,23 @@ class CustomScene{
 
 
         const game = new Panel(room, "images/gesturesHero/index.png", {x:4, y:5, z:-10}, 8, 1);
-        game.init(() => {
+        await game.init(() => {
             game.addAnimation();
         });
 
         const kikkFestivalPoster = new Panel(room, "images/gesturesHero/KIKKfestival.jpg", {x:-6.2, y:-1.6, z:-11.5}, 8, 1);
-        kikkFestivalPoster.init(() => {
+        await kikkFestivalPoster.init(() => {
             kikkFestivalPoster.addAnimation();
         });
 
         const poster = new Panel(room, "images/gesturesHero/poster.png", {x:-5, y:5, z:-10}, 8, 1);
-        poster.init(() => {
+        await poster.init(() => {
             poster.addAnimation();
         });
 
 
         const logo = new Panel(room, "images/gesturesHero/logo.png", {x:5, y:-2, z:-9.5}, 2, 1);
-        logo.init(() => {
+        await logo.init(() => {
             logo.addAnimation();
         });
 
@@ -314,16 +315,62 @@ class CustomScene{
 
         const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/GesturesHero/GesturesHero", "GesturesHero");
         githubButton.init();
+        const hpc2019 = new Panel(room, "images/hackathon/Hope_for_climate_2019.jpg", {x:0, y:-6, z:-11}, 7, 1);
+        await hpc2019.init();
 
+
+
+        const cow2019 = new Panel(room, "images/hackathon/COW_2019.jpg", {x:-8, y:0, z:-10}, 3, 1);
+        await cow2019.init();
+
+        const cow2019a = new Panel(room, "images/hackathon/COW_2019_award.png", {x:-8, y:3, z:-10}, 4, 1);
+        await cow2019a.init(() => {
+            // cow2019a.addAnimation();
+        });
+
+
+
+        const hyc2020 = new Panel(room, "images/hackathon/HYC_2020.png", {x:-3.5, y:5, z:-10}, 5, 1);
+        await hyc2020.init();
+
+        const hyc2020a = new Panel(room, "images/hackathon/HYC_2020_award.png", {x:-3.5, y:8, z:-10}, 6, 1);
+        await hyc2020a.init(() => {
+            // hyc2020a.addAnimation();
+        });
+
+
+
+        const cow2021 = new Panel(room, "images/hackathon/COW_2021.png", {x:3.5, y:5, z:-10}, 4, 1);
+        await cow2021.init();
+
+        const cow2021a = new Panel(room, "images/hackathon/COW_2021_award.png", {x:3.5, y:8, z:-10}, 4, 1);
+        await cow2021a.init(() => {
+            // cow2021a.addAnimation();
+        });
+
+
+
+        const cow2020 = new Panel(room, "images/hackathon/COW_2020.jpg", {x:8, y:0, z:-10}, 3, 1);
+        await cow2020.init();
+
+        const cow2020a = new Panel(room, "images/hackathon/COW_2020_award.png", {x:8, y:3, z:-10}, 5, 1);
+        await cow2020a.init(() => {
+            // cow2020a.addAnimation();
+        });
+
+
+
+        const imageTitle = new Title(room, "images/hackathon/title.png", {x:0, y:0, z:-14}, 8, 1);
+        imageTitle.init();
 
         return room;
     }
 
 }
 
-function setupScene(scene, camera, renderer, callback){
+async function setupScene(scene, camera, renderer, callback){
     let scene3D = new CustomScene(scene, camera, renderer);
-    scene3D.init(callback);
+    await scene3D.init(callback);
 }
 
 export { setupScene };
