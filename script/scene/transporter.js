@@ -40,14 +40,14 @@ class Transporter{
         this.mesh.rotateY(Math.PI/4);
         this.mesh.position.x = this.center.x;
         this.mesh.position.y = this.center.y;
-        this.room.mesh.add(this.mesh);
+        this.room.childrenCenter.add(this.mesh);
 
 
         const edges = new THREE.EdgesGeometry( cubeGeometry );
 
         this.lines = new THREE.LineSegments( edges );
         this.lines.material.transparent = true;
-        this.lines.material.opacity = 0.7;
+        this.lines.material.opacity = 0.3;
         this.lines.material.side = THREE.FrontSide;
 
         this.mesh.add( this.lines );
@@ -69,7 +69,7 @@ class Transporter{
     
         animationController.add(this.animation);
     
-        addInteraction(this.mesh, (event) => {
+        addInteraction(this.mesh, this.room, (event) => {
             transportController.setCurrentRoom(this.room);
         });
     }
@@ -95,13 +95,19 @@ const transportController = {
 
         room.transporter.removeLines();
 
+        room.previous?.previous?.unload();
+        room.previous?.load();
+        room.load();
+        room.next?.load();
+        room.next?.next?.unload();
+
         if(this.currentRoom){
             this.currentRoom.hideImages();
 
             // Display back the lines of the cube after a delay to avoid passing through with the camera.
             new Animation(null, null, 500, () => {}, (animation) => {
-                animation.args.room.transporter.addLines();
-
+                let room = animation.args.room;
+                room.transporter.addLines();
 
             }, { room: this.currentRoom }).init();
         }

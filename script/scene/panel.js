@@ -32,7 +32,7 @@ class Panel{
         // add the panel to the imageManager
         this.imageManager.addImage(this.mesh);
 
-        addInteraction(this.mesh, () => {
+        addInteraction(this.mesh, this.room, () => {
             // On click, make image full screen.
             imageContainer.style.backgroundImage = 'url(' + this.path + ')';
             imageContainer.style.opacity = 1;

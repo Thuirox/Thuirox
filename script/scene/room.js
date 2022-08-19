@@ -1,7 +1,7 @@
 import * as THREE from '../libs/three.module.js';
 import { LightManager } from "./lightManager.js";
 import { Chain } from "../utils.js";
-import { angleBetweenSphere } from '../const.js';
+import { angleBetweenSphere,debugLoading } from '../const.js';
 import { ImageManager } from './imageManager.js';
 
 class Room extends Chain{
@@ -29,6 +29,14 @@ class Room extends Chain{
         this.imageManager =  null;
 
         this.toPivot = true;
+
+        this.loaded = true;
+
+        this.clickableElements = [];
+    }
+
+    addClickable(clickable){
+        this.clickableElements.push(clickable);
     }
 
     setToPivot(val){
@@ -57,6 +65,30 @@ class Room extends Chain{
         this.imageManager.hideImages();
     }
 
+    load(){
+        if(!this.loaded){
+            if(debugLoading) console.log("Load", this);
+            this.mesh.add(this.childrenCenter);
+            this.loaded = true;
+            this.clickableElements.forEach(( clickable ) => {
+                clickable.turnOnInteraction();
+            });
+            this.lightManager.turnOnLights();
+        } 
+    }
+
+    unload(){
+        if(this.loaded){
+            if(debugLoading) console.log("Unloaded", this);
+            this.mesh.remove(this.childrenCenter);
+            this.loaded = false;
+            this.clickableElements.forEach(( clickable ) => {
+                clickable.turnOffInteraction();
+            });
+            this.lightManager.turnOffLights();
+        } 
+    }
+
     init(){
         /**
          * this.parent is like a planet
@@ -76,6 +108,9 @@ class Room extends Chain{
             this.parentPivot.rotateY(angleBetweenSphere);
             this.mesh.rotateY(angleBetweenSphere);
         }
+
+        this.childrenCenter = new THREE.Object3D();
+        this.mesh.add(this.childrenCenter);
 
 
         const orificeFullSize = (Math.PI / 2) - angleBetweenSphere;
@@ -108,7 +143,7 @@ class Room extends Chain{
 
 
         const pivotSphereElements = new THREE.Object3D();
-        this.mesh.add(pivotSphereElements);
+        this.childrenCenter.add(pivotSphereElements);
 
         pivotSphereElements.add(meshEntryOrifice);
         pivotSphereElements.add(meshExitOrifice);
@@ -123,7 +158,7 @@ class Room extends Chain{
         exitOrifice.rotateX(angleBetweenSphere);
 
 
-        pivotSphereElements.rotateZ(Math.PI / 2);
+        this.pivotSphereElements.rotateZ(Math.PI / 2);
 
         jointUpper.rotateZ(- Math.PI);
         jointUpper.rotateY(jointSizeAngle / 2);
@@ -135,12 +170,11 @@ class Room extends Chain{
 
         cap.rotateX(Math.PI/2);
 
-        this.lightManager = new LightManager(this.mesh, { x:0, y:0, z:0 });
+        this.lightManager = new LightManager(this.childrenCenter, { x:0, y:0, z:0 });
         this.lightManager.initLights();
 
-        this.imageManager = new ImageManager(this, { x:0, y:0, z:0 });
+        this.imageManager = new ImageManager(this.childrenCenter, { x:0, y:0, z:0 });
         this.imageManager.init();
-
     }
 
     setCenter(center){

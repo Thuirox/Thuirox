@@ -11,7 +11,7 @@ var targetFct = undefined;
 var startPosition = undefined;
 
 
-function addInteraction(object, fct){
+function addInteraction(object, room, fct){
     let setupFunction = (event) => {
         if(debugMove) console.log("interaction event started");
         move = false;
@@ -19,19 +19,38 @@ function addInteraction(object, fct){
         targetFct = fct;
     }
 
-    domEvents.addEventListener(object, "mousedown", setupFunction, false);
-
-    // Touchend not detected correctly when it is on a three js object (but work on global document). Using touchstart instead.
-    domEvents.addEventListener(object, "touchstart", (event)=>{
+    let touchEnd = (event) => {
         startPosition = {
             x:event.origDomEvent.changedTouches[0].screenX,
             y:event.origDomEvent.changedTouches[0].screenY
         };
         setupFunction(event);
-    }, false);
+    }
 
-    clickableElements.push(object);
 
+    object.turnOffInteraction = () => {
+        // Make object unclickable.
+        
+        domEvents.removeEventListener(object, "mousedown", setupFunction, false);
+        domEvents.removeEventListener(object, "touchstart", touchEnd, false);
+
+        clickableElements = clickableElements.filter(clickable => clickable != object);
+    };
+
+    object.turnOnInteraction = () => {
+        // Make object clickable.
+
+        domEvents.addEventListener(object, "mousedown", setupFunction, false);
+        // Touchend not detected correctly when it is on a three js object (but work on global document). Using touchstart instead.
+        domEvents.addEventListener(object, "touchstart", touchEnd, false);
+
+        clickableElements.push(object);
+    };
+
+    
+    room.addClickable(object);
+
+    object.turnOnInteraction();
 }
 
 function setupCancelOnMove(){

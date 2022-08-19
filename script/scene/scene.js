@@ -19,11 +19,11 @@ class CustomScene{
         const justabayetRoom = await this.createJustABayetRoom(this.scene);
         justabayetRoom.setCenter(cameraInitialPosition);
 
-        // const hackathonRoom = await this.createHackathonRoom(justabayetRoom.mesh);
-        // hackathonRoom.hideImages();
-        // hackathonRoom.setCenter({ x:28, y:0, z:0 });
+        const hackathonRoom = await this.createHackathonRoom(justabayetRoom.mesh);
+        hackathonRoom.hideImages();
+        hackathonRoom.setCenter({ x:28, y:0, z:0 });
         
-        const gesturesHeroRoom = await this.createGesturesHeroRoom(justabayetRoom.mesh);
+        const gesturesHeroRoom = await this.createGesturesHeroRoom(hackathonRoom.mesh);
         gesturesHeroRoom.hideImages();
         gesturesHeroRoom.setCenter({ x:28, y:0, z:0 });
 
@@ -34,10 +34,10 @@ class CustomScene{
         const clashRoom = await this.createClashRoom(codingOfIsaacRoom.mesh);
         clashRoom.hideImages();
         clashRoom.setCenter({ x:28, y:0, z:0 });
-
         
 
-        justabayetRoom.setNext(gesturesHeroRoom);
+        justabayetRoom.setNext(hackathonRoom);
+        hackathonRoom.setNext(gesturesHeroRoom);
         gesturesHeroRoom.setNext(codingOfIsaacRoom);
         codingOfIsaacRoom.setNext(clashRoom);
     
@@ -48,6 +48,8 @@ class CustomScene{
         this.scene.add(ambientLight);
     
         this.renderer.render(this.scene, this.camera);
+
+        
 
         transportController.setCurrentRoom(justabayetRoom);
 
@@ -96,10 +98,10 @@ class CustomScene{
         });
 
         const title = new Title(room, "images/justabayet/title.png", {x:0, y:0, z:-8}, 7, 1);
-        title.init();
+        await title.init();
 
         const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/justabayet/justabayet", "justabayet");
-        githubButton.init();
+        await githubButton.init();
         
 
         
@@ -145,13 +147,13 @@ class CustomScene{
         });
 
         const imageTitle = new Title(room, "images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8, 1);
-        imageTitle.init();
+        await imageTitle.init();
 
         const githubButton = new GithubButton(room, {x:-1.5, y:-6, z:-6}, 1, "https://github.com/justabayet/whenisnextlolclash", "whenisnextlolclash");
-        githubButton.init();
+        await githubButton.init();
 
         const websiteButton = new WebsiteButton(room, {x:1.5, y:-6, z:-6}, 1, "https://justabayet.github.io/whenisnextlolclash/");
-        websiteButton.init();
+        await websiteButton.init();
         
 
         return room;
@@ -174,8 +176,6 @@ class CustomScene{
         square.setIsDoubleSided(false);
         square.init();
 
-
-        return room;
         const hpc2019 = new Panel(room, "images/hackathon/Hope_for_climate_2019.jpg", {x:0, y:-6, z:-11}, 7, 1);
         await hpc2019.init();
 
@@ -186,7 +186,7 @@ class CustomScene{
 
         const cow2019a = new Panel(room, "images/hackathon/COW_2019_award.png", {x:-8, y:3, z:-10}, 4, 1);
         await cow2019a.init(() => {
-            // cow2019a.addAnimation();
+            cow2019a.addAnimation();
         });
 
 
@@ -196,7 +196,7 @@ class CustomScene{
 
         const hyc2020a = new Panel(room, "images/hackathon/HYC_2020_award.png", {x:-3.5, y:8, z:-10}, 6, 1);
         await hyc2020a.init(() => {
-            // hyc2020a.addAnimation();
+            hyc2020a.addAnimation();
         });
 
 
@@ -206,7 +206,7 @@ class CustomScene{
 
         const cow2021a = new Panel(room, "images/hackathon/COW_2021_award.png", {x:3.5, y:8, z:-10}, 4, 1);
         await cow2021a.init(() => {
-            // cow2021a.addAnimation();
+            cow2021a.addAnimation();
         });
 
 
@@ -216,13 +216,13 @@ class CustomScene{
 
         const cow2020a = new Panel(room, "images/hackathon/COW_2020_award.png", {x:8, y:3, z:-10}, 5, 1);
         await cow2020a.init(() => {
-            // cow2020a.addAnimation();
+            cow2020a.addAnimation();
         });
 
 
 
         const imageTitle = new Title(room, "images/hackathon/title.png", {x:0, y:0, z:-14}, 8, 1);
-        imageTitle.init();
+        await imageTitle.init();
 
         return room;
     }
@@ -261,10 +261,10 @@ class CustomScene{
         });
 
         const imageTitle = new Title(room, "images/theCodingOfIsaac/title.png", {x:0, y:0, z:-9}, 8, 1);
-        imageTitle.init();
+        await imageTitle.init();
 
         const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/snail-unamur/Yo-kai-watch", "The Coding of Isaac");
-        githubButton.init();
+        await githubButton.init();
 
         return room;
     }
@@ -310,58 +310,7 @@ class CustomScene{
         });
 
         const title = new Title(room, "images/gesturesHero/title.png", {x:0, y:0, z:-9}, 8, 1);
-        title.init();
-
-
-        const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/GesturesHero/GesturesHero", "GesturesHero");
-        githubButton.init();
-        const hpc2019 = new Panel(room, "images/hackathon/Hope_for_climate_2019.jpg", {x:0, y:-6, z:-11}, 7, 1);
-        await hpc2019.init();
-
-
-
-        const cow2019 = new Panel(room, "images/hackathon/COW_2019.jpg", {x:-8, y:0, z:-10}, 3, 1);
-        await cow2019.init();
-
-        const cow2019a = new Panel(room, "images/hackathon/COW_2019_award.png", {x:-8, y:3, z:-10}, 4, 1);
-        await cow2019a.init(() => {
-            // cow2019a.addAnimation();
-        });
-
-
-
-        const hyc2020 = new Panel(room, "images/hackathon/HYC_2020.png", {x:-3.5, y:5, z:-10}, 5, 1);
-        await hyc2020.init();
-
-        const hyc2020a = new Panel(room, "images/hackathon/HYC_2020_award.png", {x:-3.5, y:8, z:-10}, 6, 1);
-        await hyc2020a.init(() => {
-            // hyc2020a.addAnimation();
-        });
-
-
-
-        const cow2021 = new Panel(room, "images/hackathon/COW_2021.png", {x:3.5, y:5, z:-10}, 4, 1);
-        await cow2021.init();
-
-        const cow2021a = new Panel(room, "images/hackathon/COW_2021_award.png", {x:3.5, y:8, z:-10}, 4, 1);
-        await cow2021a.init(() => {
-            // cow2021a.addAnimation();
-        });
-
-
-
-        const cow2020 = new Panel(room, "images/hackathon/COW_2020.jpg", {x:8, y:0, z:-10}, 3, 1);
-        await cow2020.init();
-
-        const cow2020a = new Panel(room, "images/hackathon/COW_2020_award.png", {x:8, y:3, z:-10}, 5, 1);
-        await cow2020a.init(() => {
-            // cow2020a.addAnimation();
-        });
-
-
-
-        const imageTitle = new Title(room, "images/hackathon/title.png", {x:0, y:0, z:-14}, 8, 1);
-        imageTitle.init();
+        await title.init();
 
         return room;
     }

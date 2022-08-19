@@ -2,9 +2,9 @@ import * as THREE from '../libs/three.module.js';
 import { Animation } from '../animation.js';
 
 class LightManager{
-    constructor(parent, position){
+    constructor(parentMesh, position){
         this.position = position;
-        this.parent = parent;
+        this.parentMesh = parentMesh;
     }
     
 
@@ -19,18 +19,18 @@ class LightManager{
         this.bottomLight = new THREE.PointLight(color, intensity, 20);
         this.bottomLight.position.set(this.position.x, this.position.y-10, this.position.z);
 
-        this.parent.add(this.topLight);
-        this.parent.add(this.bottomLight);
+        this.parentMesh.add(this.topLight);
+        this.parentMesh.add(this.bottomLight);
 
         this.turnOffAnimation = new Animation(
-            1, 0, 500,
+            1, 0, 1500,
             (ratio) => {
                 this.topLight.intensity = 1 - ratio;
                 this.bottomLight.intensity = 1 - ratio;
         }, undefined);
 
         this.turnOnAnimation = new Animation(
-            1, 0, 500,
+            1, 0, 1500,
             (ratio) => {
                 this.topLight.intensity = ratio;
                 this.bottomLight.intensity = ratio;

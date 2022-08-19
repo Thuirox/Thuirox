@@ -2,8 +2,8 @@ import * as THREE from '../libs/three.module.js';
 import { Animation, DifferedAnimation } from '../animation.js';
 
 class ImageManager{
-    constructor(parent, position){
-        this.parent = parent;
+    constructor(parentMesh, position){
+        this.parentMesh = parentMesh;
 
         this.position = position;
         this.initialPosition = position;
@@ -20,13 +20,13 @@ class ImageManager{
         this.mesh =  new THREE.Object3D();
         this.mesh.position.set(this.position.x, this.position.y, this.position.z);
 
-        this.parent.mesh.add(this.mesh);
+        this.parentMesh.add(this.mesh);
 
         // Add reference point for static image.
         this.staticMesh =  new THREE.Object3D();
         this.staticMesh.position.set(this.initialPosition.x, this.initialPosition.y, this.initialPosition.z);
 
-        this.parent.mesh.add(this.staticMesh);
+        this.parentMesh.add(this.staticMesh);
     }
 
 

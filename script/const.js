@@ -5,6 +5,7 @@ const debug_text = document.getElementById("debug_text");
 const debugMove = false;
 const debugAnimation = false;
 const debugModal = false;
+const debugLoading = false;
 
 const gyroButton = document.getElementById("gyro-button");
 
@@ -34,6 +35,7 @@ export {
     debugMove, 
     debugAnimation,
     debugModal,
+    debugLoading,
     angleBetweenSphere,
     cameraInitialPosition
 }
