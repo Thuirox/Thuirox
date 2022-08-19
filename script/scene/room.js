@@ -158,7 +158,7 @@ class Room extends Chain{
         exitOrifice.rotateX(angleBetweenSphere);
 
 
-        this.pivotSphereElements.rotateZ(Math.PI / 2);
+        pivotSphereElements.rotateZ(Math.PI / 2);
 
         jointUpper.rotateZ(- Math.PI);
         jointUpper.rotateY(jointSizeAngle / 2);
