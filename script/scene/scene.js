@@ -161,7 +161,7 @@ class CustomScene{
 
     async createHackathonRoom(pivot){
         const center = { x:0, y:0, z:0 };
-        const roomColor = 0x000000;
+        const roomColor = 0xf5ffff;
 
         const room = new Room(pivot, this.camera, center, this.sphereRadius, roomColor);
 
