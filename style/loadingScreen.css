@@ -115,10 +115,27 @@
 
 #loading-screen-text-role{
     font-size: 20px;
+    margin-bottom: 30px;
+}
+
+#loading-screen-progress-bar{
+    position:relative;
+
+    transition: all 3s ease;
+
+    opacity: 1;
+
+    width: 0%;
+    height: 10px;
+    border-radius: 5px;
+
+
+    background: rgb(255,255,255);
+    background: linear-gradient(22deg, rgba(255,255,255,0.5158438375350141) 0%, rgba(255,255,255,0.8071603641456583) 52%, rgba(255,255,255,0.8799894957983193) 100%);
 }
 
 #loading-screen-text-start{
-    margin-top: 50px;
+    margin-top: 10px;
     font-size: 20px;
     opacity: 0;
     transition: transform 0.2s ease-in, opacity 2s ease;

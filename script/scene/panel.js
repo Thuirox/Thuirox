@@ -4,6 +4,7 @@ import { addRandomness } from '../utils.js';
 import { Animation, animationController } from '../animation.js';
 import { addInteraction } from '../interaction.js';
 import { imageContainer } from '../modal.js';
+import { updateProgressionLoaded } from '../loadingScreen.js';
 
 class Panel{
     constructor(room, path, position, size=5, opacity=0.7, isVideo=false){
@@ -67,12 +68,15 @@ class Panel{
     }
 
     async loadTexture(){
+        let texture;
         if(this.isVideo){
-            return this.loadVideo();
+            texture = this.loadVideo();
 
         } else {
-            return this.loadImage();
+            texture = this.loadImage();
         }
+        updateProgressionLoaded();
+        return texture;
     }
 
     async loadVideo(){
