@@ -7,42 +7,41 @@ function loadingScreenSetup(){
     const startButtonContainer = document.getElementById("loading-screen-text-start-container");
     const loadingScreen = document.getElementById("loading-screen");
 
+    
+    startButton.style.opacity = "0.8";
+
+    const startButtonAnimationTimeout = setTimeout(()=>{
+        startButton.classList.add("start-button-animation");
+
+    }, 2000)
+
     setTimeout(()=>{
-        startButton.style.opacity = "0.8";
+        startButton.style.cursor = "pointer";
 
-        const startButtonAnimationTimeout = setTimeout(()=>{
-            startButton.classList.add("start-button-animation");
+        loadingScreen.onclick = () => {
+            clearTimeout(startButtonAnimationTimeout);
+            let currentOpacity = getComputedStyle(startButton).opacity;
+            startButton.style.opacity = currentOpacity;
 
-        }, 2000)
+            startButton.classList.remove("start-button-animation");
 
-        setTimeout(()=>{
-            startButton.style.cursor = "pointer";
-
-            loadingScreen.onclick = () => {
-                clearTimeout(startButtonAnimationTimeout);
-                let currentOpacity = getComputedStyle(startButton).opacity;
-                startButton.style.opacity = currentOpacity;
-
-                startButton.classList.remove("start-button-animation");
-
-                startButtonContainer.style.opacity = 0;
+            startButtonContainer.style.opacity = 0;
+        
+            // Loading screen animation
+            document.getElementById("loading-screen-break-strip__top").style.height = "100%";
+            document.getElementById("loading-screen-break-strip__bottom").style.height = "100%";
             
-                // Loading screen animation
-                document.getElementById("loading-screen-break-strip__top").style.height = "100%";
-                document.getElementById("loading-screen-break-strip__bottom").style.height = "100%";
-                
-                setTimeout(()=>{
-                    updateGyroOffset()
+            setTimeout(()=>{
+                updateGyroOffset()
 
-                    document.getElementById("loading-screen-left-panel").style.left = "-100%";
-                    document.getElementById("loading-screen-right-panel").style.left = "calc(100% + 5px)";
-                    document.getElementById("loading-screen-text").style.bottom = "150%";
-                    loadingScreen.style.pointerEvents = "none";
-                    
-                }, 1000)
-            }
-        }, 300);
-    }, 700);
+                document.getElementById("loading-screen-left-panel").style.left = "-100%";
+                document.getElementById("loading-screen-right-panel").style.left = "calc(100% + 5px)";
+                document.getElementById("loading-screen-text").style.bottom = "150%";
+                loadingScreen.style.pointerEvents = "none";
+                
+            }, 1000)
+        }
+    }, 300);
 }
 
 export { loadingScreenSetup }
