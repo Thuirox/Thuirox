@@ -34,9 +34,9 @@ class Panel{
 
         addInteraction(this.mesh, () => {
             // On click, make image full screen.
+            imageContainer.style.backgroundImage = 'url(' + this.path + ')';
             imageContainer.style.opacity = 1;
             imageContainer.style.pointerEvents = "auto";
-            imageContainer.style.backgroundImage = 'url(' + this.path + ')';
         })
 
         callback();

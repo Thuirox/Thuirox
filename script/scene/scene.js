@@ -18,8 +18,12 @@ class CustomScene{
     async init(callback){
         const justabayetRoom = this.createJustABayetRoom(this.scene);
         justabayetRoom.setCenter(cameraInitialPosition);
+
+        const hackathonRoom = this.createHackathonRoom(justabayetRoom.mesh);
+        hackathonRoom.hideImages();
+        hackathonRoom.setCenter({ x:28, y:0, z:0 });
         
-        const gesturesHeroRoom = this.createGesturesHeroRoom(justabayetRoom.mesh);
+        const gesturesHeroRoom = this.createGesturesHeroRoom(hackathonRoom.mesh);
         gesturesHeroRoom.hideImages();
         gesturesHeroRoom.setCenter({ x:28, y:0, z:0 });
 
@@ -71,7 +75,7 @@ class CustomScene{
 
 
             
-        const gesturesHero = new Panel(room, "images/gesturesHero/index.png", {x:4.5, y:-4, z:-9}, 6, 0.9);
+        const gesturesHero = new Panel(room, "images/gesturesHero/index.png", {x:-4.5, y:-4, z:-9}, 6, 0.9);
         gesturesHero.init(() => {
             gesturesHero.addAnimation();
         });
@@ -84,6 +88,11 @@ class CustomScene{
         const thecodingofisaac = new Panel(room, "images/justabayet/thecodingofisaac.png", {x:5, y:2.2, z:-9}, 5, 1);
         thecodingofisaac.init(() => {
             thecodingofisaac.addAnimation();
+        });
+
+        const hackathon = new Panel(room, "images/hackathon/title.png", {x:6.5, y:-4, z:-9}, 7, 0.7);
+        hackathon.init(() => {
+            hackathon.addAnimation();
         });
 
         const title = new Title(room, "images/justabayet/title.png", {x:0, y:0, z:-8}, 7, 1);
@@ -144,6 +153,75 @@ class CustomScene{
         const websiteButton = new WebsiteButton(room, {x:1.5, y:-6, z:-6}, 1, "https://justabayet.github.io/whenisnextlolclash/");
         websiteButton.init();
         
+
+        return room;
+    }
+
+    createHackathonRoom(pivot){
+        const center = { x:0, y:0, z:0 };
+        const roomColor = 0x000000;
+
+        const room = new Room(pivot, this.camera, center, this.sphereRadius, roomColor);
+
+        room.addExit();
+        room.addEntry();
+
+        room.init();
+
+        
+        const square = new Transporter(room, this.camera, { x:0, y:0, z:0 }, roomColor);
+
+        square.setIsDoubleSided(false);
+        square.init();
+
+
+        const hpc2019 = new Panel(room, "images/hackathon/Hope_for_climate_2019.jpg", {x:0, y:-6, z:-11}, 7, 1);
+        hpc2019.init();
+
+
+
+        const cow2019 = new Panel(room, "images/hackathon/COW_2019.jpg", {x:-8, y:0, z:-10}, 3, 1);
+        cow2019.init();
+
+        const cow2019a = new Panel(room, "images/hackathon/COW_2019_award.png", {x:-8, y:3, z:-10}, 4, 1);
+        cow2019a.init(() => {
+            cow2019a.addAnimation();
+        });
+
+
+
+        const hyc2020 = new Panel(room, "images/hackathon/HYC_2020.png", {x:-3.5, y:5, z:-10}, 5, 1);
+        hyc2020.init();
+
+        const hyc2020a = new Panel(room, "images/hackathon/HYC_2020_award.png", {x:-3.5, y:8, z:-10}, 6, 1);
+        hyc2020a.init(() => {
+            hyc2020a.addAnimation();
+        });
+
+
+
+        const cow2021 = new Panel(room, "images/hackathon/COW_2021.png", {x:3.5, y:5, z:-10}, 4, 1);
+        cow2021.init();
+
+        const cow2021a = new Panel(room, "images/hackathon/COW_2021_award.png", {x:3.5, y:8, z:-10}, 4, 1);
+        cow2021a.init(() => {
+            cow2021a.addAnimation();
+        });
+
+
+
+        const cow2020 = new Panel(room, "images/hackathon/COW_2020.jpg", {x:8, y:0, z:-10}, 3, 1);
+        cow2020.init();
+
+        const cow2020a = new Panel(room, "images/hackathon/COW_2020_award.png", {x:8, y:3, z:-10}, 5, 1);
+        cow2020a.init(() => {
+            cow2020a.addAnimation();
+        });
+
+
+
+        const imageTitle = new Title(room, "images/hackathon/title.png", {x:0, y:0, z:-14}, 8, 1);
+        imageTitle.init();
 
         return room;
     }
