@@ -121,7 +121,7 @@
 #loading-screen-progress-bar{
     position:relative;
 
-    transition: all 3s ease;
+    transition: all 1s ease;
 
     opacity: 1;
 
