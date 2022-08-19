@@ -1,6 +1,5 @@
 import * as THREE from '../libs/three.module.js';
 import { Panel } from "./panel.js";
-import { loader } from "../const.js";
 import { addInteraction } from '../interaction.js';
 import { Animation, animationController } from '../animation.js';
 import { displayRedirectModal, redirectConfirmButton, redirectModalText } from '../modal.js';
@@ -11,7 +10,7 @@ class Button extends Panel{
 
         this.action = () => {
             console.log("button clicked");
-        }
+        };
 
         this.cubeScale = 1.2;
     }
@@ -36,7 +35,7 @@ class Button extends Panel{
         this.mesh = new THREE.Object3D();
         this.mesh.position.set(this.position.x, this.position.y, this.position.z);
         this.mesh.lookAt(0, 0, 0);
-        this.room.mesh.add(this.mesh);
+        this.imageManager.mesh.add(this.mesh);
 
         const texture = await this.loadImage();
 

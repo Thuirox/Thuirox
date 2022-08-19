@@ -1,13 +1,15 @@
 import * as THREE from '../libs/three.module.js';
 import { loader } from '../const.js';
 import { addRandomness } from '../utils.js';
-import { Animation, animationController, DifferedAnimation } from '../animation.js';
+import { Animation, animationController } from '../animation.js';
 import { addInteraction } from '../interaction.js';
 import { imageContainer } from '../modal.js';
 
 class Panel{
     constructor(room, path, position, size=5, opacity=0.7, isVideo=false){
         this.room = room;
+        
+        this.imageManager = this.room.imageManager;
 
         this.path = path;
 
@@ -27,8 +29,8 @@ class Panel{
 
         this.mesh = this.createMesh(texture, this.position);
 
-        // add the panel to the room
-        this.room.mesh.add(this.mesh);
+        // add the panel to the imageManager
+        this.imageManager.addImage(this.mesh);
 
         addInteraction(this.mesh, () => {
             // On click, make image full screen.
@@ -98,51 +100,6 @@ class Panel{
         return { texture: texture, width: width, height: height }
     }
 
-    hide(targetPosition){
-        this.moveTo(targetPosition);
-    }
-
-    show(){
-        this.moveTo(this.initialPosition, 500, 1000);
-    }
-
-    setPosition(position){
-        this.position = position;
-        this.mesh.position.set(position.x, position.y, position.z);
-    }
-
-    moveTo(targetPosition, duration = 2000, differedDuration = 0){
-
-        let sourcePosition = {
-            x: this.position.x, 
-            y: this.position.y, 
-            z: this.position.z
-        };
-
-        const imageAnimation = new Animation(
-            sourcePosition, targetPosition, duration,
-            (ratio, a) => {
-                
-                let position = {
-                    x: a.start.x + (a.end.x - a.start.x) * ratio,
-                    y: a.start.y + (a.end.y - a.start.y) * ratio,
-                    z: a.start.z + (a.end.z - a.start.z) * ratio
-                };
-                this.setPosition(position);
-            }, 
-            (a) => {
-                let position = a.end;
-                this.setPosition(position);
-            }
-        );
-
-        const differedAnimation =  new DifferedAnimation(imageAnimation, differedDuration)
-        differedAnimation.init();
-    
-        animationController.add(differedAnimation);
-
-    }
-
     addAnimation(){
         let offsetX = 0;
         let offsetY = 0.2;
@@ -193,7 +150,7 @@ class Title extends Panel{
 
         this.mesh = this.createMesh(texture, this.position);
 
-        this.room.mesh.add(this.mesh);
+        this.imageManager.addStatic(this.mesh);
 
         callback();
     }

@@ -16,16 +16,19 @@ class CustomScene{
     }
     
     async init(callback){
-        const justabayetRoom = await this.createJustABayetRoom(this.scene);
+        const justabayetRoom = this.createJustABayetRoom(this.scene);
         justabayetRoom.setCenter(cameraInitialPosition);
         
-        const gesturesHeroRoom = await this.createGesturesHeroRoom(justabayetRoom.mesh);
+        const gesturesHeroRoom = this.createGesturesHeroRoom(justabayetRoom.mesh);
+        gesturesHeroRoom.hideImages();
         gesturesHeroRoom.setCenter({ x:28, y:0, z:0 });
 
-        const codingOfIsaacRoom = await this.createCodingOfIsaacRoom(gesturesHeroRoom.mesh);
+        const codingOfIsaacRoom = this.createCodingOfIsaacRoom(gesturesHeroRoom.mesh);
+        codingOfIsaacRoom.hideImages();
         codingOfIsaacRoom.setCenter({ x:28, y:0, z:0 });
 
-        const clashRoom = await this.createClashRoom(codingOfIsaacRoom.mesh);
+        const clashRoom = this.createClashRoom(codingOfIsaacRoom.mesh);
+        clashRoom.hideImages();
         clashRoom.setCenter({ x:28, y:0, z:0 });
 
         
@@ -48,7 +51,7 @@ class CustomScene{
     }
 
 
-    async createJustABayetRoom(pivot){
+    createJustABayetRoom(pivot){
         const center = { x:0, y:0, z:0 };
 
         const roomColor = 0x0B0014;
@@ -67,43 +70,35 @@ class CustomScene{
 
 
 
-        let awaitFunction = async () => {
-
             
-            let gesturesHero = new Panel(room, "images/gesturesHero/index.png", {x:4.5, y:-4, z:-9}, 6, 0.9);
-            await gesturesHero.init(() => {
-                gesturesHero.addAnimation();
-                room.addImage(gesturesHero);
-            });
+        const gesturesHero = new Panel(room, "images/gesturesHero/index.png", {x:4.5, y:-4, z:-9}, 6, 0.9);
+        gesturesHero.init(() => {
+            gesturesHero.addAnimation();
+        });
 
-            let whenisnextlolclash = new Panel(room, "images/justabayet/whenisnextlolclash.png", {x:-5.5, y:1.5, z:-9}, 3, 1);
-            whenisnextlolclash.init(() => {
-                whenisnextlolclash.addAnimation();
-                room.addImage(whenisnextlolclash);
-            });
+        const whenisnextlolclash = new Panel(room, "images/justabayet/whenisnextlolclash.png", {x:-5.5, y:1.5, z:-9}, 3, 1);
+        whenisnextlolclash.init(() => {
+            whenisnextlolclash.addAnimation();
+        });
 
-            let thecodingofisaac = new Panel(room, "images/justabayet/thecodingofisaac.png", {x:5, y:2.2, z:-9}, 5, 1);
-            thecodingofisaac.init(() => {
-                thecodingofisaac.addAnimation();
-                room.addImage(thecodingofisaac);
-            });
-    
-            let title = new Title(room, "images/justabayet/title.png", {x:0, y:0, z:-8}, 7, 1);
-            title.init();
-    
-            const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/justabayet/justabayet", "justabayet");
-            githubButton.init(() => {
-                room.addImage(githubButton);
-            });
-        };
+        const thecodingofisaac = new Panel(room, "images/justabayet/thecodingofisaac.png", {x:5, y:2.2, z:-9}, 5, 1);
+        thecodingofisaac.init(() => {
+            thecodingofisaac.addAnimation();
+        });
 
-        await awaitFunction();
+        const title = new Title(room, "images/justabayet/title.png", {x:0, y:0, z:-8}, 7, 1);
+        title.init();
+
+        const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/justabayet/justabayet", "justabayet");
+        githubButton.init();
+        
+
         
 
         return room;
     }
 
-    async createClashRoom(pivot){
+    createClashRoom(pivot){
         const center = { x:0, y:0, z:0 };
         // const roomColor = 0x0B0014;
         // const roomColor = 0xF6BB62; // Text Color
@@ -123,50 +118,37 @@ class CustomScene{
 
         square.init();
 
-        // let imageDesktop = new Panel(room, "whenisnextlolclash-video", {x:4, y:2.2, z:-7}, 7, 1, true);
+        // const videoDesktop = new Panel(room, "whenisnextlolclash-video", {x:4, y:2.2, z:-7}, 7, 1, true);
         
-        // imageDesktop.init(() => {
-        //     imageDesktop.addAnimation();
-        //     room.addImage(imageDesktop);
+        // videoDesktop.init(() => {
+        //     videoDesktop.addAnimation();
+    
         // });
 
-        let awaitFunction = async () => {
+        const imageDesktop = new Panel(room, "images/whenisnextlolclash/index.png", {x:4, y:2.2, z:-7}, 7, 1);
+        imageDesktop.init(() => {
+            imageDesktop.addAnimation();
+        });
 
-            let imageDesktop = new Panel(room, "images/whenisnextlolclash/index.png", {x:4, y:2.2, z:-7}, 7, 1);
-            await imageDesktop.init(() => {
-                imageDesktop.addAnimation();
-                room.addImage(imageDesktop);
-            });
-    
-            let imageMobile = new Panel(room, "images/whenisnextlolclash/indexMobile.png", {x:-4, y:-3.5, z:-8}, 3, 1);
-            await imageMobile.init(() => {
-                imageMobile.addAnimation();
-                room.addImage(imageMobile);
-            });
-    
-            let imageTitle = new Title(room, "images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8, 1);
-            await imageTitle.init();
-    
-            const githubButton = new GithubButton(room, {x:-1.5, y:-6, z:-6}, 1, "https://github.com/justabayet/whenisnextlolclash", "whenisnextlolclash");
-            await githubButton.init(() => {
-                room.addImage(githubButton);
-            });
-    
-            const websiteButton = new WebsiteButton(room, {x:1.5, y:-6, z:-6}, 1, "https://justabayet.github.io/whenisnextlolclash/");
-            await websiteButton.init(() => {
-                room.addImage(websiteButton);
-            });
+        const imageMobile = new Panel(room, "images/whenisnextlolclash/indexMobile.png", {x:-4, y:-3.5, z:-8}, 3, 1);
+        imageMobile.init(() => {
+            imageMobile.addAnimation();
+        });
 
-            room.hideImages();
-        };
+        const imageTitle = new Title(room, "images/whenisnextlolclash/title.png", {x:0, y:0, z:-9}, 8, 1);
+        imageTitle.init();
 
-        await awaitFunction();
+        const githubButton = new GithubButton(room, {x:-1.5, y:-6, z:-6}, 1, "https://github.com/justabayet/whenisnextlolclash", "whenisnextlolclash");
+        githubButton.init();
+
+        const websiteButton = new WebsiteButton(room, {x:1.5, y:-6, z:-6}, 1, "https://justabayet.github.io/whenisnextlolclash/");
+        websiteButton.init();
         
 
         return room;
     }
 
-    async createCodingOfIsaacRoom(pivot){
+    createCodingOfIsaacRoom(pivot){
         const center = { x:0, y:0, z:0 };
         const roomColor = 0x340500;
 
@@ -184,43 +166,31 @@ class CustomScene{
         square.init();
 
 
-        let a = async () => {
-            let imageChara = new Panel(room, "images/theCodingOfIsaac/character.png", {x:-3, y:-2, z:-8}, 2, 1);
-            await imageChara.init(() => {
-                imageChara.addAnimation();
-                room.addImage(imageChara);
-            });
-    
-            let imageTutorial = new Panel(room, "images/theCodingOfIsaac/tutorial.png", {x:5, y:-1, z:-11.5}, 8, 1);
-            await imageTutorial.init(() => {
-                imageTutorial.addAnimation();
-                room.addImage(imageTutorial);
-            });
-    
-            let imageRoom = new Panel(room, "images/theCodingOfIsaac/room.png", {x:-5, y:1.5, z:-10}, 7, 1);
-            await imageRoom.init(() => {
-                imageRoom.addAnimation();
-                room.addImage(imageRoom);
-            });
-    
-            let imageTitle = new Title(room, "images/theCodingOfIsaac/title.png", {x:0, y:0, z:-9}, 8, 1);
-            await imageTitle.init();
+        const imageChara = new Panel(room, "images/theCodingOfIsaac/character.png", {x:-3, y:-2, z:-8}, 2, 1);
+        imageChara.init(() => {
+            imageChara.addAnimation();
+        });
 
-            const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/snail-unamur/Yo-kai-watch", "The Coding of Isaac");
-            await githubButton.init(() => {
-                room.addImage(githubButton);
-            });
+        const imageTutorial = new Panel(room, "images/theCodingOfIsaac/tutorial.png", {x:5, y:-1, z:-11.5}, 8, 1);
+        imageTutorial.init(() => {
+            imageTutorial.addAnimation();
+        });
 
-            room.hideImages();
-        };
-        await a();
+        const imageRoom = new Panel(room, "images/theCodingOfIsaac/room.png", {x:-5, y:1.5, z:-10}, 7, 1);
+        imageRoom.init(() => {
+            imageRoom.addAnimation();
+        });
 
+        const imageTitle = new Title(room, "images/theCodingOfIsaac/title.png", {x:0, y:0, z:-9}, 8, 1);
+        imageTitle.init();
+
+        const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/snail-unamur/Yo-kai-watch", "The Coding of Isaac");
+        githubButton.init();
 
         return room;
-
     }
 
-    async createGesturesHeroRoom(pivot){
+    createGesturesHeroRoom(pivot){
         const center = { x:0, y:0, z:0 };
         // const roomColor = colors[2];
         const roomColor = 0x33CCCC;
@@ -239,53 +209,38 @@ class CustomScene{
         square.init();
 
 
-        let a = async () => {
-            let game = new Panel(room, "images/gesturesHero/index.png", {x:4, y:5, z:-10}, 8, 1);
-            await game.init(() => {
-                game.addAnimation();
-                room.addImage(game);
-            });
-    
-            let kikkFestivalPoster = new Panel(room, "images/gesturesHero/KIKKfestival.jpg", {x:-6.2, y:-1.6, z:-11.5}, 8, 1);
-            await kikkFestivalPoster.init(() => {
-                kikkFestivalPoster.addAnimation();
-                room.addImage(kikkFestivalPoster);
-            });
-    
-            let poster = new Panel(room, "images/gesturesHero/poster.png", {x:-5, y:5, z:-10}, 8, 1);
-            await poster.init(() => {
-                poster.addAnimation();
-                room.addImage(poster);
-            });
+        const game = new Panel(room, "images/gesturesHero/index.png", {x:4, y:5, z:-10}, 8, 1);
+        game.init(() => {
+            game.addAnimation();
+        });
 
-    
-            let logo = new Panel(room, "images/gesturesHero/logo.png", {x:5, y:-2, z:-9.5}, 2, 1);
-            await logo.init(() => {
-                logo.addAnimation();
-                room.addImage(logo);
-            });
-    
-            let title = new Title(room, "images/gesturesHero/title.png", {x:0, y:0, z:-9}, 8, 1);
-            await title.init();
+        const kikkFestivalPoster = new Panel(room, "images/gesturesHero/KIKKfestival.jpg", {x:-6.2, y:-1.6, z:-11.5}, 8, 1);
+        kikkFestivalPoster.init(() => {
+            kikkFestivalPoster.addAnimation();
+        });
+
+        const poster = new Panel(room, "images/gesturesHero/poster.png", {x:-5, y:5, z:-10}, 8, 1);
+        poster.init(() => {
+            poster.addAnimation();
+        });
 
 
-            const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/GesturesHero/GesturesHero", "GesturesHero");
-            await githubButton.init(() => {
-                room.addImage(githubButton);
-            });
+        const logo = new Panel(room, "images/gesturesHero/logo.png", {x:5, y:-2, z:-9.5}, 2, 1);
+        logo.init(() => {
+            logo.addAnimation();
+        });
 
-            room.hideImages();
-        };
-        await a();
+        const title = new Title(room, "images/gesturesHero/title.png", {x:0, y:0, z:-9}, 8, 1);
+        title.init();
+
+
+        const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/GesturesHero/GesturesHero", "GesturesHero");
+        githubButton.init();
 
 
         return room;
-
     }
 
-    pivotRoom(room){
-
-    }
 }
 
 function setupScene(scene, camera, renderer, callback){

@@ -2,6 +2,7 @@ import * as THREE from '../libs/three.module.js';
 import { LightManager } from "./lightManager.js";
 import { Chain } from "../utils.js";
 import { angleBetweenSphere } from '../const.js';
+import { ImageManager } from './imageManager.js';
 
 class Room extends Chain{
     constructor(parent, camera, center, radius, color){
@@ -25,7 +26,7 @@ class Room extends Chain{
 
         this.lightManager =  null;
 
-        this.images = [];
+        this.imageManager =  null;
 
         this.toPivot = true;
     }
@@ -45,19 +46,15 @@ class Room extends Chain{
     }
 
     addImage(image){
-        this.images.push(image);
+        this.imageManager.addImage(image);
     }
 
     showImages(){
-        this.images.forEach((image) => {
-            image.show();
-        });
+        this.imageManager.showImages();
     }
 
     hideImages(){
-        this.images.forEach((image) => {
-            image.hide({ x: image.position.x, y: -20, z: image.position.z });
-        });
+        this.imageManager.hideImages();
     }
 
     init(){
@@ -138,8 +135,11 @@ class Room extends Chain{
 
         cap.rotateX(Math.PI/2);
 
-        this.lightManager = new LightManager(this.mesh, { x:0, y:0, z:0 })
+        this.lightManager = new LightManager(this.mesh, { x:0, y:0, z:0 });
         this.lightManager.initLights();
+
+        this.imageManager = new ImageManager(this, { x:0, y:0, z:0 });
+        this.imageManager.init();
 
     }
 
