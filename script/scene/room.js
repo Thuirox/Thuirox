@@ -4,10 +4,10 @@ import { Chain } from "../utils.js";
 import { angleBetweenSphere } from '../const.js';
 
 class Room extends Chain{
-    constructor(scene, camera, center, radius, color){
+    constructor(parent, camera, center, radius, color){
         super();
 
-        this.scene = scene;
+        this.parent = parent;
         this.camera = camera;
 
         this.center = center;
@@ -15,25 +15,17 @@ class Room extends Chain{
 
         this.color = color;
 
-        this.clippingPlanes = [];
-
-        this.clippingPlanesOffset = 1;
-
         this.sphereNbSegments = 40;
         this.capNbSegments = 10;
         this.jointNbSegments = 10;
-
-        this.isEntry = false;
-        this.isExit = false;
         
+        this.openAngle = Math.PI/8;
         this.openAngleEntry = 0;
         this.openAngleExit = 0;
 
         this.lightManager =  null;
 
         this.images = [];
-
-        this.openAngle = Math.PI/8;
 
         this.toPivot = true;
     }
@@ -45,13 +37,11 @@ class Room extends Chain{
     addEntry(){
         // -x side
         this.openAngleEntry = this.openAngle;
-        this.isEntry = true;
     }
 
     addExit(){
         // +x side
         this.openAngleExit = this.openAngle;
-        this.isExit = true;
     }
 
     addImage(image){
@@ -71,54 +61,63 @@ class Room extends Chain{
     }
 
     init(){
+        /**
+         * this.parent is like a planet
+         * this.parentPivot is a second center of it, having independent rotation
+         * this.mesh is a satellite of this.parent. It is rotating following this.parent secondary center.
+         * 
+         * this.parent -> this.parentPivot -> this.mesh
+         */
         this.mesh = new THREE.Object3D();
 
-        this.pivotGlobalRotation = new THREE.Object3D();
-        this.scene.add(this.pivotGlobalRotation);
+        this.parentPivot = new THREE.Object3D();
+        this.parent.add(this.parentPivot);
 
-        this.pivotGlobalRotation.add(this.mesh);
+        this.parentPivot.add(this.mesh);
 
         if(this.toPivot){
+            this.parentPivot.rotateY(angleBetweenSphere);
             this.mesh.rotateY(angleBetweenSphere);
-            this.pivotGlobalRotation.rotateY(angleBetweenSphere);
         }
 
-
-        this.pivotSphereElements = new THREE.Object3D();
-
-
-        const jointSizeAngle = Math.PI - 2*this.openAngle - 0.1;
 
         const orificeFullSize = (Math.PI / 2) - angleBetweenSphere;
 
         const entryOrifice = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, 2*Math.PI, this.openAngleEntry, orificeFullSize - this.openAngleEntry );
         const exitOrifice = new THREE.SphereGeometry( this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, 2*Math.PI, this.openAngleExit, orificeFullSize - this.openAngleExit );
+
+
+        const jointSizeAngle = Math.PI - 2*this.openAngle - 0.1;
+
         const jointUpper = new THREE.SphereGeometry( this.radius, 3, this.jointNbSegments, 0, jointSizeAngle, 0, Math.PI);
         const jointLower = new THREE.SphereGeometry( this.radius, 3, this.jointNbSegments, 0, jointSizeAngle, 0, Math.PI);
+
 
         const capSize = Math.PI - orificeFullSize - 2* angleBetweenSphere;
         const cap = new THREE.SphereGeometry( this.radius, this.capNbSegments, this.capNbSegments, 0, 2 * Math.PI, 0, capSize);
         
+
         const sphereMaterial = new THREE.MeshPhongMaterial({
             side: THREE.DoubleSide,
             color: this.color,
             clipShadows: true,
             clipIntersection: false
         });
-        this.meshEntryOrifice = new THREE.Mesh( entryOrifice, sphereMaterial );
-        this.meshExitOrifice = new THREE.Mesh( exitOrifice, sphereMaterial );
-        this.meshjointUpper = new THREE.Mesh( jointUpper, sphereMaterial );
-        this.meshjointLower = new THREE.Mesh( jointLower, sphereMaterial );
-        this.meshCap = new THREE.Mesh( cap, sphereMaterial );
+        const meshEntryOrifice = new THREE.Mesh( entryOrifice, sphereMaterial );
+        const meshExitOrifice = new THREE.Mesh( exitOrifice, sphereMaterial );
+        const meshjointUpper = new THREE.Mesh( jointUpper, sphereMaterial );
+        const meshjointLower = new THREE.Mesh( jointLower, sphereMaterial );
+        const meshCap = new THREE.Mesh( cap, sphereMaterial );
 
 
-        this.mesh.add(this.pivotSphereElements);
+        const pivotSphereElements = new THREE.Object3D();
+        this.mesh.add(pivotSphereElements);
 
-        this.pivotSphereElements.add(this.meshEntryOrifice);
-        this.pivotSphereElements.add(this.meshExitOrifice);
-        this.pivotSphereElements.add(this.meshjointUpper);
-        this.pivotSphereElements.add(this.meshjointLower);
-        this.pivotSphereElements.add(this.meshCap);
+        pivotSphereElements.add(meshEntryOrifice);
+        pivotSphereElements.add(meshExitOrifice);
+        pivotSphereElements.add(meshjointUpper);
+        pivotSphereElements.add(meshjointLower);
+        pivotSphereElements.add(meshCap);
 
 
         entryOrifice.rotateX(- angleBetweenSphere);
@@ -127,7 +126,7 @@ class Room extends Chain{
         exitOrifice.rotateX(angleBetweenSphere);
 
 
-        this.pivotSphereElements.rotateZ(Math.PI / 2);
+        pivotSphereElements.rotateZ(Math.PI / 2);
 
         jointUpper.rotateZ(- Math.PI);
         jointUpper.rotateY(jointSizeAngle / 2);
@@ -152,8 +151,8 @@ class Room extends Chain{
 
     }
 
-    addSquare(square){
-        this.square = square;
+    addTransporter(transporter){
+        this.transporter = transporter;
     }
 
 }

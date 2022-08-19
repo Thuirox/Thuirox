@@ -7,25 +7,27 @@ import { GithubButton, WebsiteButton } from './button.js';
 
 class CustomScene{
 
-    constructor(scene, camera, renderer, nbBalls = 10){
+    constructor(scene, camera, renderer){
         this.scene = scene;
         this.camera = camera;
         this.renderer = renderer;
-        this.nbBalls = nbBalls;
 
         this.sphereRadius = 15;
     }
     
     async init(callback){
         const justabayetRoom = await this.createJustABayetRoom(this.scene);
-        const gesturesHeroRoom = await this.createGesturesHeroRoom(justabayetRoom.mesh);
-        const codingOfIsaacRoom = await this.createCodingOfIsaacRoom(gesturesHeroRoom.mesh);
-        const clashRoom = await this.createClashRoom(codingOfIsaacRoom.mesh);
-
         justabayetRoom.setCenter(cameraInitialPosition);
+        
+        const gesturesHeroRoom = await this.createGesturesHeroRoom(justabayetRoom.mesh);
         gesturesHeroRoom.setCenter({ x:28, y:0, z:0 });
+
+        const codingOfIsaacRoom = await this.createCodingOfIsaacRoom(gesturesHeroRoom.mesh);
         codingOfIsaacRoom.setCenter({ x:28, y:0, z:0 });
+
+        const clashRoom = await this.createClashRoom(codingOfIsaacRoom.mesh);
         clashRoom.setCenter({ x:28, y:0, z:0 });
+
         
 
         justabayetRoom.setNext(gesturesHeroRoom);
@@ -218,7 +220,6 @@ class CustomScene{
 
     }
 
-    
     async createGesturesHeroRoom(pivot){
         const center = { x:0, y:0, z:0 };
         // const roomColor = colors[2];
@@ -279,6 +280,10 @@ class CustomScene{
 
 
         return room;
+
+    }
+
+    pivotRoom(room){
 
     }
 }

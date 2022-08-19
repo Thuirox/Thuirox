@@ -6,8 +6,9 @@ import { addInteraction } from '../interaction.js';
 import { imageContainer } from '../modal.js';
 
 class Panel{
-    constructor(parent, path, position, size=5, opacity=0.7, isVideo=false){
-        this.parent = parent;
+    constructor(room, path, position, size=5, opacity=0.7, isVideo=false){
+        this.room = room;
+
         this.path = path;
 
         this.position = position;
@@ -22,62 +23,79 @@ class Panel{
 
 
     async init(callback=()=>{}){
+        const texture = await this.loadTexture();
 
-        let texture;
-        let width;
-        let height;
-        if(this.isVideo){
-            let video = document.getElementById(this.path);
-            video.muted = true; // Mute video to force play. Without this play raises a security error.
-            video.play();
+        this.mesh = this.createMesh(texture, this.position);
 
-            // Best filtering method would be LinearMipmapLinearFilter like for images.
-            // But for some reasons when sets on videos, they stop working.
-            texture = new THREE.VideoTexture(video);
-            texture.minFilter = THREE.LinearFilter;
-            texture.maxFilter = THREE.LinearFilter;
-
-            width = texture.image.videoWidth;
-            height = texture.image.videoHeight;
-
-        } else {
-            texture = await loader.loadAsync(this.path);
-
-            width = texture.image.width;
-            height = texture.image.height;
-        }
-
-        // ! the material isn't double sided
-        let material = new THREE.MeshBasicMaterial({
-            map: texture,
-            transparent: true,
-            opacity: this.opacity,
-            side:THREE.DoubleSide
-        });
-          
-        let geometry = new THREE.PlaneGeometry(this.size, this.size);
-        
-        // combine our image geometry and material into a mesh
-        this.mesh = new THREE.Mesh(geometry, material);
-
-        // Scale mesh to match image ratio
-        this.mesh.scale.set(1, height / width, 1.0);
-        
-        // set the position of the image mesh in the x,y,z dimensions
-        this.mesh.position.set(this.position.x, this.position.y, this.position.z);
-        
-        // add the image to the parent
-        this.parent.mesh.add(this.mesh);
-        this.mesh.lookAt(this.parent.center.x, this.parent.center.y, this.parent.center.z);
+        // add the panel to the room
+        this.room.mesh.add(this.mesh);
 
         addInteraction(this.mesh, () => {
-            
+            // On click, make image full screen.
             imageContainer.style.opacity = 1;
             imageContainer.style.pointerEvents = "auto";
             imageContainer.style.backgroundImage = 'url(' + this.path + ')';
         })
 
         callback();
+    }
+
+    createMesh(texture, position){
+        let material = new THREE.MeshBasicMaterial({
+            map: texture.texture,
+            transparent: true,
+            opacity: this.opacity,
+            side:THREE.DoubleSide
+        });
+          
+        const geometry = new THREE.PlaneGeometry(this.size, this.size);
+        
+        const mesh = new THREE.Mesh(geometry, material);
+
+        // Scale mesh to match image ratio
+        mesh.scale.set(1, texture.height / texture.width, 1.0);
+        
+        // set the position of the image
+        mesh.position.set(position.x, position.y, position.z);
+        
+        // Make the panel look where it comes from
+        mesh.lookAt(0, 0, 0);
+
+        return mesh;
+    }
+
+    async loadTexture(){
+        if(this.isVideo){
+            return this.loadVideo();
+
+        } else {
+            return this.loadImage();
+        }
+    }
+
+    async loadVideo(){
+        const video = document.getElementById(this.path);
+        video.muted = true; // Mute video to force play. Without this play raises a security error.
+        video.play();
+
+        // Best filtering method would be LinearMipmapLinearFilter like for images.
+        // But for some reasons when sets on videos, they stop working.
+        const texture = new THREE.VideoTexture(video);
+        texture.minFilter = THREE.LinearFilter;
+        texture.maxFilter = THREE.LinearFilter;
+
+        const width = texture.image.videoWidth;
+        const height = texture.image.videoHeight;
+
+        return { texture: texture, width: width, height: height }
+    }
+
+    async loadImage(){
+        const texture = await loader.loadAsync(this.path);
+        const width = texture.image.width;
+        const height = texture.image.height;
+
+        return { texture: texture, width: width, height: height }
     }
 
     hide(targetPosition){
@@ -94,26 +112,26 @@ class Panel{
     }
 
     moveTo(targetPosition, duration = 2000, differedDuration = 0){
+
         let sourcePosition = {
             x: this.position.x, 
             y: this.position.y, 
             z: this.position.z
         };
 
-
         const imageAnimation = new Animation(
-            null, null, duration,
-            (ratio, animation) => {
+            sourcePosition, targetPosition, duration,
+            (ratio, a) => {
                 
                 let position = {
-                    x: sourcePosition.x + (targetPosition.x - sourcePosition.x) * ratio,
-                    y: sourcePosition.y + (targetPosition.y - sourcePosition.y) * ratio,
-                    z: sourcePosition.z + (targetPosition.z - sourcePosition.z) * ratio
+                    x: a.start.x + (a.end.x - a.start.x) * ratio,
+                    y: a.start.y + (a.end.y - a.start.y) * ratio,
+                    z: a.start.z + (a.end.z - a.start.z) * ratio
                 };
                 this.setPosition(position);
             }, 
-            (animation) => {
-                let position = targetPosition;
+            (a) => {
+                let position = a.end;
                 this.setPosition(position);
             }
         );
@@ -126,14 +144,12 @@ class Panel{
     }
 
     addAnimation(){
-        
         let offsetX = 0;
         let offsetY = 0.2;
 
         offsetY = addRandomness(offsetY, 0.5);
 
         let animationDuration = 5000;
-        // animationDuration = addRandomness(animationDuration, 0.5)
         
         const imageAnimation = new Animation(
             1, 0, animationDuration,
@@ -167,39 +183,17 @@ class Panel{
 }
 
 class Title extends Panel{
-    constructor(parent, path, position, size=5, opacity=0.7){
-        super(parent, path, position, size, opacity, false);
+    constructor(room, path, position, size=5, opacity=0.7){
+        super(room, path, position, size, opacity, false);
     }
 
+    
     async init(callback=()=>{}){
-        let texture = await loader.loadAsync(this.path);
+        const texture = await this.loadImage();
 
-        let width = texture.image.width;
-        let height = texture.image.height;
+        this.mesh = this.createMesh(texture, this.position);
 
-        // ! the material isn't double sided
-        let material = new THREE.MeshBasicMaterial({
-            map: texture,
-            transparent: true,
-            opacity: this.opacity,
-            side:THREE.DoubleSide
-        });
-          
-        let geometry = new THREE.PlaneGeometry(this.size, this.size);
-        
-        // combine our image geometry and material into a mesh
-        this.mesh = new THREE.Mesh(geometry, material);
-
-        // Scale mesh to match image ratio
-        this.mesh.scale.set(1, height / width, 1.0);
-        
-        // set the position of the image mesh in the x,y,z dimensions
-        this.mesh.position.set(this.position.x, this.position.y, this.position.z);
-        
-        // add the image to the parent
-        this.parent.mesh.add(this.mesh);
-
-        this.mesh.lookAt(this.parent.center.x, this.parent.center.y, this.parent.center.z);
+        this.room.mesh.add(this.mesh);
 
         callback();
     }

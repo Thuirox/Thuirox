@@ -3,8 +3,8 @@ import { Animation, animationController } from '../animation.js';
 import { addInteraction } from '../interaction.js';
 
 class Transporter{
-    constructor(parent, camera, center, color, squareSideLength=6.5){
-        this.parent = parent;
+    constructor(room, camera, center, color, squareSideLength=6.5){
+        this.room = room;
         this.center = center;
         this.color = color;
 
@@ -12,13 +12,11 @@ class Transporter{
 
         this.isDoubleSided = true;
 
-        this.parent;
-
         this.squareSideLength = squareSideLength;
 
         this.mesh = null;
 
-        this.parent.addSquare(this);
+        this.room.addTransporter(this);
     }
 
     setIsDoubleSided(val){
@@ -26,12 +24,6 @@ class Transporter{
     }
 
     init(){
-        let cubeFace;
-        if(this.isDoubleSided){
-            cubeFace = THREE.DoubleSide;
-        } else {
-            cubeFace = THREE.FrontSide;
-        }
         // Click point
         const boxSide = this.squareSideLength;
         const boxWidth = boxSide;
@@ -40,7 +32,7 @@ class Transporter{
         const cubeGeometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
         const cubeMaterial = new THREE.MeshPhongMaterial({
             color: this.color,
-            side: cubeFace
+            side: this.isDoubleSided ? THREE.DoubleSide : THREE.FrontSide
         });
     
         this.mesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
@@ -48,7 +40,7 @@ class Transporter{
         this.mesh.rotateY(Math.PI/4);
         this.mesh.position.x = this.center.x;
         this.mesh.position.y = this.center.y;
-        this.parent.mesh.add(this.mesh);
+        this.room.mesh.add(this.mesh);
 
 
         const edges = new THREE.EdgesGeometry( cubeGeometry );
@@ -64,9 +56,12 @@ class Transporter{
         this.animation = new Animation(
             0, Math.PI*0.001, 1000,
             (ratio, animation) => {
+
                 let v3 = new THREE.Vector3(1, 1, 1);
                 v3.normalize();
+                
                 this.mesh.rotateOnAxis(v3, animation.end);
+
             }, undefined);
     
         this.animation.setIsLooping(true);
@@ -75,9 +70,16 @@ class Transporter{
         animationController.add(this.animation);
     
         addInteraction(this.mesh, (event) => {
-          
-            transportController.setCurrentRoom(this.parent);
+            transportController.setCurrentRoom(this.room);
         });
+    }
+
+    addLines(){
+        this.mesh.add(this.lines);
+    }
+
+    removeLines(){
+        this.mesh.remove(this.lines);
     }
 }
 
@@ -91,15 +93,16 @@ const transportController = {
 
         room.showImages();
 
-        room.square.mesh.remove(room.square.lines);
+        room.transporter.removeLines();
 
         if(this.currentRoom){
             this.currentRoom.hideImages();
 
             // Display back the lines of the cube after a delay to avoid passing through with the camera.
-            new Animation(0, 0, 500, () => {}, (animation) => {
-                animation.args.room.square.mesh.add(animation.args.room.square.lines);
-                animation.args.room.square.lines.material.opacity = 0.7;
+            new Animation(null, null, 500, () => {}, (animation) => {
+                animation.args.room.transporter.addLines();
+
+
             }, { room: this.currentRoom }).init();
         }
         this.currentRoom = room;
