@@ -12,22 +12,20 @@ class Button extends Panel{
             console.log("button clicked");
         };
 
-        this.cubeScale = 1.2;
+        this.cubeScale = 1.3;
+        this.backgroundOpacity = 0.3;
     }
 
     setAction(action){
         this.action = action;
     }
 
-    
+    removeBackground(){
+        this.setBackgroundOpacity(0);
+    }
 
-    
-    async init(callback=()=>{}){
-        const texture = await this.loadImage();
-
-        this.createMesh(texture);
-
-        callback();
+    setBackgroundOpacity(value){
+        this.backgroundOpacity = value;
     }
 
 
@@ -56,7 +54,7 @@ class Button extends Panel{
         this.cubeMesh = new THREE.Mesh( cubeGeometry, new THREE.MeshBasicMaterial({
             color: 0xffffff,
             transparent: true,
-            opacity: 0.3,
+            opacity: this.backgroundOpacity,
             side: THREE.BackSide
 
         }));
@@ -129,4 +127,13 @@ class WebsiteButton extends RedirectButton{
     }
 }
 
-export { Button, GithubButton, WebsiteButton }
+class LinkedinButton extends RedirectButton{
+    constructor(room, position, size=5, url=""){
+        super(room, position, size, "images/linkedin.png", url);
+
+        this.text = "Open the likedin profile?";
+
+    }
+}
+
+export { Button, GithubButton, WebsiteButton, LinkedinButton }

@@ -3,7 +3,7 @@ import { Panel, Title } from "./panel.js";
 import { Transporter, transportController } from "./transporter.js";
 import { Room } from "./room.js";
 import { cameraInitialPosition } from "../const.js";
-import { GithubButton, WebsiteButton } from './button.js';
+import { GithubButton, WebsiteButton, LinkedinButton } from './button.js';
 
 class CustomScene{
 
@@ -22,24 +22,24 @@ class CustomScene{
         const hackathonRoom = await this.createHackathonRoom(justabayetRoom.mesh);
         hackathonRoom.hideImages();
         hackathonRoom.setCenter({ x:28, y:0, z:0 });
+
+        const codingOfIsaacRoom = await this.createCodingOfIsaacRoom(hackathonRoom.mesh);
+        codingOfIsaacRoom.hideImages();
+        codingOfIsaacRoom.setCenter({ x:28, y:0, z:0 });
         
-        const gesturesHeroRoom = await this.createGesturesHeroRoom(hackathonRoom.mesh);
+        const gesturesHeroRoom = await this.createGesturesHeroRoom(codingOfIsaacRoom.mesh);
         gesturesHeroRoom.hideImages();
         gesturesHeroRoom.setCenter({ x:28, y:0, z:0 });
 
-        const codingOfIsaacRoom = await this.createCodingOfIsaacRoom(gesturesHeroRoom.mesh);
-        codingOfIsaacRoom.hideImages();
-        codingOfIsaacRoom.setCenter({ x:28, y:0, z:0 });
-
-        const clashRoom = await this.createClashRoom(codingOfIsaacRoom.mesh);
+        const clashRoom = await this.createClashRoom(gesturesHeroRoom.mesh);
         clashRoom.hideImages();
         clashRoom.setCenter({ x:28, y:0, z:0 });
         
 
         justabayetRoom.setNext(hackathonRoom);
-        hackathonRoom.setNext(gesturesHeroRoom);
-        gesturesHeroRoom.setNext(codingOfIsaacRoom);
-        codingOfIsaacRoom.setNext(clashRoom);
+        hackathonRoom.setNext(codingOfIsaacRoom);
+        codingOfIsaacRoom.setNext(gesturesHeroRoom);
+        gesturesHeroRoom.setNext(clashRoom);
     
     
     
@@ -110,6 +110,16 @@ class CustomScene{
         await githubButton.init();
         
 
+        const linkedinButton = new LinkedinButton(room, {x:-10, y:0, z:-2.5}, 2, "https://www.linkedin.com/in/anthony-bayet");
+        linkedinButton.setBackgroundOpacity(0.1);
+        await linkedinButton.init();
+        
+
+        const githubGeneralButton = new GithubButton(room, {x:-10, y:0, z:2.5}, 2, "https://github.com/justabayet");
+        githubGeneralButton.setBackgroundOpacity(0.1);
+        await githubGeneralButton.init();
+        
+
         
 
         return room;
@@ -142,7 +152,7 @@ class CustomScene{
     
         // });
 
-        const index = new Panel(room, "images/whenisnextlolclash/index.png", {x:5.5, y:0, z:-8}, 4, 1);
+        const index = new Panel(room, "images/whenisnextlolclash/index.png", {x:-5.5, y:0, z:-8}, 4, 1);
         await index.init(() => {
             index.addAnimation();
         });
@@ -156,6 +166,16 @@ class CustomScene{
 
         const websiteButton = new WebsiteButton(room, {x:1.5, y:-5, z:-7}, 1, "https://justabayet.github.io/whenisnextlolclash/");
         await websiteButton.init();
+        
+
+        const linkedinButton = new LinkedinButton(room, {x:10, y:0, z:-2.5}, 2, "https://www.linkedin.com/in/anthony-bayet");
+        linkedinButton.setBackgroundOpacity(0.1);
+        await linkedinButton.init();
+        
+
+        const githubGeneralButton = new GithubButton(room, {x:10, y:0, z:2.5}, 2, "https://github.com/justabayet");
+        githubGeneralButton.setBackgroundOpacity(0.1);
+        await githubGeneralButton.init();
         
 
         return room;
@@ -262,6 +282,11 @@ class CustomScene{
         const imageRoom = new Panel(room, "images/theCodingOfIsaac/room.png", {x:-5, y:1.5, z:-10}, 7, 1);
         await imageRoom.init(() => {
             imageRoom.addAnimation();
+        });
+        
+        const universities = new Panel(room, "images/theCodingOfIsaac/universities.png", {x:-4.5, y:-6.5, z:-10}, 10, 1);
+        await universities.init(() => {
+            universities.addAnimation();
         });
 
         const imageTitle = new Title(room, "images/theCodingOfIsaac/title.png", {x:0, y:0, z:-9}, 8, 1);
