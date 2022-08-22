@@ -1,3 +1,4 @@
+import { debugLoading } from "./const.js";
 import { updateGyroOffset } from "./gyroControls.js";
 
 const progressBar = document.getElementById("loading-screen-progress-bar");
@@ -49,7 +50,7 @@ function loadingScreenSetup(){
     }, 300);
 }
 
-const nbTextureToLoad = 21;
+const nbTextureToLoad = 22;
 var nbLoaded = 0;
 
 function updateProgressionLoaded(){
@@ -57,7 +58,7 @@ function updateProgressionLoaded(){
 
     progressBar.style.width = (( nbLoaded / nbTextureToLoad ) * 100 ).toString() + "%";
 
-    console.log(nbLoaded, nbTextureToLoad)
+    if(debugLoading) console.log(nbLoaded, nbTextureToLoad);
 
     if(nbLoaded == nbTextureToLoad){
         loadingScreenSetup();
