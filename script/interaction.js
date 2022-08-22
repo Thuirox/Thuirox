@@ -1,6 +1,7 @@
 import * as THREE from './libs/three.module.js';
 import { debugMove } from './const.js';
 import { contactModalContainer, redirectModalContainer } from './modal.js';
+import { loadingScreen } from './loadingScreen.js';
 
 var move = false;
 var domEvents;
@@ -82,7 +83,7 @@ function setupCancelOnMove(){
         }
 
         // Style pointer as cursor when hovering a clickable object
-        if(!contactModalContainer.classList.contains("active") && !redirectModalContainer.classList.contains("active")){
+        if(!contactModalContainer.classList.contains("active") && !redirectModalContainer.classList.contains("active") && !loadingScreen.classList.contains("active")){
             var mouse = new THREE.Vector2();
             mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
             mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;

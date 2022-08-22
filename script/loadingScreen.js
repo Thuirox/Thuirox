@@ -1,13 +1,13 @@
 import { updateGyroOffset } from "./gyroControls.js";
 
 const progressBar = document.getElementById("loading-screen-progress-bar");
+const loadingScreen = document.getElementById("loading-screen");
 
 
 function loadingScreenSetup(){
     
     const startButton = document.getElementById("loading-screen-text-start");
     const startButtonContainer = document.getElementById("loading-screen-text-start-container");
-    const loadingScreen = document.getElementById("loading-screen");
 
     // progressBar.style.opacity = "0";
 
@@ -42,19 +42,26 @@ function loadingScreenSetup(){
                 document.getElementById("loading-screen-right-panel").style.left = "calc(100% + 5px)";
                 document.getElementById("loading-screen-text").style.bottom = "150%";
                 loadingScreen.style.pointerEvents = "none";
+                loadingScreen.classList.remove("active");
                 
             }, 1000)
         }
     }, 300);
 }
 
-const nbTextureToLoad = 22;
+const nbTextureToLoad = 21;
 var nbLoaded = 0;
 
 function updateProgressionLoaded(){
     nbLoaded += 1;
 
     progressBar.style.width = (( nbLoaded / nbTextureToLoad ) * 100 ).toString() + "%";
+
+    console.log(nbLoaded, nbTextureToLoad)
+
+    if(nbLoaded == nbTextureToLoad){
+        loadingScreenSetup();
+    }
 }
 
-export { loadingScreenSetup, updateProgressionLoaded }
+export { updateProgressionLoaded, loadingScreen }

@@ -5,12 +5,12 @@ import { THREEx } from './libs/threex.domevents.js';
 import { setupInteractions } from './interaction.js';
 import { gyroControl, setupGyroControls, updateGyro } from './gyroControls.js'
 import { animationController, cameraAnimation } from './animation.js'
-import { cameraAngleDegOffset, cameraPositionOffset, updateCameraPositionOffsetAngle, updateCameraPositionOffsetPoint } from './utils.js';
-import { loadingScreenSetup } from './loadingScreen.js';
+import { cameraAngleDegOffset, cameraPositionOffset, updateCameraPositionOffsetPoint } from './utils.js';
+
 import { cameraInitialPosition } from './const.js';
 import { transportController } from './scene/transporter.js';
 
-async function main() {
+function main() {
     const canvas = document.querySelector('#c');
     const renderer = new THREE.WebGLRenderer({
         canvas,
@@ -91,7 +91,7 @@ async function main() {
 
 
     const scene = new THREE.Scene();
-    await setupScene(scene, camera, renderer, ()=>{
+    setupScene(scene, camera, renderer, ()=>{
 
         let pos = transportController.currentRoom.mesh.getWorldPosition(new THREE.Vector3());
         
@@ -144,7 +144,5 @@ async function main() {
 
 }
 
-await main();
-
-loadingScreenSetup();
+main();
 
