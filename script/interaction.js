@@ -31,25 +31,33 @@ function addInteraction(object, room, fct){
 
     object.turnOffInteraction = () => {
         // Make object unclickable.
+        if(!object.isOn) return;
         
         domEvents.removeEventListener(object, "mousedown", setupFunction, false);
         domEvents.removeEventListener(object, "touchstart", touchEnd, false);
 
         clickableElements = clickableElements.filter(clickable => clickable != object);
+
+        object.isOn = false;
     };
 
     object.turnOnInteraction = () => {
         // Make object clickable.
+        if(object.isOn) return;
 
         domEvents.addEventListener(object, "mousedown", setupFunction, false);
         // Touchend not detected correctly when it is on a three js object (but work on global document). Using touchstart instead.
         domEvents.addEventListener(object, "touchstart", touchEnd, false);
 
         clickableElements.push(object);
+
+        object.isOn = true;
     };
 
     
     room.addClickable(object);
+
+    object.isOn = false;
 
     object.turnOnInteraction();
 }
