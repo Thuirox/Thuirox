@@ -76,13 +76,6 @@ class CustomScene{
 
 
 
-            
-        // const gesturesHero = new Panel(room, "images/gesturesHero/index.png", {x:-4.5, y:-4, z:-9}, 6, 0.9);
-        // await gesturesHero.init(() => {
-        //     gesturesHero.addAnimation();
-        // });
-
-
         const gesturesHero = new Panel(room, "images/justabayet/gestureshero.png", {x:-4.5, y:-3, z:-9}, 2, 1);
         await gesturesHero.init(() => {
             gesturesHero.addAnimation();
@@ -145,12 +138,7 @@ class CustomScene{
 
         square.init();
 
-        // const videoDesktop = new Panel(room, "whenisnextlolclash-video", {x:4, y:2.2, z:-7}, 7, 1, true);
-         
-        // videoDesktop.init(() => {
-        //     videoDesktop.addAnimation();
-    
-        // });
+
 
         const index = new Panel(room, "images/whenisnextlolclash/index.png", {x:-5.5, y:0, z:-8}, 4, 1);
         await index.init(() => {
