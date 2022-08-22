@@ -49,9 +49,21 @@ class Button extends Panel{
 
         const edges = new THREE.EdgesGeometry( cubeGeometry );
 
-        this.cube = new THREE.LineSegments( edges );
-        this.cube.material.transparent = true;
-        this.cube.material.opacity = 0.4;
+        this.edgesMesh = new THREE.LineSegments( edges );
+        this.edgesMesh.material.transparent = true;
+        this.edgesMesh.material.opacity = 0.4;
+
+        this.cubeMesh = new THREE.Mesh( cubeGeometry, new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.3,
+            side: THREE.BackSide
+
+        }));
+
+        this.cube = new THREE.Object3D();
+        this.cube.add( this.edgesMesh );
+        this.cube.add( this.cubeMesh );
 
         this.mesh.add( this.cube );
         

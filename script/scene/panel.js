@@ -48,7 +48,8 @@ class Panel{
             map: texture.texture,
             transparent: true,
             opacity: this.opacity,
-            side:THREE.DoubleSide
+            side:THREE.DoubleSide,
+            alphaTest: 0.5
         });
           
         const geometry = new THREE.PlaneGeometry(this.size, this.size);
