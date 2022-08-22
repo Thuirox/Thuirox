@@ -70,9 +70,7 @@ class Room extends Chain{
             if(debugLoading) console.log("Load", this);
             this.mesh.add(this.childrenCenter);
             this.loaded = true;
-            this.clickableElements.forEach(( clickable ) => {
-                clickable.turnOnInteraction();
-            });
+            this.transporter.mesh.turnOnInteraction();
             this.lightManager.turnOnLights();
         } 
     }
@@ -82,9 +80,7 @@ class Room extends Chain{
             if(debugLoading) console.log("Unloaded", this);
             this.mesh.remove(this.childrenCenter);
             this.loaded = false;
-            this.clickableElements.forEach(( clickable ) => {
-                clickable.turnOffInteraction();
-            });
+            this.transporter.mesh.turnOffInteraction();
             this.lightManager.turnOffLights();
         } 
     }

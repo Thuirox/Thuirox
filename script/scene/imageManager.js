@@ -43,10 +43,16 @@ class ImageManager{
 
     showImages(){
         this.moveTo(this.initialPosition, 500, 1000);
+        this.images.forEach(( image ) => {
+            image.turnOnInteraction();
+        });
     }
 
     hideImages(){
         this.moveTo({ x: this.mesh.position.x, y: -20, z: this.mesh.position.z });
+        this.images.forEach(( image ) => {
+            image.turnOffInteraction();
+        });
     }
 
 
