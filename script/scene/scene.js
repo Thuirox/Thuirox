@@ -98,7 +98,7 @@ class CustomScene{
             thecodingofisaac.addAnimation();
         });
 
-        const hackathon = new Panel(room, "images/hackathon/title.png", {x:6.5, y:-4, z:-9}, 7, 0.7);
+        const hackathon = new Panel(room, "images/hackathon/title.png", {x:5, y:-4, z:-9}, 7, 0.8);
         await hackathon.init(() => {
             hackathon.addAnimation();
         });
@@ -179,8 +179,8 @@ class CustomScene{
         square.init();
 
 
-        const logoSize = 4;
-        const awardSize = 2;
+        const logoSize = 3;
+        const awardSize = 1.5;
 
         const hpc2019 = new Panel(room, "images/hackathon/Hope_for_climate_2019.png", {x:0, y:-6, z:-11}, logoSize * 1.2, 1);
         await hpc2019.init();
@@ -189,7 +189,7 @@ class CustomScene{
         const cow2019 = new Panel(room, "images/hackathon/COW_2019_logo.png", {x:-7, y:-0.5, z:-10}, logoSize, 1);
         await cow2019.init();
 
-        const cow2019a = new Panel(room, "images/hackathon/COW_2019_award.png", {x:-5, y:-2.3, z:-9.5}, awardSize, 1);
+        const cow2019a = new Panel(room, "images/hackathon/COW_2019_award.png", {x:-5.4, y:-1.9, z:-9.5}, awardSize, 1);
         await cow2019a.init(() => {
             cow2019a.addAnimation();
         });
@@ -199,16 +199,16 @@ class CustomScene{
         const cow2020 = new Panel(room, "images/hackathon/COW_2020_logo.png", {x:-3.5, y:4.5, z:-10}, logoSize, 1);
         await cow2020.init();
 
-        const cow2020a = new Panel(room, "images/hackathon/COW_2020_award.png", {x:-5.3, y:2.7, z:-9.5}, awardSize * 0.9, 1);
+        const cow2020a = new Panel(room, "images/hackathon/COW_2020_award.png", {x:-4.7, y:3, z:-9.5}, awardSize, 1);
         await cow2020a.init(() => {
             cow2020a.addAnimation();
         });
 
 
-        const hyc2020 = new Panel(room, "images/hackathon/hack_your_city_2020.png", {x:3.5, y:5, z:-10}, logoSize * 1.4, 1);
+        const hyc2020 = new Panel(room, "images/hackathon/hack_your_city_2020.png", {x:3.5, y:5, z:-10}, logoSize * 1.6, 1);
         await hyc2020.init();
 
-        const hyc2020a = new Panel(room, "images/hackathon/HYC_2020_award.png", {x:6, y:3.2, z:-9.5}, awardSize, 1);
+        const hyc2020a = new Panel(room, "images/hackathon/HYC_2020_award.png", {x:5.7, y:3.3, z:-9.5}, awardSize, 1);
         await hyc2020a.init(() => {
             hyc2020a.addAnimation();
         });
@@ -218,7 +218,7 @@ class CustomScene{
         const cow2021 = new Panel(room, "images/hackathon/COW_2021_logo.png", {x:7, y:-0.5, z:-10}, logoSize, 1);
         await cow2021.init();
 
-        const cow2021a = new Panel(room, "images/hackathon/COW_2021_award.png", {x:5, y:-2.3, z:-9.5}, awardSize, 1);
+        const cow2021a = new Panel(room, "images/hackathon/COW_2021_award.png", {x:5.4, y:-1.9, z:-9.5}, awardSize, 1);
         await cow2021a.init(() => {
             cow2021a.addAnimation();
         });
