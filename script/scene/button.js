@@ -83,7 +83,7 @@ class Button extends Panel{
     
         animationController.add(this.animation);
 
-        addInteraction(this.logo, this.room, this.action);
+        addInteraction(this.cubeMesh, this.room, this.action);
 
         callback();
     }
