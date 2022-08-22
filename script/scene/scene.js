@@ -317,7 +317,7 @@ class CustomScene{
         square.init();
 
 
-        const game = new Panel(room, "images/gesturesHero/index.png", {x:4, y:5, z:-10}, 8, 1);
+        const game = new Panel(room, "images/gesturesHero/index.png", {x:4, y:4.5, z:-10}, 8, 1);
         await game.init(() => {
             game.addAnimation();
         });
@@ -327,7 +327,7 @@ class CustomScene{
             kikkFestivalPoster.addAnimation();
         });
 
-        const poster = new Panel(room, "images/gesturesHero/poster.png", {x:-5, y:5, z:-10}, 8, 1);
+        const poster = new Panel(room, "images/gesturesHero/poster.png", {x:-5, y:4.5, z:-10}, 8, 1);
         await poster.init(() => {
             poster.addAnimation();
         });
