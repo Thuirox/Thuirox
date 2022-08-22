@@ -76,27 +76,27 @@ class CustomScene{
 
 
 
-        const gesturesHero = new Panel(room, "images/justabayet/gestureshero.png", {x:-4.5, y:-3, z:-9}, 2, 1);
+        const gesturesHero = new Panel(room, "images/justabayet/gestureshero.png", {x:-4.5, y:-3, z:-8}, 2);
         await gesturesHero.init(() => {
             gesturesHero.addAnimation();
         });
 
-        const whenisnextlolclash = new Panel(room, "images/justabayet/whenisnextlolclash.png", {x:-5.5, y:1.5, z:-9}, 3, 1);
+        const whenisnextlolclash = new Panel(room, "images/justabayet/whenisnextlolclash.png", {x:-5.5, y:1.5, z:-9}, 3);
         await whenisnextlolclash.init(() => {
             whenisnextlolclash.addAnimation();
         });
 
-        const thecodingofisaac = new Panel(room, "images/justabayet/thecodingofisaac.png", {x:5, y:2.2, z:-9}, 5, 1);
+        const thecodingofisaac = new Panel(room, "images/justabayet/thecodingofisaac.png", {x:5, y:2.2, z:-9}, 5);
         await thecodingofisaac.init(() => {
             thecodingofisaac.addAnimation();
         });
 
-        const hackathon = new Panel(room, "images/hackathon/title.png", {x:5, y:-4, z:-9}, 7, 0.8);
+        const hackathon = new Panel(room, "images/justabayet/hackathons.png", {x:4.5, y:-3, z:-8}, 2.5);
         await hackathon.init(() => {
             hackathon.addAnimation();
         });
 
-        const title = new Title(room, "images/justabayet/title.png", {x:0, y:0, z:-8}, 7, 1);
+        const title = new Title(room, "images/justabayet/title.png", {x:0, y:0, z:-8}, 7);
         await title.init();
 
         const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/justabayet/justabayet", "justabayet");

@@ -6,7 +6,7 @@ import { displayRedirectModal, redirectConfirmButton, redirectModalText } from '
 
 class Button extends Panel{
     constructor(room, position, size=5, path=""){
-        super(room, path, position, size, 1);
+        super(room, path, position, size);
 
         this.action = () => {
             console.log("button clicked");

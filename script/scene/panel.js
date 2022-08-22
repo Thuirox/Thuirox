@@ -7,7 +7,7 @@ import { imageContainer } from '../modal.js';
 import { updateProgressionLoaded } from '../loadingScreen.js';
 
 class Panel{
-    constructor(room, path, position, size=5, opacity=0.7, isVideo=false){
+    constructor(room, path, position, size=5, opacity=1, isVideo=false){
         this.room = room;
         
         this.imageManager = this.room.imageManager;
@@ -145,7 +145,7 @@ class Panel{
 }
 
 class Title extends Panel{
-    constructor(room, path, position, size=5, opacity=0.7){
+    constructor(room, path, position, size=5, opacity=1){
         super(room, path, position, size, opacity, false);
     }
 
