@@ -1,0 +1,21 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "project": ["./tsconfig.json"]
+  },
+  "rules": {
+    "semi": ["error", "never"]
+  },
+  "plugins": [
+    "css"
+  ],
+  "extends": [
+    "standard-with-typescript",
+    "plugin:css/recommended"
+  ]
+}
