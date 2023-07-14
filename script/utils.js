@@ -1,4 +1,4 @@
-import { Vector3 } from "./libs/three.module.js";
+import * as THREE from 'three';
 import { angleBetweenSphere } from "./const.js";
 import { updateCameraAngleOffset } from "./gyroControls.js";
 
@@ -77,7 +77,7 @@ class Chain{
 
 
 
-var cameraPositionOffset = new Vector3();
+var cameraPositionOffset = new THREE.Vector3();
 
 updateCameraPositionOffsetAngle(2*angleBetweenSphere)
 
@@ -87,9 +87,9 @@ var cameraAngleDegOffset = cameraAngleRadOffset * 180/Math.PI;
 updateCameraAngleOffset(cameraAngleDegOffset);
 
 function updateCameraPositionOffsetAngle(angle){
-    let positionOffset = new Vector3( 0, 0, 0.001 );
+    let positionOffset = new THREE.Vector3( 0, 0, 0.001 );
 
-    let axisY = new Vector3( 0, 1, 0 );
+    let axisY = new THREE.Vector3( 0, 1, 0 );
 
     positionOffset.applyAxisAngle( axisY, angle );
 

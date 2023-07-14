@@ -1,4 +1,4 @@
-import * as THREE from '../libs/three.module.js';
+import * as THREE from 'three';
 import { LightManager } from "./lightManager.js";
 import { Chain } from "../utils.js";
 import { angleBetweenSphere,debugLoading } from '../const.js';

@@ -1,4 +1,4 @@
-import * as THREE from '../libs/three.module.js';
+import * as THREE from 'three';
 import { Panel, Title } from "./panel.js";
 import { Transporter, transportController } from "./transporter.js";
 import { Room } from "./room.js";

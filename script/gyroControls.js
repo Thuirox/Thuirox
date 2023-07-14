@@ -1,4 +1,4 @@
-import * as THREE from './libs/three.module.js';
+import * as THREE from 'three';
 import { debug_text, gyroButton } from "./const.js";
 import { Animation } from './animation.js';
 

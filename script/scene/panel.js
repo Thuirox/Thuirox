@@ -1,4 +1,4 @@
-import * as THREE from '../libs/three.module.js';
+import * as THREE from 'three';
 import { loader } from '../const.js';
 import { addRandomness } from '../utils.js';
 import { Animation, animationController } from '../animation.js';

@@ -1,4 +1,4 @@
-import * as THREE from './libs/three.module.js';
+import * as THREE from 'three';
 import { setupScene } from './scene/scene.js';
 import { setupManualControls } from './manualControls.js';
 import { THREEx } from './libs/threex.domevents.js';
@@ -25,10 +25,12 @@ function main() {
         canvas,
         antialias: true
     });
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(4);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.localClippingEnabled = true;
+    THREE.ColorManagement.enabled = false;
+    renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
     
 
     // camera setup

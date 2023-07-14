@@ -1,4 +1,4 @@
-import * as THREE from './libs/three.module.js';
+import * as THREE from 'three';
 import { debugMove } from './const.js';
 import { contactModalContainer, redirectModalContainer } from './modal.js';
 import { loadingScreen } from './loadingScreen.js';

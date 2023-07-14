@@ -1,4 +1,4 @@
-import * as THREE from './libs/three.module.js';
+import * as THREE from 'three';
 
 const debug_text = document.getElementById("debug_text");
 
