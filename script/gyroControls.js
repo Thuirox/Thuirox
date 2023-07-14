@@ -25,20 +25,27 @@ function switchGyroControl(event){
 gyroButton.onclick = switchGyroControl;
 
 function setupGyroControls(camera_, controls_){
-    // source : https://leemartin.dev/how-to-request-device-motion-and-orientation-permission-in-ios-13-74fc9d6cd140
-    if (typeof DeviceMotionEvent.requestPermission === 'function') {
-        // iOS 13+
-        DeviceOrientationEvent.requestPermission()
-        .then(response => {
-            if (response == 'granted') {
-                setupGyroControlsPrivate(camera_, controls_);
-            }
-        })
-        .catch(console.error)
+    try {
+        if (DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
+            // iOS 13+
+            DeviceOrientationEvent.requestPermission()
+            .then(response => {
+                if (response == 'granted') {
+                    setupGyroControlsPrivate(camera_, controls_);
+                }
+            })
+            .catch(console.error)
+        } else {
+            // non iOS 13+
+            setupGyroControlsPrivate(camera_, controls_);
+        }
+  } catch (error) {
+    if (error instanceof ReferenceError){
+      return true
     } else {
-        // non iOS 13+
-        setupGyroControlsPrivate(camera_, controls_);
+      throw error
     }
+  }
 }
 
 

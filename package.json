@@ -1,0 +1,34 @@
+{
+  "name": "justabayet",
+  "version": "1.0.0",
+  "description": "Immersive mobile experience",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx vite --host $(ipconfig getifaddr en0)"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/justabayet/justabayet.git"
+  },
+  "keywords": [
+    "THREE.js",
+    "typescript",
+    "immersive",
+    "mobile"
+  ],
+  "author": "Anthony Bayet",
+  "license": "ISC",
+  "engines": {
+    "npm": ">=9.0.0",
+    "node": ">=20.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/justabayet/justabayet/issues"
+  },
+  "homepage": "https://github.com/justabayet/justabayet#readme",
+  "devDependencies": {
+    "@vitejs/plugin-basic-ssl": "^1.0.1",
+    "vite": "^4.4.4"
+  }
+}
