@@ -2,10 +2,12 @@
   "name": "justabayet",
   "version": "1.0.0",
   "description": "Immersive mobile experience",
-  "main": "index.js",
+  "main": "doc/index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx vite --host $(ipconfig getifaddr en0)"
+    "dev": "vite --host $(ipconfig getifaddr en0)",
+    "build": "tsc && vite build",
+    "preview": "vite preview --host $(ipconfig getifaddr en0)"
   },
   "repository": {
     "type": "git",

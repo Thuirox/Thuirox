@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { debug_text, gyroButton } from "./const.js";
+import { debugText, gyroButton } from "./const";
 import { Animation } from './animation.js';
 
 var gyroControl = false;
@@ -18,7 +18,7 @@ function switchGyroControl(event){
     } else {
         updateGyro = updateGyroEmpty;
     }
-    debug_text.textContent = `GyroControl switched`;
+    debugText.textContent = `GyroControl switched`;
     updateGyroOffset();
 }
 

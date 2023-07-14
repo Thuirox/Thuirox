@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { angleBetweenSphere } from "./const.js";
+import { angleBetweenSphere } from "./const";
 import { updateCameraAngleOffset } from "./gyroControls.js";
 
 function isMobile(){

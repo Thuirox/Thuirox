@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { Panel, Title } from "./panel.js";
 import { Transporter, transportController } from "./transporter.js";
 import { Room } from "./room.js";
-import { cameraInitialPosition } from "../const.js";
+import { cameraInitialPosition } from "../const";
 import { GithubButton, WebsiteButton, LinkedinButton } from './button.js';
 
 class CustomScene{

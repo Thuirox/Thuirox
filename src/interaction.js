@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { debugMove } from './const.js';
+import { debugMove } from './const';
 import { contactModalContainer, redirectModalContainer } from './modal.js';
 import { loadingScreen } from './loadingScreen.js';
 

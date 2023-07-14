@@ -1,4 +1,4 @@
-import { debugModal } from "./const.js";
+import { debugModal } from "./const";
 
 
 // Zoom image modal

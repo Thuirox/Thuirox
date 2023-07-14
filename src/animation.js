@@ -1,4 +1,4 @@
-import { debugAnimation } from "./const.js";
+import { debugAnimation } from "./const";
 import { updateCameraAngleOffset } from "./gyroControls.js";
 
 class AnimationController{

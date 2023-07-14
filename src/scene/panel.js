@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { loader } from '../const.js';
+import { loader } from '../const';
 import { addRandomness } from '../utils.js';
 import { Animation, animationController } from '../animation.js';
 import { addInteraction } from '../interaction.js';

@@ -7,7 +7,7 @@ import { gyroControl, setupGyroControls, updateGyro } from './gyroControls.js'
 import { animationController, cameraAnimation } from './animation.js'
 import { cameraAngleDegOffset, cameraPositionOffset, updateCameraPositionOffsetPoint } from './utils.js';
 
-import { cameraInitialPosition } from './const.js';
+import { cameraInitialPosition } from './const';
 import { transportController } from './scene/transporter.js';
 
 import Stats from 'stats.js'

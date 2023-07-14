@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { LightManager } from "./lightManager.js";
 import { Chain } from "../utils.js";
-import { angleBetweenSphere,debugLoading } from '../const.js';
+import { angleBetweenSphere,debugLoading } from '../const';
 import { ImageManager } from './imageManager.js';
 
 class Room extends Chain{
