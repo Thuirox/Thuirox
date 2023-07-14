@@ -1,4 +1,4 @@
-import { OrbitControls } from './libs/OrbitControls.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { isMobile } from './utils.js';
 import { cameraInitialPosition } from './const.js';
 
