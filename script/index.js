@@ -10,7 +10,16 @@ import { cameraAngleDegOffset, cameraPositionOffset, updateCameraPositionOffsetP
 import { cameraInitialPosition } from './const.js';
 import { transportController } from './scene/transporter.js';
 
+import Stats from 'stats.js'
+
+const debug = true
+
 function main() {
+    const stats = new Stats()
+    if(debug) {
+        stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
+        document.body.appendChild(stats.dom)
+    }
     const canvas = document.querySelector('#c');
     const renderer = new THREE.WebGLRenderer({
         canvas,
@@ -108,6 +117,10 @@ function main() {
 
 
     function render(time) {
+        if(debug) {
+            console.log(renderer.info);
+            stats.begin();
+        }
         time *= 0.001;  // convert time to seconds
 
         if (resizeRendererToDisplaySize(renderer)) {
@@ -125,7 +138,9 @@ function main() {
         animationController.update();
        
         renderer.render(scene, camera);
-       
+        if(debug) {
+            stats.end();
+        }
         requestAnimationFrame(render);
     }
     requestAnimationFrame(render);
