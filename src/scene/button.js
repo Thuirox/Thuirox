@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Panel } from "./panel.js";
-import { addInteraction } from '../interaction.js';
-import { Animation, animationController } from '../animation';
+import { MeshInteractive } from '../interaction';
+import { Animation } from '../animation';
 import { displayRedirectModal, redirectConfirmButton, redirectModalText } from '../modal.js';
 
 class Button extends Panel{
@@ -51,13 +51,21 @@ class Button extends Panel{
         this.edgesMesh.material.transparent = true;
         this.edgesMesh.material.opacity = 0.4;
 
-        this.cubeMesh = new THREE.Mesh( cubeGeometry, new THREE.MeshBasicMaterial({
+        this.cubeMesh = new MeshInteractive(this.action, cubeGeometry, new THREE.MeshBasicMaterial({
             color: 0xffffff,
             transparent: true,
             opacity: this.backgroundOpacity,
             side: THREE.BackSide
 
-        }));
+        }))
+
+        // this.cubeMesh = new THREE.Mesh( cubeGeometry, new THREE.MeshBasicMaterial({
+        //     color: 0xffffff,
+        //     transparent: true,
+        //     opacity: this.backgroundOpacity,
+        //     side: THREE.BackSide
+
+        // }));
 
         this.cube = new THREE.Object3D();
         this.cube.add( this.edgesMesh );
@@ -80,10 +88,6 @@ class Button extends Panel{
     
         this.animation.setIsLooping(true);
         this.animation.init();
-    
-        animationController.add(this.animation);
-
-        addInteraction(this.cubeMesh, this.room, this.action);
 
         callback();
     }

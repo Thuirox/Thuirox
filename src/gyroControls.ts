@@ -198,7 +198,7 @@ class GyroscopeControls {
   }
 
   private updateEmpty (): void {
-    console.log('trying to update gyro controls. Without function set.')
+    Logger.debugInteraction('trying to update gyro controls. Without function set.')
   }
 
   public updateOffset (): void {

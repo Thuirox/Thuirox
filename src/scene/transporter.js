@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { Animation, animationController } from '../animation';
-import { addInteraction } from '../interaction.js';
+import { Animation } from '../animation';
+import { MeshInteractive } from '../interaction';
 
 class Transporter{
     constructor(room, camera, center, color, squareSideLength=6.5){
@@ -34,8 +34,10 @@ class Transporter{
             color: this.color,
             side: this.isDoubleSided ? THREE.DoubleSide : THREE.FrontSide
         });
-    
-        this.mesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
+
+        this.mesh = new MeshInteractive((event) => {
+            transportController.setCurrentRoom(this.room);
+        }, cubeGeometry, cubeMaterial);
         this.mesh.rotateZ(Math.PI/4);
         this.mesh.rotateY(Math.PI/4);
         this.mesh.position.x = this.center.x;
@@ -66,12 +68,6 @@ class Transporter{
     
         this.animation.setIsLooping(true);
         this.animation.init();
-    
-        animationController.add(this.animation);
-    
-        addInteraction(this.mesh, this.room, (event) => {
-            transportController.setCurrentRoom(this.room);
-        });
     }
 
     addLines(){

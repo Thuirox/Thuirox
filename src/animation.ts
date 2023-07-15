@@ -4,24 +4,21 @@ import { Logger } from './helpers/logger'
 import { type GyroscopeControls } from './gyroControls'
 import { type OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 class AnimationController {
-  private animations: Array<Animation<any, any>>
+  private static animations: Array<Animation<any, any>> = []
 
-  constructor () {
-    this.animations = []
-  }
-
-  add (animation: Animation<any, any>): void {
+  public static add (animation: Animation<any, any>): void {
     if (typeof animation.startTime === 'undefined') {
-      console.log('! animation added to controller but not initialized')
+      Logger.debugAnimation('! animation added to controller but not initialized')
     }
-    this.animations.push(animation)
+    AnimationController.animations.push(animation)
   }
 
-  update (): void {
+  public static update (): void {
     const currentTime = Date.now()
 
-    this.animations.forEach((animation) => {
+    AnimationController.animations.forEach((animation) => {
       const timeDifference = currentTime - animation.startTime
 
       if (timeDifference > animation.duration) {
@@ -31,13 +28,11 @@ class AnimationController {
       }
     })
 
-    this.animations = this.animations.filter((animation) => {
+    AnimationController.animations = AnimationController.animations.filter((animation) => {
       return !animation.ended
     })
   }
 }
-
-const animationController = new AnimationController()
 
 class Animation<T, Args> {
   startTime: number = 0
@@ -109,7 +104,7 @@ class Animation<T, Args> {
     this.startTime = Date.now()
     this.ended = false
     if (toAdd) {
-      animationController.add(this)
+      AnimationController.add(this)
     }
   }
 
@@ -138,7 +133,7 @@ class DifferedAnimation<T, Args> extends Animation<number, undefined> {
       () => {},
       () => {
         nextAnimation.init()
-        animationController.add(nextAnimation)
+        AnimationController.add(nextAnimation)
       },
       undefined
     )
@@ -195,4 +190,4 @@ const cameraAnimation = new Animation<CameraAnimationTargetType, CameraAnimation
   }, null
 )
 
-export { animationController, Animation, cameraAnimation, DifferedAnimation }
+export { AnimationController, Animation, cameraAnimation, DifferedAnimation }

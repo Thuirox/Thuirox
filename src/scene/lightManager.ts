@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { Animation } from '../animation'
+import { Logger } from '../helpers/logger'
 
 class LightManager {
   private readonly parent: THREE.Object3D
@@ -47,7 +48,7 @@ class LightManager {
 
   turnOffLights (): void {
     if (this.turnOffAnimation === undefined) {
-      console.log('Light turn off animation not initialized yet')
+      Logger.debug('Light turn off animation not initialized yet')
     } else {
       this.turnOffAnimation.init(this.turnOffAnimation.isOver())
     }
@@ -55,7 +56,7 @@ class LightManager {
 
   turnOnLights (): void {
     if (this.turnOnAnimation === undefined) {
-      console.log('Light turn on animation not initialized yet')
+      Logger.debug('Light turn on animation not initialized yet')
     } else {
       this.turnOnAnimation.init(this.turnOnAnimation.isOver())
     }

@@ -2,9 +2,8 @@ import * as THREE from 'three';
 import { GyroscopeControls } from './gyroControls'
 import { setupScene } from './scene/scene.js';
 import { setupManualControls } from './manualControls';
-import { THREEx } from './libs/threex.domevents.js';
-import { setupInteractions } from './interaction.js';
-import { animationController, cameraAnimation } from './animation'
+import { setupInteractions } from './interaction';
+import { AnimationController, cameraAnimation } from './animation'
 
 import { cameraInitialPosition } from './helpers/const';
 import { transportController } from './scene/transporter.js';
@@ -67,14 +66,11 @@ function main() {
     // camera.position.set(40, 20, 20); // camera out of balls
     // camera.position.set(7, 7, 7); // camera in first ball but out of cube
     
-    const domEvents = new THREEx.DomEvents(camera, canvas);
-
-    setupInteractions(domEvents, camera);
+    setupInteractions(camera, canvas);
 
     const orbitControls = setupManualControls(camera, canvas);
 
     camera.controls = orbitControls;
-
 
     camera.goToRoom = function(room) {
 
@@ -150,7 +146,7 @@ function main() {
             orbitControls.update();
         }
 
-        animationController.update();
+        AnimationController.update();
        
         renderer.render(scene, camera);
         if(debug) {

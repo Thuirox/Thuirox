@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { loader } from '../helpers/const';
 import { addRandomness } from '../helpers/utils';
-import { Animation, animationController } from '../animation';
-import { addInteraction } from '../interaction.js';
+import { Animation } from '../animation';
+import { MeshInteractive } from '../interaction';
 import { imageContainer } from '../modal.js';
 import { updateProgressionLoaded } from '../loadingScreen.js';
 
@@ -28,22 +28,26 @@ class Panel{
     async init(callback=()=>{}){
         const texture = await this.loadTexture();
 
+        const { material, geometry } = this.getGeoMat(texture, this.position)
+
         this.mesh = this.createMesh(texture, this.position);
-
-        // add the panel to the imageManager
-        this.imageManager.addImage(this.mesh);
-
-        addInteraction(this.mesh, this.room, () => {
+        
+        this.mesh = new MeshInteractive(() => {
             // On click, make image full screen.
             imageContainer.style.backgroundImage = 'url(' + this.path + ')';
             imageContainer.style.opacity = 1;
             imageContainer.style.pointerEvents = "auto";
-        })
+        }, geometry, material);
+
+        this.setupMesh(this.mesh, texture, this.position)
+
+        // add the panel to the imageManager
+        this.imageManager.addImage(this.mesh);
 
         callback();
     }
 
-    createMesh(texture, position){
+    getGeoMat(texture, position){
         let material = new THREE.MeshBasicMaterial({
             map: texture.texture,
             transparent: true,
@@ -53,9 +57,11 @@ class Panel{
         });
           
         const geometry = new THREE.PlaneGeometry(this.size, this.size);
-        
-        const mesh = new THREE.Mesh(geometry, material);
 
+        return { material, geometry }
+    }
+
+    setupMesh(mesh, texture, position) {
         // Scale mesh to match image ratio
         mesh.scale.set(1, texture.height / texture.width, 1.0);
         
@@ -64,6 +70,14 @@ class Panel{
         
         // Make the panel look where it comes from
         mesh.lookAt(0, 0, 0);
+    }
+
+    createMesh(texture, position){
+        const { material, geometry } = this.getGeoMat(texture, position)
+        
+        const mesh = new THREE.Mesh(geometry, material);
+
+        this.setupMesh(mesh, texture, position)
 
         return mesh;
     }
@@ -139,8 +153,6 @@ class Panel{
     
         imageAnimation.init();
         imageAnimation.setIsLooping(true);
-    
-        animationController.add(imageAnimation);
     }
 }
 
