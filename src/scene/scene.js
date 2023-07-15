@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Panel, Title } from "./panel.js";
 import { Transporter } from "./transporter.js";
-import { Room } from "./room.js";
+import { Room } from "./room";
 import { cameraInitialPosition } from "../helpers/const";
 import { GithubButton, WebsiteButton, LinkedinButton } from './button.js';
 import { TransportManager } from '../managers/transportManager';
@@ -62,12 +62,7 @@ class CustomScene{
         const center = { x:0, y:0, z:0 };
 
         const roomColor = 0x0B0014;
-        const room = new Room(pivot, this.camera, center, this.sphereRadius, roomColor);
-
-        room.addExit();
-
-        room.init();
-
+        const room = new Room(pivot, center, this.sphereRadius, roomColor, { hasExit: true });
 
         const square = new Transporter(room, this.camera, { x:0, y:0, z:0 }, roomColor);
 
@@ -113,9 +108,6 @@ class CustomScene{
         githubGeneralButton.setBackgroundOpacity(0.1);
         await githubGeneralButton.init();
 
-
-
-
         return room;
     }
 
@@ -126,12 +118,7 @@ class CustomScene{
         // const roomColor = 0x1A2623; // Project Background Color
         // const roomColor = colors[0];
         const roomColor = 0x455854;
-        const room = new Room(pivot, this.camera, center, this.sphereRadius, roomColor);
-
-        room.addEntry();
-
-        room.init();
-
+        const room = new Room(pivot, center, this.sphereRadius, roomColor, { hasEntry: true });
 
         const square = new Transporter(room, this.camera, { x:0, y:0, z:0 }, roomColor);
 
@@ -174,13 +161,7 @@ class CustomScene{
         const center = { x:0, y:0, z:0 };
         const roomColor = 0xf5ffff;
 
-        const room = new Room(pivot, this.camera, center, this.sphereRadius, roomColor);
-
-        room.addExit();
-        room.addEntry();
-
-        room.init();
-
+        const room = new Room(pivot, center, this.sphereRadius, roomColor, { hasEntry: true, hasExit: true });
 
         const square = new Transporter(room, this.camera, { x:0, y:0, z:0 }, roomColor);
 
@@ -244,13 +225,7 @@ class CustomScene{
         const center = { x:0, y:0, z:0 };
         const roomColor = 0x340500;
 
-        const room = new Room(pivot, this.camera, center, this.sphereRadius, roomColor);
-
-        room.addExit();
-        room.addEntry();
-
-        room.init();
-
+        const room = new Room(pivot, center, this.sphereRadius, roomColor, { hasEntry: true, hasExit: true });
 
         const square = new Transporter(room, this.camera, { x:0, y:0, z:0 }, roomColor);
 
@@ -293,12 +268,7 @@ class CustomScene{
         const roomColor = 0x33CCCC;
 
 
-        const room = new Room(pivot, this.camera, center, this.sphereRadius, roomColor);
-
-        room.addExit();
-        room.addEntry();
-
-        room.init();
+        const room = new Room(pivot, center, this.sphereRadius, roomColor, { hasEntry: true, hasExit: true });
 
         const square = new Transporter(room, this.camera, { x:0, y:0, z:0 }, roomColor);
 

@@ -1,4 +1,4 @@
-class DoubleLinkedList<T> {
+class DoubleLinkedList<T extends DoubleLinkedList<T>> {
   public next: DoubleLinkedList<T> | null
   public previous: DoubleLinkedList<T> | null
 

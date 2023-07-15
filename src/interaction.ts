@@ -105,7 +105,11 @@ class InteractionManager {
   }
 }
 
-class MeshLoadable extends THREE.Mesh {
+interface Loadable {
+  load: () => void
+  unload: () => void
+}
+class MeshLoadable extends THREE.Mesh implements Loadable {
   public load (): void {}
   public unload (): void {}
 }
@@ -176,4 +180,4 @@ function setupInteractions (camera: THREE.Camera, canvas: HTMLCanvasElement): vo
   InteractionManager.Instanciate(domEvents, camera)
 }
 
-export { setupInteractions, MeshInteractive, MeshLoadable }
+export { setupInteractions, MeshInteractive, MeshLoadable, type Loadable }

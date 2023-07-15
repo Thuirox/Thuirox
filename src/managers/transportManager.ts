@@ -80,7 +80,7 @@ class TransportManager {
 
     room.showChidlren()
 
-    room.transporter.removeLines()
+    room.transporter?.removeLines()
 
     room.previous?.previous?.unload()
     room.previous?.load()
@@ -98,7 +98,7 @@ class TransportManager {
         () => {},
         (animation) => {
           const { room } = animation.args
-          if (room) room.transporter.addLines()
+          if (room?.transporter) room.transporter.addLines()
         },
         { room: this.currentRoom }
       )

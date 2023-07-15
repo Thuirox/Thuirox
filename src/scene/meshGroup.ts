@@ -3,7 +3,7 @@ import { Animation, DifferedAnimation } from '../animation'
 import { type MeshLoadable } from '../interaction'
 
 class MeshGroup {
-  private readonly parent: THREE.Mesh
+  private readonly parent: THREE.Object3D
 
   private position: THREE.Vector3
   private readonly initialPosition: THREE.Vector3
@@ -15,7 +15,7 @@ class MeshGroup {
   private readonly childrenAnimatedCenter: THREE.Object3D
   private readonly childrenStaticCenter: THREE.Object3D
 
-  constructor (parent: THREE.Mesh, position: THREE.Vector3) {
+  constructor (parent: THREE.Object3D, position: THREE.Vector3) {
     this.parent = parent
 
     this.position = position
