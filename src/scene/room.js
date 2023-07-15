@@ -1,10 +1,10 @@
 import * as THREE from 'three';
-import { LightManager } from "./lightManager.js";
-import { Chain } from "../utils.js";
-import { angleBetweenSphere,debugLoading } from '../const';
+import { LightManager } from "./lightManager";
+import { angleBetweenSphere, debugLoading } from '../helpers/const';
 import { ImageManager } from './imageManager.js';
+import { DoubleLinkedList } from '../doubleLinkedList';
 
-class Room extends Chain{
+class Room extends DoubleLinkedList{
     constructor(parent, camera, center, radius, color){
         super();
 

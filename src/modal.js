@@ -1,4 +1,4 @@
-import { debugModal } from "./const";
+import { debugModal } from "./helpers/const";
 
 
 // Zoom image modal

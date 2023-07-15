@@ -1,16 +1,16 @@
 import * as THREE from 'three';
+import { gyroControl, setupGyroControls, updateCameraAngleOffset, updateGyro } from './gyroControls.js'
 import { setupScene } from './scene/scene.js';
-import { setupManualControls } from './manualControls.js';
+import { setupManualControls } from './manualControls';
 import { THREEx } from './libs/threex.domevents.js';
 import { setupInteractions } from './interaction.js';
-import { gyroControl, setupGyroControls, updateGyro } from './gyroControls.js'
 import { animationController, cameraAnimation } from './animation.js'
-import { cameraAngleDegOffset, cameraPositionOffset, updateCameraPositionOffsetPoint } from './utils.js';
 
-import { cameraInitialPosition } from './const';
+import { cameraInitialPosition } from './helpers/const';
 import { transportController } from './scene/transporter.js';
 
 import Stats from 'stats.js'
+import { Camera } from './scene/camera';
 
 const debug = true
 
@@ -38,11 +38,32 @@ function main() {
     const aspect = 2;  // the canvas default
     const near = 0.1;
     const far = 250;
-    const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+
+    const camera = new Camera(fov, aspect, near, far)
+    updateCameraAngleOffset(camera.angleDegOffset)
+
+
+    window.addEventListener('resize', onWindowResize, false)
+
+    function onWindowResize () {
+        const canvas = renderer.domElement
+
+        const width = canvas.clientWidth
+        const height = canvas.clientHeight
+
+        camera.aspect = width / height
+        camera.updateProjectionMatrix()
+
+        renderer.setSize(width, height, false)
+    }
+
+    onWindowResize()
+
+    // const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     camera.position.set(
-        cameraInitialPosition.x + cameraPositionOffset.x, 
-        cameraInitialPosition.y + cameraPositionOffset.y, 
-        cameraInitialPosition.z + cameraPositionOffset.z
+        cameraInitialPosition.x + camera.positionOffset.x, 
+        cameraInitialPosition.y + camera.positionOffset.y, 
+        cameraInitialPosition.z + camera.positionOffset.z
     );
     // camera.position.set(40, 20, 20); // camera out of balls
     // camera.position.set(7, 7, 7); // camera in first ball but out of cube
@@ -66,14 +87,14 @@ function main() {
         let targetPosition = new THREE.Vector3();
         room.mesh.getWorldPosition(targetPosition);
 
-        let startAngleGyro = cameraAngleDegOffset;
+        let startAngleGyro = camera.angleDegOffset;
 
 
 
         const offsetPointWorld = room.mesh.localToWorld( new THREE.Vector3( 0, 0, -0.001 ) );
         const offsetPoint = new THREE.Vector3().copy(targetPosition);
 
-        updateCameraPositionOffsetPoint( offsetPoint.sub( offsetPointWorld ) );
+        camera.updatePositionOffsetPoint( offsetPoint.sub( offsetPointWorld ) );
         
         cameraAnimation.setParams({
             x: camera.position.x,
@@ -85,11 +106,11 @@ function main() {
             x:targetPosition.x, 
             y:targetPosition.y, 
             z:targetPosition.z,
-            angle: cameraAngleDegOffset
+            angle: camera.angleDegOffset
         }, 
         { 
             camera: camera, 
-            offset: cameraPositionOffset,
+            offset: camera.positionOffset,
             controls: controls
         });
 
@@ -107,9 +128,9 @@ function main() {
         let pos = transportController.currentRoom.mesh.getWorldPosition(new THREE.Vector3());
         
         camera.position.set(
-            pos.x + cameraPositionOffset.x, 
-            pos.y + cameraPositionOffset.y, 
-            pos.z + cameraPositionOffset.z
+            pos.x + camera.positionOffset.x, 
+            pos.y + camera.positionOffset.y, 
+            pos.z + camera.positionOffset.z
         );
         controls.target.set(pos.x, pos.y, pos.z);
         // controls.target.set(0, 0, 0);
@@ -124,12 +145,6 @@ function main() {
             stats.begin();
         }
         time *= 0.001;  // convert time to seconds
-
-        if (resizeRendererToDisplaySize(renderer)) {
-            const canvas = renderer.domElement;
-            camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            camera.updateProjectionMatrix();
-        }
 
         if(gyroControl){
             updateGyro();
@@ -146,18 +161,6 @@ function main() {
         requestAnimationFrame(render);
     }
     requestAnimationFrame(render);
-
-
-    function resizeRendererToDisplaySize(renderer) {
-        const canvas = renderer.domElement;
-        const width = canvas.clientWidth;
-        const height = canvas.clientHeight;
-        const needResize = canvas.width !== width || canvas.height !== height;
-        if (needResize) {
-          renderer.setSize(width, height, false);
-        }
-        return needResize;
-    }
 
 }
 

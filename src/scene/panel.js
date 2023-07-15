@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { loader } from '../const';
-import { addRandomness } from '../utils.js';
+import { loader } from '../helpers/const';
+import { addRandomness } from '../helpers/utils';
 import { Animation, animationController } from '../animation.js';
 import { addInteraction } from '../interaction.js';
 import { imageContainer } from '../modal.js';

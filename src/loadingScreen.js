@@ -1,4 +1,4 @@
-import { debugLoading } from "./const";
+import { debugLoading } from "./helpers/const";
 import { updateGyroOffset } from "./gyroControls.js";
 
 const progressBar = document.getElementById("loading-screen-progress-bar");

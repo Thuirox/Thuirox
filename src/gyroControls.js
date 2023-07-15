@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { debugText, gyroButton } from "./const";
+import { debugText, gyroButton } from "./helpers/const";
 import { Animation } from './animation.js';
 
 var gyroControl = false;
