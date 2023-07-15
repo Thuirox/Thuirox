@@ -105,7 +105,12 @@ class InteractionManager {
   }
 }
 
-class MeshInteractive extends THREE.Mesh {
+class MeshLoadable extends THREE.Mesh {
+  public load (): void {}
+  public unload (): void {}
+}
+
+class MeshInteractive extends MeshLoadable {
   private isInteractive: boolean = false
   public readonly onInteraction: (event: UIEvent) => void
 
@@ -156,6 +161,14 @@ class MeshInteractive extends THREE.Mesh {
     InteractionManager.setIsMoving(false)
     InteractionManager.setTarget(this)
   }
+
+  public load (): void {
+    this.turnOnInteraction()
+  }
+
+  public unload (): void {
+    this.turnOffInteraction()
+  }
 }
 
 function setupInteractions (camera: THREE.Camera, canvas: HTMLCanvasElement): void {
@@ -163,4 +176,4 @@ function setupInteractions (camera: THREE.Camera, canvas: HTMLCanvasElement): vo
   InteractionManager.Instanciate(domEvents, camera)
 }
 
-export { setupInteractions, MeshInteractive }
+export { setupInteractions, MeshInteractive, MeshLoadable }

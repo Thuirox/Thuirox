@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Panel } from "./panel.js";
-import { MeshInteractive } from '../interaction';
+import { MeshInteractive, MeshLoadable } from '../interaction';
 import { Animation } from '../animation';
 import { displayRedirectModal, redirectConfirmButton, redirectModalText } from '../modal';
 
@@ -30,10 +30,10 @@ class Button extends Panel{
 
 
     async init(callback=()=>{}){
-        this.mesh = new THREE.Object3D();
+        this.mesh = new MeshLoadable();
         this.mesh.position.set(this.position.x, this.position.y, this.position.z);
         this.mesh.lookAt(0, 0, 0);
-        this.imageGroup.mesh.add(this.mesh);
+        this.meshGroup.addChild(this.mesh);
 
         const texture = await this.loadImage();
 
@@ -72,10 +72,10 @@ class Button extends Panel{
         this.cube.add( this.cubeMesh );
 
         this.mesh.add( this.cube );
-        
+
         this.cube.rotateZ(Math.PI/4);
         this.cube.rotateY(Math.PI/4);
-    
+
 
         // add rotating animation
         this.animation = new Animation(
@@ -85,7 +85,7 @@ class Button extends Panel{
                 v3.normalize();
                 this.cube.rotateOnAxis(v3, animation.end);
             }, undefined);
-    
+
         this.animation.setIsLooping(true);
         this.animation.init();
 

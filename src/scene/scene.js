@@ -15,42 +15,42 @@ class CustomScene{
 
         this.sphereRadius = 15;
     }
-    
+
     async init(callback){
         const justabayetRoom = await this.createJustABayetRoom(this.scene);
         justabayetRoom.setCenter(cameraInitialPosition);
 
         const hackathonRoom = await this.createHackathonRoom(justabayetRoom.mesh);
-        hackathonRoom.hideImages();
+        hackathonRoom.hideChildren();
         hackathonRoom.setCenter({ x:28, y:0, z:0 });
 
         const codingOfIsaacRoom = await this.createCodingOfIsaacRoom(hackathonRoom.mesh);
-        codingOfIsaacRoom.hideImages();
+        codingOfIsaacRoom.hideChildren();
         codingOfIsaacRoom.setCenter({ x:28, y:0, z:0 });
-        
+
         const gesturesHeroRoom = await this.createGesturesHeroRoom(codingOfIsaacRoom.mesh);
-        gesturesHeroRoom.hideImages();
+        gesturesHeroRoom.hideChildren();
         gesturesHeroRoom.setCenter({ x:28, y:0, z:0 });
 
         const clashRoom = await this.createClashRoom(gesturesHeroRoom.mesh);
-        clashRoom.hideImages();
+        clashRoom.hideChildren();
         clashRoom.setCenter({ x:28, y:0, z:0 });
-        
+
 
         justabayetRoom.setNext(hackathonRoom);
         hackathonRoom.setNext(codingOfIsaacRoom);
         codingOfIsaacRoom.setNext(gesturesHeroRoom);
         gesturesHeroRoom.setNext(clashRoom);
-    
-    
-    
+
+
+
         // Global light
         const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
         this.scene.add(ambientLight);
-    
+
         this.renderer.render(this.scene, this.camera);
 
-        
+
 
         TransportManager.setCurrentRoom(justabayetRoom);
 
@@ -68,7 +68,7 @@ class CustomScene{
 
         room.init();
 
-        
+
         const square = new Transporter(room, this.camera, { x:0, y:0, z:0 }, roomColor);
 
         square.setIsDoubleSided(false);
@@ -102,19 +102,19 @@ class CustomScene{
 
         const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/justabayet/justabayet", "justabayet");
         await githubButton.init();
-        
+
 
         const linkedinButton = new LinkedinButton(room, {x:-10, y:0, z:-2.5}, 2, "https://www.linkedin.com/in/anthony-bayet");
         linkedinButton.setBackgroundOpacity(0.1);
         await linkedinButton.init();
-        
+
 
         const githubGeneralButton = new GithubButton(room, {x:-10, y:0, z:2.5}, 2, "https://github.com/justabayet");
         githubGeneralButton.setBackgroundOpacity(0.1);
         await githubGeneralButton.init();
-        
 
-        
+
+
 
         return room;
     }
@@ -132,7 +132,7 @@ class CustomScene{
 
         room.init();
 
-        
+
         const square = new Transporter(room, this.camera, { x:0, y:0, z:0 }, roomColor);
 
         square.setIsDoubleSided(false);
@@ -155,17 +155,17 @@ class CustomScene{
 
         const websiteButton = new WebsiteButton(room, {x:1.5, y:-5, z:-7}, 1, "https://justabayet.github.io/whenisnextlolclash/");
         await websiteButton.init();
-        
+
 
         const linkedinButton = new LinkedinButton(room, {x:10, y:0, z:-2.5}, 2, "https://www.linkedin.com/in/anthony-bayet");
         linkedinButton.setBackgroundOpacity(0.1);
         await linkedinButton.init();
-        
+
 
         const githubGeneralButton = new GithubButton(room, {x:10, y:0, z:2.5}, 2, "https://github.com/justabayet");
         githubGeneralButton.setBackgroundOpacity(0.1);
         await githubGeneralButton.init();
-        
+
 
         return room;
     }
@@ -181,7 +181,7 @@ class CustomScene{
 
         room.init();
 
-        
+
         const square = new Transporter(room, this.camera, { x:0, y:0, z:0 }, roomColor);
 
         square.setIsDoubleSided(false);
@@ -251,7 +251,7 @@ class CustomScene{
 
         room.init();
 
-        
+
         const square = new Transporter(room, this.camera, { x:0, y:0, z:0 }, roomColor);
 
         square.setIsDoubleSided(false);
@@ -272,7 +272,7 @@ class CustomScene{
         await imageRoom.init(() => {
             imageRoom.addAnimation();
         });
-        
+
         const universities = new Panel(room, "images/theCodingOfIsaac/universities.png", {x:-4.5, y:-6.5, z:-10}, 10, 1);
         await universities.init(() => {
             universities.addAnimation();
@@ -299,7 +299,7 @@ class CustomScene{
         room.addEntry();
 
         room.init();
-        
+
         const square = new Transporter(room, this.camera, { x:0, y:0, z:0 }, roomColor);
 
         square.setIsDoubleSided(false);
@@ -330,7 +330,7 @@ class CustomScene{
         const title = new Title(room, "images/gesturesHero/title.png", {x:0, y:0, z:-9}, 8, 1);
         await title.init();
 
-        
+
         const githubButton = new GithubButton(room, {x:0, y:-6, z:-6}, 1, "https://github.com/GesturesHero/GesturesHero", "GesturesHero");
         await githubButton.init();
 

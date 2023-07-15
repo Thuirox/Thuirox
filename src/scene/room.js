@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { LightManager } from "../managers/lightManager";
 import { angleBetweenSphere, debugLoading } from '../helpers/const';
-import { ImageGroup } from './imageGroup.js';
+import { MeshGroup } from './meshGroup';
 import { DoubleLinkedList } from '../doubleLinkedList';
 
 class Room extends DoubleLinkedList{
@@ -19,14 +19,14 @@ class Room extends DoubleLinkedList{
         this.sphereNbSegments = 40;
         this.capNbSegments = 10;
         this.jointNbSegments = 10;
-        
+
         this.openAngle = Math.PI/8;
         this.openAngleEntry = 0;
         this.openAngleExit = 0;
 
         this.lightManager =  null;
 
-        this.imageGroup =  null;
+        this.meshGroup =  null;
 
         this.toPivot = true;
 
@@ -54,15 +54,15 @@ class Room extends DoubleLinkedList{
     }
 
     addImage(image){
-        this.imageGroup.addImage(image);
+        this.meshGroup.addChild(image);
     }
 
-    showImages(){
-        this.imageGroup.showImages();
+    showChidlren(){
+        this.meshGroup.show();
     }
 
-    hideImages(){
-        this.imageGroup.hideImages();
+    hideChildren(){
+        this.meshGroup.hide();
     }
 
     load(){
@@ -72,7 +72,7 @@ class Room extends DoubleLinkedList{
             this.loaded = true;
             this.transporter.mesh.turnOnInteraction();
             this.lightManager.turnOnLights();
-        } 
+        }
     }
 
     unload(){
@@ -82,7 +82,7 @@ class Room extends DoubleLinkedList{
             this.loaded = false;
             this.transporter.mesh.turnOffInteraction();
             this.lightManager.turnOffLights();
-        } 
+        }
     }
 
     init(){
@@ -90,7 +90,7 @@ class Room extends DoubleLinkedList{
          * this.parent is like a planet
          * this.parentPivot is a second center of it, having independent rotation
          * this.mesh is a satellite of this.parent. It is rotating following this.parent secondary center.
-         * 
+         *
          * this.parent -> this.parentPivot -> this.mesh
          */
         this.mesh = new THREE.Object3D();
@@ -123,7 +123,7 @@ class Room extends DoubleLinkedList{
 
         const capSize = Math.PI - orificeFullSize - 2* angleBetweenSphere;
         const cap = new THREE.SphereGeometry( this.radius, this.capNbSegments, this.capNbSegments, 0, 2 * Math.PI, 0, capSize);
-        
+
 
         const sphereMaterial = new THREE.MeshPhongMaterial({
             side: THREE.DoubleSide,
@@ -168,8 +168,7 @@ class Room extends DoubleLinkedList{
 
         this.lightManager = new LightManager(this.childrenCenter, { x:0, y:0, z:0 });
 
-        this.imageGroup = new ImageGroup(this.childrenCenter, { x:0, y:0, z:0 });
-        this.imageGroup.init();
+        this.meshGroup = new MeshGroup(this.childrenCenter, new THREE.Vector3(0, 0, 0));
     }
 
     setCenter(center){

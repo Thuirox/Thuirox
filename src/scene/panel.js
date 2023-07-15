@@ -9,8 +9,8 @@ import { updateProgressionLoaded } from '../loadingScreen';
 class Panel{
     constructor(room, path, position, size=5, opacity=1, isVideo=false){
         this.room = room;
-        
-        this.imageGroup = this.room.imageGroup;
+
+        this.meshGroup = this.room.meshGroup;
 
         this.path = path;
 
@@ -31,7 +31,7 @@ class Panel{
         const { material, geometry } = this.getGeoMat(texture, this.position)
 
         this.mesh = this.createMesh(texture, this.position);
-        
+
         this.mesh = new MeshInteractive(() => {
             // On click, make image full screen.
             imageContainer.style.backgroundImage = 'url(' + this.path + ')';
@@ -41,8 +41,8 @@ class Panel{
 
         this.setupMesh(this.mesh, texture, this.position)
 
-        // add the panel to the imageGroup
-        this.imageGroup.addImage(this.mesh);
+        // add the panel to the meshGroup
+        this.meshGroup.addChild(this.mesh);
 
         callback();
     }
@@ -55,7 +55,7 @@ class Panel{
             side:THREE.DoubleSide,
             alphaTest: 0.5
         });
-          
+
         const geometry = new THREE.PlaneGeometry(this.size, this.size);
 
         return { material, geometry }
@@ -64,17 +64,17 @@ class Panel{
     setupMesh(mesh, texture, position) {
         // Scale mesh to match image ratio
         mesh.scale.set(1, texture.height / texture.width, 1.0);
-        
+
         // set the position of the image
         mesh.position.set(position.x, position.y, position.z);
-        
+
         // Make the panel look where it comes from
         mesh.lookAt(0, 0, 0);
     }
 
     createMesh(texture, position){
         const { material, geometry } = this.getGeoMat(texture, position)
-        
+
         const mesh = new THREE.Mesh(geometry, material);
 
         this.setupMesh(mesh, texture, position)
@@ -126,15 +126,15 @@ class Panel{
         offsetY = addRandomness(offsetY, 0.5);
 
         let animationDuration = 5000;
-        
+
         const imageAnimation = new Animation(
             1, 0, animationDuration,
             (ratio, animation) => {
                 if(ratio < 0.5){
                     let relativeRatio = ratio / 0.5;
                     let position = {
-                        x:this.position.x + offsetX * relativeRatio, 
-                        y:this.position.y + offsetY * relativeRatio, 
+                        x:this.position.x + offsetX * relativeRatio,
+                        y:this.position.y + offsetY * relativeRatio,
                         z:this.position.z
                     }
                     this.mesh.position.set(position.x, position.y, position.z);
@@ -143,14 +143,14 @@ class Panel{
                     let relativeRatio = (ratio - 0.5) / 0.5;
 
                     let position = {
-                        x:this.position.x + offsetX * (1-relativeRatio), 
-                        y:this.position.y + offsetY * (1-relativeRatio), 
+                        x:this.position.x + offsetX * (1-relativeRatio),
+                        y:this.position.y + offsetY * (1-relativeRatio),
                         z:this.position.z
                     }
                     this.mesh.position.set(position.x, position.y, position.z);
                 }
             });
-    
+
         imageAnimation.init();
         imageAnimation.setIsLooping(true);
     }
@@ -161,13 +161,13 @@ class Title extends Panel{
         super(room, path, position, size, opacity, false);
     }
 
-    
+
     async init(callback=()=>{}){
         const texture = await this.loadImage();
 
         this.mesh = this.createMesh(texture, this.position);
 
-        this.imageGroup.addStatic(this.mesh);
+        this.meshGroup.addChild(this.mesh, true);
 
         callback();
     }

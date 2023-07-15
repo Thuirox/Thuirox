@@ -78,7 +78,7 @@ class TransportManager {
 
     this.goToRoom(room)
 
-    room.showImages()
+    room.showChidlren()
 
     room.transporter.removeLines()
 
@@ -89,7 +89,7 @@ class TransportManager {
     room.next?.next?.unload()
 
     if (this.currentRoom) {
-      this.currentRoom.hideImages()
+      this.currentRoom.hideChildren()
 
       // Display back the lines of the cube after a delay to avoid passing through with the camera.
       const animation = new Animation<null, { room: Room | null }>(
