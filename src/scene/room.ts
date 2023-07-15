@@ -135,6 +135,10 @@ class Room extends DoubleLinkedList<Room> implements Loadable {
     this.meshGroup = new MeshGroup(this.childrenCenter, new THREE.Vector3(0, 0, 0))
   }
 
+  getCurrent (): Room {
+    return this
+  }
+
   addEntry (): void {
     // -x side
     this.openAngleEntry = this.openAngle
