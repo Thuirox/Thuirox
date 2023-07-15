@@ -3,14 +3,14 @@ import { loader } from '../helpers/const';
 import { addRandomness } from '../helpers/utils';
 import { Animation } from '../animation';
 import { MeshInteractive } from '../interaction';
-import { imageContainer } from '../modal.js';
-import { updateProgressionLoaded } from '../loadingScreen.js';
+import { imageContainer } from '../modal';
+import { updateProgressionLoaded } from '../loadingScreen';
 
 class Panel{
     constructor(room, path, position, size=5, opacity=1, isVideo=false){
         this.room = room;
         
-        this.imageManager = this.room.imageManager;
+        this.imageGroup = this.room.imageGroup;
 
         this.path = path;
 
@@ -41,8 +41,8 @@ class Panel{
 
         this.setupMesh(this.mesh, texture, this.position)
 
-        // add the panel to the imageManager
-        this.imageManager.addImage(this.mesh);
+        // add the panel to the imageGroup
+        this.imageGroup.addImage(this.mesh);
 
         callback();
     }
@@ -167,7 +167,7 @@ class Title extends Panel{
 
         this.mesh = this.createMesh(texture, this.position);
 
-        this.imageManager.addStatic(this.mesh);
+        this.imageGroup.addStatic(this.mesh);
 
         callback();
     }

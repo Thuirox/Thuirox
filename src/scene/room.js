@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { LightManager } from "./lightManager";
+import { LightManager } from "../managers/lightManager";
 import { angleBetweenSphere, debugLoading } from '../helpers/const';
-import { ImageManager } from './imageManager.js';
+import { ImageGroup } from './imageGroup.js';
 import { DoubleLinkedList } from '../doubleLinkedList';
 
 class Room extends DoubleLinkedList{
@@ -26,7 +26,7 @@ class Room extends DoubleLinkedList{
 
         this.lightManager =  null;
 
-        this.imageManager =  null;
+        this.imageGroup =  null;
 
         this.toPivot = true;
 
@@ -54,15 +54,15 @@ class Room extends DoubleLinkedList{
     }
 
     addImage(image){
-        this.imageManager.addImage(image);
+        this.imageGroup.addImage(image);
     }
 
     showImages(){
-        this.imageManager.showImages();
+        this.imageGroup.showImages();
     }
 
     hideImages(){
-        this.imageManager.hideImages();
+        this.imageGroup.hideImages();
     }
 
     load(){
@@ -169,8 +169,8 @@ class Room extends DoubleLinkedList{
         this.lightManager = new LightManager(this.childrenCenter, { x:0, y:0, z:0 });
         this.lightManager.initLights();
 
-        this.imageManager = new ImageManager(this.childrenCenter, { x:0, y:0, z:0 });
-        this.imageManager.init();
+        this.imageGroup = new ImageGroup(this.childrenCenter, { x:0, y:0, z:0 });
+        this.imageGroup.init();
     }
 
     setCenter(center){

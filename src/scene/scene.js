@@ -1,9 +1,10 @@
 import * as THREE from 'three';
 import { Panel, Title } from "./panel.js";
-import { Transporter, transportController } from "./transporter.js";
+import { Transporter } from "./transporter.js";
 import { Room } from "./room.js";
 import { cameraInitialPosition } from "../helpers/const";
 import { GithubButton, WebsiteButton, LinkedinButton } from './button.js';
+import { TransportManager } from '../managers/transportManager';
 
 class CustomScene{
 
@@ -51,7 +52,7 @@ class CustomScene{
 
         
 
-        transportController.setCurrentRoom(justabayetRoom);
+        TransportManager.setCurrentRoom(justabayetRoom);
 
         callback();
     }

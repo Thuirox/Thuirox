@@ -10,7 +10,8 @@
   },
   "rules": {
     "semi": ["error", "never"],
-    "@typescript-eslint/strict-boolean-expressions": "off"
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/no-extraneous-class": "off"
   },
   "plugins": [
     "css"

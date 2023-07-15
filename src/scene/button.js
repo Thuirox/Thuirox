@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { Panel } from "./panel.js";
 import { MeshInteractive } from '../interaction';
 import { Animation } from '../animation';
-import { displayRedirectModal, redirectConfirmButton, redirectModalText } from '../modal.js';
+import { displayRedirectModal, redirectConfirmButton, redirectModalText } from '../modal';
 
 class Button extends Panel{
     constructor(room, position, size=5, path=""){
@@ -33,7 +33,7 @@ class Button extends Panel{
         this.mesh = new THREE.Object3D();
         this.mesh.position.set(this.position.x, this.position.y, this.position.z);
         this.mesh.lookAt(0, 0, 0);
-        this.imageManager.mesh.add(this.mesh);
+        this.imageGroup.mesh.add(this.mesh);
 
         const texture = await this.loadImage();
 

@@ -124,7 +124,7 @@ class MeshInteractive extends THREE.Mesh {
     if (!this.isInteractive) return
 
     InteractionManager.domEvents.removeEventListener(this, 'mousedown', this.setupFunction.bind(this), false)
-    InteractionManager.domEvents.removeEventListener(this, 'touchstart', this.touchEnd, false)
+    InteractionManager.domEvents.removeEventListener(this, 'touchstart', this.touchEnd.bind(this), false)
 
     InteractionManager.removeClickable(this)
 
@@ -136,7 +136,7 @@ class MeshInteractive extends THREE.Mesh {
 
     InteractionManager.domEvents.addEventListener(this, 'mousedown', this.setupFunction.bind(this), false)
     // this. not detected correctly when it is on a three js object (but work on global document). Using touchstart instead.
-    InteractionManager.domEvents.addEventListener(this, 'touchstart', this.touchEnd, false)
+    InteractionManager.domEvents.addEventListener(this, 'touchstart', this.touchEnd.bind(this), false)
 
     InteractionManager.addClickable(this)
 

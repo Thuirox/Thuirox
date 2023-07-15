@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { Animation } from '../animation';
 import { MeshInteractive } from '../interaction';
+import { TransportManager } from '../managers/transportManager';
 
 class Transporter{
     constructor(room, camera, center, color, squareSideLength=6.5){
@@ -36,7 +37,7 @@ class Transporter{
         });
 
         this.mesh = new MeshInteractive((event) => {
-            transportController.setCurrentRoom(this.room);
+            TransportManager.setCurrentRoom(this.room);
         }, cubeGeometry, cubeMaterial);
         this.mesh.rotateZ(Math.PI/4);
         this.mesh.rotateY(Math.PI/4);
@@ -79,36 +80,4 @@ class Transporter{
     }
 }
 
-const transportController = {
-    currentRoom: null,
-    setCurrentRoom: function (room) {
-        // If the camera is already going there, don't do again the animations.
-        if(this.currentRoom == room) return;
-
-        room.camera.goToRoom(room);
-
-        room.showImages();
-
-        room.transporter.removeLines();
-
-        room.previous?.previous?.unload();
-        room.previous?.load();
-        room.load();
-        room.next?.load();
-        room.next?.next?.unload();
-
-        if(this.currentRoom){
-            this.currentRoom.hideImages();
-
-            // Display back the lines of the cube after a delay to avoid passing through with the camera.
-            new Animation(null, null, 500, () => {}, (animation) => {
-                let room = animation.args.room;
-                room.transporter.addLines();
-
-            }, { room: this.currentRoom }).init();
-        }
-        this.currentRoom = room;
-    }
-}
-
-export { Transporter, transportController }
+export { Transporter }

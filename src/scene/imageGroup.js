@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Animation, DifferedAnimation } from '../animation';
 
-class ImageManager{
+class ImageGroup {
     constructor(parentMesh, position){
         this.parentMesh = parentMesh;
 
@@ -92,4 +92,4 @@ class ImageManager{
     }
 }
 
-export { ImageManager }
+export { ImageGroup }
