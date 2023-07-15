@@ -1,5 +1,4 @@
 import { debugLoading } from "./helpers/const";
-import { updateGyroOffset } from "./gyroControls.js";
 
 const progressBar = document.getElementById("loading-screen-progress-bar");
 const loadingScreen = document.getElementById("loading-screen");
@@ -37,7 +36,7 @@ function loadingScreenSetup(){
             document.getElementById("loading-screen-break-strip__bottom").style.height = "100%";
             
             setTimeout(()=>{
-                updateGyroOffset()
+                // updateGyroOffset()
 
                 document.getElementById("loading-screen-left-panel").style.left = "-100%";
                 document.getElementById("loading-screen-right-panel").style.left = "calc(100% + 5px)";

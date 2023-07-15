@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Animation, DifferedAnimation } from '../animation.js';
+import { Animation, DifferedAnimation } from '../animation';
 
 class ImageManager{
     constructor(parentMesh, position){

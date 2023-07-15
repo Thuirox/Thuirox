@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Animation, animationController } from '../animation.js';
+import { Animation, animationController } from '../animation';
 import { addInteraction } from '../interaction.js';
 
 class Transporter{

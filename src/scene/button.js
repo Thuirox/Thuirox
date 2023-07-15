@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Panel } from "./panel.js";
 import { addInteraction } from '../interaction.js';
-import { Animation, animationController } from '../animation.js';
+import { Animation, animationController } from '../animation';
 import { displayRedirectModal, redirectConfirmButton, redirectModalText } from '../modal.js';
 
 class Button extends Panel{

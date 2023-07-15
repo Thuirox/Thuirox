@@ -1,10 +1,10 @@
 import * as THREE from 'three';
-import { gyroControl, setupGyroControls, updateCameraAngleOffset, updateGyro } from './gyroControls.js'
+import { GyroscopeControls } from './gyroControls'
 import { setupScene } from './scene/scene.js';
 import { setupManualControls } from './manualControls';
 import { THREEx } from './libs/threex.domevents.js';
 import { setupInteractions } from './interaction.js';
-import { animationController, cameraAnimation } from './animation.js'
+import { animationController, cameraAnimation } from './animation'
 
 import { cameraInitialPosition } from './helpers/const';
 import { transportController } from './scene/transporter.js';
@@ -40,7 +40,6 @@ function main() {
     const far = 250;
 
     const camera = new Camera(fov, aspect, near, far)
-    updateCameraAngleOffset(camera.angleDegOffset)
 
 
     window.addEventListener('resize', onWindowResize, false)
@@ -72,9 +71,9 @@ function main() {
 
     setupInteractions(domEvents, camera);
 
-    const controls = setupManualControls(camera, canvas);
+    const orbitControls = setupManualControls(camera, canvas);
 
-    camera.controls = controls;
+    camera.controls = orbitControls;
 
 
     camera.goToRoom = function(room) {
@@ -97,21 +96,19 @@ function main() {
         camera.updatePositionOffsetPoint( offsetPoint.sub( offsetPointWorld ) );
         
         cameraAnimation.setParams({
-            x: camera.position.x,
-            y: camera.position.y,
-            z: camera.position.z,
+            v3: new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z),
             angle: startAngleGyro
         }, 
         {
-            x:targetPosition.x, 
-            y:targetPosition.y, 
-            z:targetPosition.z,
+            v3: new THREE.Vector3(targetPosition.x, targetPosition.y, targetPosition.z),
             angle: camera.angleDegOffset
         }, 
         { 
-            camera: camera, 
+            camera, 
             offset: camera.positionOffset,
-            controls: controls
+            orbitControls,
+            gyroscopeControls
+
         });
 
         cameraAnimation.init();
@@ -119,7 +116,8 @@ function main() {
     };
     
 
-    setupGyroControls(camera, controls);
+    const gyroscopeControls = GyroscopeControls.getInstance(camera, orbitControls)
+    gyroscopeControls.updateCameraAngleOffset(camera.angleDegOffset)
 
 
     const scene = new THREE.Scene();
@@ -132,7 +130,7 @@ function main() {
             pos.y + camera.positionOffset.y, 
             pos.z + camera.positionOffset.z
         );
-        controls.target.set(pos.x, pos.y, pos.z);
+        orbitControls.target.set(pos.x, pos.y, pos.z);
         // controls.target.set(0, 0, 0);
         // camera.position.set(120, 20, 20); // camera out of balls
     });
@@ -146,10 +144,10 @@ function main() {
         }
         time *= 0.001;  // convert time to seconds
 
-        if(gyroControl){
-            updateGyro();
+        if(gyroscopeControls.isInUse()){
+            gyroscopeControls.updateGyro();
         } else {
-            controls.update();
+            orbitControls.update();
         }
 
         animationController.update();

@@ -1,12 +1,12 @@
 import * as THREE from 'three'
-import { Animation } from '../animation.js'
+import { Animation } from '../animation'
 
 class LightManager {
   private readonly parent: THREE.Object3D
   private readonly position: THREE.Vector3
 
-  private turnOffAnimation?: Animation
-  private turnOnAnimation?: Animation
+  private turnOffAnimation?: Animation<number, undefined>
+  private turnOnAnimation?: Animation<number, undefined>
 
   private topLight?: THREE.PointLight
   private bottomLight?: THREE.PointLight
