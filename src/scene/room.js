@@ -167,7 +167,6 @@ class Room extends DoubleLinkedList{
         cap.rotateX(Math.PI/2);
 
         this.lightManager = new LightManager(this.childrenCenter, { x:0, y:0, z:0 });
-        this.lightManager.initLights();
 
         this.imageGroup = new ImageGroup(this.childrenCenter, { x:0, y:0, z:0 });
         this.imageGroup.init();

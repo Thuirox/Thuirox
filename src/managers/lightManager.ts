@@ -6,19 +6,16 @@ class LightManager {
   private readonly parent: THREE.Object3D
   private readonly position: THREE.Vector3
 
-  private turnOffAnimation?: Animation<number, undefined>
-  private turnOnAnimation?: Animation<number, undefined>
+  private readonly turnOffAnimation: Animation<number, undefined>
+  private readonly turnOnAnimation: Animation<number, undefined>
 
-  private topLight?: THREE.PointLight
-  private bottomLight?: THREE.PointLight
+  private readonly topLight: THREE.PointLight
+  private readonly bottomLight: THREE.PointLight
 
   constructor (parent: THREE.Object3D, position: THREE.Vector3) {
     this.position = position
     this.parent = parent
-  }
 
-  initLights (): void {
-    // Light
     const color = 0xFFFFFF
     const intensity = 1
 
