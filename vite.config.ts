@@ -7,5 +7,6 @@ export default defineConfig({
   },
   plugins: [
     basicSsl()
-  ]
+  ],
+  base: '/justabayet/'
 })
