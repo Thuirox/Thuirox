@@ -37,7 +37,7 @@ class Animation<T, Args> {
   start: T
   end: T
   updateFct: (ratio: number, animation: Animation<T, Args>) => void
-  endFct: (animation: Animation<T, Args>) => void
+  endFct: ((animation: Animation<T, Args>) => void) | undefined
   args: Args
   isLooping: boolean
 
@@ -46,7 +46,7 @@ class Animation<T, Args> {
     end: T,
     duration: number,
     updateFct: (ratio: number, animation: Animation<T, Args>) => void,
-    endFct: (animation: Animation<T, Args>) => void,
+    endFct: ((animation: Animation<T, Args>) => void) | undefined,
     args: Args) {
     Logger.debugAnimation('new animation created')
 

@@ -45,7 +45,7 @@ function loadingScreenSetup (): void {
   }, 300)
 }
 
-const nbTextureToLoad = 22
+const nbTextureToLoad = 36
 let nbLoaded = 0
 
 function updateProgressionLoaded (): void {

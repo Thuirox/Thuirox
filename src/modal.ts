@@ -42,7 +42,7 @@ const redirectModalText = document.getElementById('redirect-modal-text')!
 const redirectCross = document.getElementById('redirect-modal-cross')!
 const redirectModal = document.getElementById('redirect-modal')!
 
-const redirectConfirmButton = document.getElementById('redirect-modal-confirm-button')!
+const redirectConfirmButton = document.getElementById('redirect-modal-confirm-button')! as HTMLLinkElement
 const redirectCancelButton = document.getElementById('redirect-modal-cancel-button')!
 
 redirectModal.onclick = (e) => {

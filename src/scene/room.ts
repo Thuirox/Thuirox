@@ -28,11 +28,11 @@ class Room extends DoubleLinkedList<Room> implements Loadable {
   private readonly toPivot: boolean
   private loaded: boolean
 
-  private readonly meshGroup: MeshGroup
+  public readonly meshGroup: MeshGroup
 
   public transporter?: Transporter
 
-  constructor (parent: THREE.Object3D, center: THREE.Vector3, radius: number, color: THREE.ColorRepresentation, args?: { hasExit: boolean, hasEntry: boolean, toPivot: boolean }) {
+  constructor (parent: THREE.Object3D, center: THREE.Vector3, radius: number, color: THREE.ColorRepresentation, args?: { hasExit?: boolean, hasEntry?: boolean, toPivot?: boolean }) {
     super()
 
     this.parent = parent
@@ -149,8 +149,8 @@ class Room extends DoubleLinkedList<Room> implements Loadable {
     this.openAngleExit = this.openAngle
   }
 
-  addImage (image: MeshLoadable): void {
-    this.meshGroup.addChild(image)
+  addImage (child: MeshLoadable, isStatic: boolean = false): void {
+    this.meshGroup.addChild(child, isStatic)
   }
 
   showChidlren (): void {
@@ -190,6 +190,7 @@ class Room extends DoubleLinkedList<Room> implements Loadable {
 
   addTransporter (transporter: Transporter): void {
     this.transporter = transporter
+    this.childrenCenter.add(this.transporter.mesh)
   }
 }
 

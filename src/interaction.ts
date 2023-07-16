@@ -109,19 +109,19 @@ interface Loadable {
   load: () => void
   unload: () => void
 }
-class MeshLoadable extends THREE.Mesh implements Loadable {
+class MeshLoadable extends THREE.Mesh<THREE.BufferGeometry, THREE.Material> implements Loadable {
   public load (): void {}
   public unload (): void {}
 }
 
 class MeshInteractive extends MeshLoadable {
   private isInteractive: boolean = false
-  public readonly onInteraction: (event: UIEvent) => void
+  public onInteraction: (event: UIEvent) => void
 
   constructor (
-    onInteraction: () => void,
+    onInteraction: () => void = () => {},
     geometry?: THREE.BufferGeometry<THREE.NormalBufferAttributes> | undefined,
-    material?: THREE.Material | THREE.Material[] | undefined
+    material?: THREE.Material | undefined
   ) {
     super(geometry, material)
 

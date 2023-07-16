@@ -28,19 +28,19 @@ class LightManager {
     this.parent.add(this.topLight)
     this.parent.add(this.bottomLight)
 
-    this.turnOffAnimation = new Animation(
+    this.turnOffAnimation = new Animation<number, undefined>(
       1, 0, 1500,
       (ratio: number) => {
         if (this.topLight !== undefined) this.topLight.intensity = 1 - ratio
         if (this.bottomLight !== undefined) this.bottomLight.intensity = 1 - ratio
-      }, () => {}, undefined)
+      }, undefined, undefined)
 
-    this.turnOnAnimation = new Animation(
+    this.turnOnAnimation = new Animation<number, undefined>(
       1, 0, 1500,
       (ratio: number) => {
         if (this.topLight !== undefined) this.topLight.intensity = ratio
         if (this.bottomLight !== undefined) this.bottomLight.intensity = ratio
-      }, () => {}, undefined)
+      }, undefined, undefined)
   }
 
   turnOffLights (): void {

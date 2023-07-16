@@ -10,7 +10,7 @@ const debugLoading = false
 
 const gyroButton = document.getElementById('gyro-button')!
 
-const cameraInitialPosition = { x: 0, y: 0, z: 0 }
+const cameraInitialPosition = new THREE.Vector3(0, 0, 0)
 
 const angleBetweenSphere = 0.1 * Math.PI
 

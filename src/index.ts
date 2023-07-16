@@ -12,7 +12,9 @@ import { Camera } from './scene/camera'
 import { TransportManager } from './managers/transportManager'
 import { Logger } from './helpers/logger.js'
 
-const debug = true
+const debug = false
+
+THREE.Cache.enabled = true
 
 function main (): void {
   const stats = new Stats()
@@ -25,7 +27,7 @@ function main (): void {
     canvas,
     antialias: true
   })
-  renderer.setPixelRatio(4)
+  renderer.setPixelRatio(window.devicePixelRatio)
   renderer.shadowMap.enabled = true
   renderer.shadowMap.type = THREE.PCFSoftShadowMap
   renderer.localClippingEnabled = true
