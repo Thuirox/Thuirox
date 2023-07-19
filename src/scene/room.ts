@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { LightManager } from '../managers/lightManager'
 import { angleBetweenSphere, debugLoading } from '../helpers/const'
 import { MeshGroup } from './meshGroup'
-import { DoubleLinkedList } from '../doubleLinkedList'
+import { DoubleLinkedList } from '../helpers/doubleLinkedList'
 import { type MeshLoadable, type Loadable } from '../interaction'
 import { type Transporter } from './transporter'
 
