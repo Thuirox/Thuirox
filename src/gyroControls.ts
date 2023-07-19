@@ -66,7 +66,7 @@ const gyroscopeCameraAnimation = new Animation<undefined | THREE.Quaternion, { c
     camera: null
   })
 
-function logOrientation (orientation: { alpha: number, beta: number, gamma: number }): void {
+function logOrientation (orientation: { alpha: number | null, beta: number | null, gamma: number | null }): void {
   const getString = (value: number | null): string => {
     return value != null ? value.toFixed(3) : '?'
   }
@@ -165,20 +165,19 @@ class GyroscopeControls {
     if (this.deviceOrientation == null) {
       return
     }
-    // logOrientation(this.deviceOrientation)
+    logOrientation(this.deviceOrientation)
 
     const alpha = this.deviceOrientation.alpha != null ? THREE.MathUtils.degToRad(this.deviceOrientation.alpha + this.gyroOffset.alpha) : 0 // Z
     const beta = this.deviceOrientation.beta != null ? THREE.MathUtils.degToRad(this.deviceOrientation.beta + this.gyroOffset.beta) : 0 // X'
     const gamma = this.deviceOrientation.gamma != null ? THREE.MathUtils.degToRad(this.deviceOrientation.gamma + this.gyroOffset.gamma) : 0 // Y''
     const orient = this.screenOrientation != null ? THREE.MathUtils.degToRad(this.screenOrientation) : 0 // O
 
-    // There was a bug, when alpha reached 0 the camera jumped. This is a dead simple very dirty workaround fixing it.
+    // There was a bug, when alpha reached 0 the camera jumped. This is a dead simple dirty workaround fixing it.
     if (alpha === 0) {
       return
     }
 
     if (this.useGyroscopeInterpolation) {
-      // logOrientation({ alpha:this.camera.quaternion.x, beta:this.camera.quaternion.y, gamma:this.camera.quaternion.z})
       const targetQuaternion = new THREE.Quaternion(this.camera.quaternion.x, this.camera.quaternion.y, this.camera.quaternion.z, this.camera.quaternion.w)
       setObjectQuaternion(targetQuaternion, alpha, beta, gamma, orient)
 
@@ -224,4 +223,4 @@ class GyroscopeControls {
   }
 }
 
-export { GyroscopeControls, logOrientation }
+export { GyroscopeControls }
