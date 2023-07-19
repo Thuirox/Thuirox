@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { Animation } from '../animation'
 import { type Camera } from '../scene/camera'
 import { type Room } from '../scene/room'
-import { type OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { type OrbitControls } from '../manualControls'
 import { type GyroscopeControls } from '../gyroControls'
 import { Logger } from '../helpers/logger'
 

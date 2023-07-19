@@ -1,11 +1,11 @@
 import * as THREE from 'three'
 import { Panel, Title } from './panel'
-import { Transporter } from './transporter.js'
+import { Transporter } from './transporter'
 import { Room } from './room'
 import { cameraInitialPosition } from '../helpers/const'
 import { GithubButton, WebsiteButton, LinkedinButton } from './button'
 import { TransportManager } from '../managers/transportManager'
-import { type Camera } from './camera.js'
+import { type Camera } from './camera'
 
 class CustomScene {
   private readonly scene: THREE.Scene

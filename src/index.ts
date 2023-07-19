@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { GyroscopeControls } from './gyroControls'
-import { setupScene } from './scene/scene.js'
+import { setupScene } from './scene/scene'
 import { setupManualControls } from './manualControls'
 import { setupInteractions } from './interaction'
 import { AnimationController } from './animation'
@@ -10,8 +10,8 @@ import { cameraInitialPosition } from './helpers/const'
 import Stats from 'stats.js'
 import { Camera } from './scene/camera'
 import { TransportManager } from './managers/transportManager'
-import { Logger } from './helpers/logger.js'
-import { type OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { Logger } from './helpers/logger'
+import { type OrbitControls } from './manualControls'
 
 const debug = false
 
@@ -92,7 +92,7 @@ function main (): void {
 
   setupInteractions(camera, canvas)
 
-  const orbitControls: OrbitControls = setupManualControls(camera, canvas)
+  const orbitControls: OrbitControls = setupManualControls(camera, canvas, cameraInitialPosition)
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const controlsSwitchButton = document.getElementById('gyro-button')!
