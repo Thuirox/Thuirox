@@ -1,7 +1,4 @@
 import * as THREE from 'three'
-import { type OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { Logger } from './helpers/logger'
-import { Animation } from './animation'
 
 interface DeviceOrientationEventiOS extends DeviceOrientationEvent {
   requestPermission?: () => Promise<'granted' | 'denied'>
@@ -19,7 +16,7 @@ async function askGyroscopePermission (): Promise<boolean> {
           return response === 'granted'
         })
         .catch((reason) => {
-          Logger.error(reason)
+          console.log(reason)
           return false
         })
     } else {
@@ -48,43 +45,31 @@ const setObjectQuaternion = (function () {
   }
 }())
 
-const gyroscopeCameraAnimation = new Animation<undefined | THREE.Quaternion, { camera: THREE.Camera | null }>(
-  undefined,
-  undefined,
-  100,
-  (_, animation) => {
-    if (animation.end != null && animation.args.camera != null) {
-      Logger.screenDebug(`Update ${Date.now()}`)
-      animation.args.camera.quaternion.slerp(animation.end, 0.5)
-    }
-  },
-  (animation) => {
-    if (animation.end != null && animation.args.camera != null) {
-      animation.args.camera.quaternion.copy(animation.end)
-    }
-  }, {
-    camera: null
-  })
-
-function logOrientation (orientation: { alpha: number | null, beta: number | null, gamma: number | null }): void {
-  const getString = (value: number | null): string => {
-    return value != null ? value.toFixed(3) : '?'
+class UninitializedError extends Error {
+  constructor (className: string) {
+    super(`${className} has not been initialized yet. Use ${className}.initialize([parameters]) first.`)
   }
+}
 
-  Logger.screenDebug(`${getString(orientation.alpha)}\n${getString(orientation.beta)}\n${getString(orientation.gamma)}`)
+interface GyroscopeControlsProps {
+  useGyroscopeInterpolation?: boolean
+  interpolationSpeed?: number
+  onGyroAvailable?: () => void
+  logOrientation?: (orientation: { alpha: number | null, beta: number | null, gamma: number | null }) => void
 }
 
 class GyroscopeControls {
   private usingGyroscopeControls = false
-  private readonly camera: THREE.Camera
-  private readonly controls: OrbitControls
+  private camera: THREE.Camera
   private deviceOrientation?: DeviceOrientationEvent
-  public updateGyro: () => void
 
-  private readonly gyroButton: HTMLElement
+  private onGyroAvailable: () => void = () => { this.setEnabled() }
+  private logOrientation: (orientation: { alpha: number | null, beta: number | null, gamma: number | null }) => void = (orientation) => { console.log(orientation) }
+
   private gyroscopeSupportDetected: boolean = false
 
-  private readonly useGyroscopeInterpolation: boolean = true
+  private useGyroscopeInterpolation: boolean = true
+  private interpolationSpeed: number = 0.5
   private readonly screenOrientation: number = 0
 
   private readonly gyroOffset = {
@@ -97,40 +82,57 @@ class GyroscopeControls {
 
   private static instance?: GyroscopeControls
 
-  private constructor (camera: THREE.Camera, controls: OrbitControls) {
-    this.controls = controls
+  private constructor (camera: THREE.Camera, props: GyroscopeControlsProps) {
     this.camera = camera
-
-    this.updateGyro = this.updateEmpty
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.gyroButton = document.getElementById('gyro-button')!
-    this.gyroButton.onclick = this.switchGyroControl
+    this.updateProps(props)
 
     askGyroscopePermission()
       .then(canUseGyroscope => {
-        if (canUseGyroscope) this.setupGyroscopeControls()
+        if (canUseGyroscope) this.setupSupport()
       }).catch((reason) => {
-        Logger.error(reason)
+        console.log(reason)
       })
   }
 
-  private setupGyroscopeControls (): void {
-    /**
-       * Angles value in scene:
-       *  "Anthony Bayet" labels is in 90 90 0
-       *  Next room is in 270 90 0
-       */
-    Logger.screenDebug('Gyroscope controls setup')
+  public updateGyro (): void {
+    if (!this.usingGyroscopeControls) {
+      console.log('Trying to update gyro controls. But it is not in used.')
+    } else {
+      if (this.deviceOrientation == null) {
+        return
+      }
+      this.logOrientation(this.deviceOrientation)
+
+      const alpha = this.deviceOrientation.alpha != null ? THREE.MathUtils.degToRad(this.deviceOrientation.alpha + this.gyroOffset.alpha) : 0 // Z
+      const beta = this.deviceOrientation.beta != null ? THREE.MathUtils.degToRad(this.deviceOrientation.beta + this.gyroOffset.beta) : 0 // X'
+      const gamma = this.deviceOrientation.gamma != null ? THREE.MathUtils.degToRad(this.deviceOrientation.gamma + this.gyroOffset.gamma) : 0 // Y''
+      const orient = this.screenOrientation != null ? THREE.MathUtils.degToRad(this.screenOrientation) : 0 // O
+
+      // There was a bug, when alpha reached 0 the camera jumped. This is a dead simple dirty workaround fixing it.
+      if (alpha === 0) {
+        return
+      }
+
+      if (this.useGyroscopeInterpolation) {
+        const targetQuaternion = new THREE.Quaternion(this.camera.quaternion.x, this.camera.quaternion.y, this.camera.quaternion.z, this.camera.quaternion.w)
+        setObjectQuaternion(targetQuaternion, alpha, beta, gamma, orient)
+
+        this.camera.quaternion.slerp(targetQuaternion, this.interpolationSpeed)
+      } else {
+        setObjectQuaternion(this.camera.quaternion, alpha, beta, gamma, orient)
+      }
+    }
+  }
+
+  private setupSupport (): void {
+    console.log('Gyroscope controls setup')
     const onOrientationDataAvailable = (event: DeviceOrientationEvent): void => {
       this.deviceOrientation = event
       // If the first time this event is triggered with a value in the alpha field.
       // It means that the device support this feature.
-      // Then, swap the controls to the gyroscope one.
+      // Then, by default turn on the gyroscope control.
       if (!this.gyroscopeSupportDetected && event.alpha != null) {
-        this.switchGyroControl(event)
-        // Display the button to switch between controls
-        this.gyroButton.style.display = 'block'
+        this.onGyroAvailable()
         this.gyroscopeSupportDetected = true
       }
     }
@@ -138,66 +140,36 @@ class GyroscopeControls {
     window.addEventListener('deviceorientation', onOrientationDataAvailable)
   }
 
-  public static getInstance (camera: THREE.Camera, controls: OrbitControls): GyroscopeControls {
-    if (this.instance == null) {
-      this.instance = new GyroscopeControls(camera, controls)
-    }
-
-    return this.instance
+  public updateProps ({ useGyroscopeInterpolation, interpolationSpeed, onGyroAvailable, logOrientation }: GyroscopeControlsProps): void {
+    if (useGyroscopeInterpolation) this.useGyroscopeInterpolation = useGyroscopeInterpolation
+    if (interpolationSpeed) this.interpolationSpeed = interpolationSpeed
+    if (onGyroAvailable) this.onGyroAvailable = onGyroAvailable
+    if (logOrientation) this.logOrientation = logOrientation
   }
 
-  public switchGyroControl (_: any): void {
-    this.usingGyroscopeControls = !this.usingGyroscopeControls
-    this.controls.enabled = !this.controls.enabled
-
-    if (this.usingGyroscopeControls) {
-      this.updateGyro = this.updateFull
+  public static initialize (camera: THREE.Camera, props: GyroscopeControlsProps = {}): GyroscopeControls {
+    if (GyroscopeControls.instance == null) {
+      GyroscopeControls.instance = new GyroscopeControls(camera, props)
     } else {
-      this.updateGyro = this.updateEmpty
+      GyroscopeControls.instance.camera = camera
+      GyroscopeControls.instance.updateProps(props)
+    }
+    return GyroscopeControls.instance
+  }
+
+  public static getInstance (): GyroscopeControls {
+    if (GyroscopeControls.instance == null) {
+      throw new UninitializedError('GyroscopeControls')
     }
 
-    Logger.screenDebug('GyroControl switched')
+    return GyroscopeControls.instance
+  }
+
+  public setEnabled (enabled: boolean = true): void {
+    this.usingGyroscopeControls = enabled
+    console.log(`GyroControl enabled: ${String(enabled)}`)
 
     this.updateOffset()
-  }
-
-  private updateFull (): void {
-    if (this.deviceOrientation == null) {
-      return
-    }
-    logOrientation(this.deviceOrientation)
-
-    const alpha = this.deviceOrientation.alpha != null ? THREE.MathUtils.degToRad(this.deviceOrientation.alpha + this.gyroOffset.alpha) : 0 // Z
-    const beta = this.deviceOrientation.beta != null ? THREE.MathUtils.degToRad(this.deviceOrientation.beta + this.gyroOffset.beta) : 0 // X'
-    const gamma = this.deviceOrientation.gamma != null ? THREE.MathUtils.degToRad(this.deviceOrientation.gamma + this.gyroOffset.gamma) : 0 // Y''
-    const orient = this.screenOrientation != null ? THREE.MathUtils.degToRad(this.screenOrientation) : 0 // O
-
-    // There was a bug, when alpha reached 0 the camera jumped. This is a dead simple dirty workaround fixing it.
-    if (alpha === 0) {
-      return
-    }
-
-    if (this.useGyroscopeInterpolation) {
-      const targetQuaternion = new THREE.Quaternion(this.camera.quaternion.x, this.camera.quaternion.y, this.camera.quaternion.z, this.camera.quaternion.w)
-      setObjectQuaternion(targetQuaternion, alpha, beta, gamma, orient)
-
-      // Trigger camera angle animation from current to target in X milliseconds.
-      gyroscopeCameraAnimation.setParams(undefined, targetQuaternion, { camera: this.camera })
-
-      if (gyroscopeCameraAnimation.isOver()) {
-        // If previous animation stopped. Set params, init and add animation to controller.
-        gyroscopeCameraAnimation.init()
-      } else {
-        // If previous animation running. Set params, init.
-        gyroscopeCameraAnimation.init(false)
-      }
-    } else {
-      setObjectQuaternion(this.camera.quaternion, alpha, beta, gamma, orient)
-    }
-  }
-
-  private updateEmpty (): void {
-    Logger.debugInteraction('trying to update gyro controls. Without function set.')
   }
 
   public updateOffset (): void {
@@ -208,14 +180,6 @@ class GyroscopeControls {
   public updateCameraAngleOffset (value: number): void {
     this.gyroOffset.alpha += value - this.cameraAngleOffset
     this.cameraAngleOffset = value
-  }
-
-  public setTarget (position: THREE.Vector3): void {
-    this.controls.target.set(
-      position.x,
-      position.y,
-      position.z
-    )
   }
 
   public isInUse (): boolean {

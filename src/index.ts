@@ -11,10 +11,33 @@ import Stats from 'stats.js'
 import { Camera } from './scene/camera'
 import { TransportManager } from './managers/transportManager'
 import { Logger } from './helpers/logger.js'
+import { type OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 const debug = false
 
 THREE.Cache.enabled = true
+
+function setupGyroControls (camera: Camera, orbitControls: OrbitControls, controlsSwitchButton: HTMLElement): GyroscopeControls {
+  const onGyroAvailable = (): void => {
+    orbitControls.enabled = false
+    GyroscopeControls.getInstance().setEnabled()
+    controlsSwitchButton.style.display = 'block'
+  }
+
+  const logOrientation = (orientation: { alpha: number | null, beta: number | null, gamma: number | null }): void => {
+    const getString = (value: number | null): string => {
+      return value != null ? value.toFixed(3) : '?'
+    }
+
+    Logger.screenDebug(`${getString(orientation.alpha)}\n${getString(orientation.beta)}\n${getString(orientation.gamma)}`)
+  }
+
+  GyroscopeControls.initialize(camera, { onGyroAvailable, logOrientation })
+
+  const gyroscopeControls = GyroscopeControls.getInstance()
+  gyroscopeControls.updateCameraAngleOffset(camera.angleDegOffset)
+  return gyroscopeControls
+}
 
 function main (): void {
   const stats = new Stats()
@@ -69,10 +92,16 @@ function main (): void {
 
   setupInteractions(camera, canvas)
 
-  const orbitControls = setupManualControls(camera, canvas)
+  const orbitControls: OrbitControls = setupManualControls(camera, canvas)
 
-  const gyroscopeControls = GyroscopeControls.getInstance(camera, orbitControls)
-  gyroscopeControls.updateCameraAngleOffset(camera.angleDegOffset)
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const controlsSwitchButton = document.getElementById('gyro-button')!
+  controlsSwitchButton.onclick = () => {
+    orbitControls.enabled = !orbitControls.enabled
+    GyroscopeControls.getInstance().setEnabled(!orbitControls.enabled)
+  }
+
+  const gyroscopeControls = setupGyroControls(camera, orbitControls, controlsSwitchButton)
 
   TransportManager.initiate(camera, orbitControls, gyroscopeControls)
 
