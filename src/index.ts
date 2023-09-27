@@ -123,12 +123,11 @@ function main (): void {
     // camera.position.set(120, 20, 20); // camera out of balls
   })
 
-  function render (time: number): void {
+  function render (): void {
     if (debug) {
       // console.log(renderer.info);
-      stats.begin()
+      stats.update()
     }
-    time *= 0.001 // convert time to seconds
 
     if (gyroscopeControls.isInUse()) {
       gyroscopeControls.updateGyro()
@@ -139,9 +138,6 @@ function main (): void {
     AnimationController.update()
 
     renderer.render(scene, camera)
-    if (debug) {
-      stats.end()
-    }
     requestAnimationFrame(render)
   }
   requestAnimationFrame(render)

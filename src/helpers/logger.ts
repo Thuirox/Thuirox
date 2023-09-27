@@ -1,4 +1,4 @@
-const debugText = document.getElementById('debug_text')
+const debugText = document.getElementById('debug-text')
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 class Logger {
@@ -11,20 +11,22 @@ class Logger {
     if (Logger.showDebug && debugText) debugText.textContent = message
   }
 
-  static debug (message: string): void {
-    if (Logger.showDebug) console.error(message)
+  static debug (message: string, context?: object): void {
+    if (Logger.showDebug) console.log(message, context)
   }
 
-  static error (message: string): void {
-    if (Logger.showError) console.error(message)
+  static error (message: string, context?: object): void {
+    if (Logger.showError) console.error(message, context)
   }
 
-  static debugAnimation (message: string): void {
-    if (Logger.showDebug && Logger.shouldDebugAnimation) console.log(`Animation: ${message}`)
+  static debugAnimation (message: string, context?: object): void {
+    if (Logger.showDebug && Logger.shouldDebugAnimation) {
+      console.log(`Animation: ${message}`, context !== undefined ? context : '')
+    }
   }
 
-  static debugInteraction (message: string): void {
-    if (Logger.showDebug && Logger.shouldDebugInteraction) console.log(`Interaction: ${message}`)
+  static debugInteraction (message: string, context?: object): void {
+    if (Logger.showDebug && Logger.shouldDebugInteraction) console.log(`Interaction: ${message}`, context !== undefined ? context : '')
   }
 }
 

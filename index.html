@@ -4,14 +4,14 @@
 </html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>abayet</title>
-    <link href='https://fonts.googleapis.com/css?family=Cinzel' rel='stylesheet'>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>abayet</title>
+  <link href='https://fonts.googleapis.com/css?family=Cinzel' rel='stylesheet'>
 
-    <link rel="stylesheet" href="style/main.css">
-    <link rel="stylesheet" href="style/modal.css">
-    <link rel="stylesheet" href="style/loadingScreen.css">
+  <link rel="stylesheet" href="style/main.css">
+  <link rel="stylesheet" href="style/modal.css">
+  <link rel="stylesheet" href="style/loadingScreen.css">
 </head>
 
 <!-- <a href="https://www.flaticon.com/free-icons/share" title="share icons">Share icons created by IconKanan - Flaticon</a> -->
@@ -19,80 +19,80 @@
 <!-- <a href="https://www.flaticon.com/free-icons/quality" title="quality icons">Quality icons created by Vectors Market - Flaticon</a> -->
 
 <body>
-    <video id="whenisnextlolclash-video" loop crossOrigin="anonymous" playsinline style="display: none;">
-        <source src="images/whenisnextlolclash/video.mp4" type='video/mp4'>
-    </video>
+  <video id="whenisnextlolclash-video" loop crossOrigin="anonymous" playsinline style="display: none;">
+    <source src="images/whenisnextlolclash/video.mp4" type='video/mp4'>
+  </video>
 
-    <div id="image-container">
+  <div id="image-container">
+  </div>
+
+  <div id="contact-modal-container" class="modal-container">
+    <div id="contact-modal" class="modal">
+      <div id="contact-modal-cross" class="modal-cross"></div>
+
+      <p>
+        <a target="_blank" href="mailto:anthony.bayet@hotmail.com">anthony.bayet@hotmail.com</a>
+      </p>
+
+      <p>
+        <a target="_blank" href="http://www.linkedin.com/in/anthony-bayet">linkedin.com/in/anthony-bayet</a>
+      </p>
+
+
     </div>
+  </div>
 
-    <div id="contact-modal-container" class="modal-container">
-        <div id="contact-modal" class="modal">
-            <div id="contact-modal-cross" class="modal-cross"></div>
+  <div id="redirect-modal-container" class="modal-container">
+    <div id="redirect-modal" class="modal">
 
-            <p>
-                <a target="_blank" href="mailto:anthony.bayet@hotmail.com">anthony.bayet@hotmail.com</a>
-            </p>
+      <div id="redirect-modal-cross" class="modal-cross"></div>
 
-            <p>
-                <a target="_blank" href="http://www.linkedin.com/in/anthony-bayet">linkedin.com/in/anthony-bayet</a>
-            </p>
+      <p id="redirect-modal-text">Github</p>
+
+      <div id="redirect-modal-button-container">
+        <a target="_blank" id="redirect-modal-confirm-button" class="modal-button modal-button-confirm">Open</a>
+        <div id="redirect-modal-cancel-button" class="modal-button modal-button-cancel">Cancel</div>
+      </div>
 
 
-        </div>
     </div>
+  </div>
 
-    <div id="redirect-modal-container" class="modal-container">
-        <div id="redirect-modal" class="modal">
+  <div id="contact-button" class="unselectable">
+    Contact me
+  </div>
 
-            <div id="redirect-modal-cross" class="modal-cross"></div>
-
-            <p id="redirect-modal-text">Github</p>
-
-            <div id="redirect-modal-button-container">
-                <a target="_blank" id="redirect-modal-confirm-button" class="modal-button modal-button-confirm">Open</a>
-                <div id="redirect-modal-cancel-button" class="modal-button modal-button-cancel">Cancel</div>
-            </div>
-
-
-        </div>
+  <div id="loading-screen" class="active">
+    <div id="loading-screen-right-panel" class="loading-screen-panel">
+      <div id="loading-screen-break-strip__bottom" class="loading-screen-break-strip"></div>
     </div>
+    <div id="loading-screen-left-panel" class="loading-screen-panel">
+      <div id="loading-screen-break-strip__top" class="loading-screen-break-strip"></div>
 
-    <div id="contact-button" class="unselectable">
-        Contact me
-    </div>
-
-    <div id="loading-screen" class="active">
-        <div id="loading-screen-right-panel" class="loading-screen-panel">
-            <div id="loading-screen-break-strip__bottom" class="loading-screen-break-strip"></div>
-        </div>
-        <div id="loading-screen-left-panel" class="loading-screen-panel">
-            <div id="loading-screen-break-strip__top" class="loading-screen-break-strip"></div>
-
-        </div>
-
-
-        <div id="loading-screen-text">
-            <p id="loading-screen-text-name">Anthony Bayet</p>
-            <p id="loading-screen-text-role">Software Engineer</p>
-            <div id="loading-screen-progress-bar">
-
-            </div>
-            <div id="loading-screen-text-start-container">
-                <p id="loading-screen-text-start" class="unselectable">Click to start</p>
-            </div>
-        </div>
     </div>
 
 
+    <div id="loading-screen-text">
+      <p id="loading-screen-text-name">Anthony Bayet</p>
+      <p id="loading-screen-text-role">Software Engineer</p>
+      <div id="loading-screen-progress-bar">
 
-    <div id="ui">
-        <pre id="gyro-button">Switch</pre>
-        <pre id="gyro_text">Gyro not<br>detected</pre>
-        <pre id="debug-text">Debug Text</pre>
+      </div>
+      <div id="loading-screen-text-start-container">
+        <p id="loading-screen-text-start" class="unselectable">Click to start</p>
+      </div>
     </div>
+  </div>
 
-    <canvas id="canvas3D"></canvas>
+
+
+  <div id="ui">
+    <pre id="gyro-button">Switch</pre>
+    <pre id="gyro-text">Gyro not<br>detected</pre>
+    <pre id="debug-text">Debug Text</pre>
+  </div>
+
+  <canvas id="canvas3D"></canvas>
 </body>
 
 

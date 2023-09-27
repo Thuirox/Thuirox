@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as THREE from 'three'
 
-const debugText = document.getElementById('debug-text')!
-
-const debugMove = false
-const debugAnimation = false
 const debugModal = false
 const debugLoading = false
 
@@ -25,12 +21,9 @@ const colors = [
 ]
 
 export {
-  debugText,
   gyroButton,
   loader,
   colors,
-  debugMove,
-  debugAnimation,
   debugModal,
   debugLoading,
   angleBetweenSphere,

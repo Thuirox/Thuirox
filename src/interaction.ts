@@ -1,12 +1,10 @@
 import * as THREE from 'three'
 import { Logger } from './helpers/logger'
-import { THREEx } from './libs/threex.domevents.js'
 
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 class InteractionManager {
   private static target?: MeshInteractive
   private static camera: THREE.Camera
-  public static domEvents: any
+  private static canvas: HTMLCanvasElement
 
   private static isMoving: boolean = false
 
@@ -14,78 +12,120 @@ class InteractionManager {
 
   public static startPosition?: { x: number, y: number }
 
+  private static readonly pointer: THREE.Vector2 = new THREE.Vector2()
+
   static targetFunction: () => void
 
-  public static Instanciate (domEvents: any, camera: THREE.Camera): void {
-    InteractionManager.domEvents = domEvents
+  public static Instanciate (camera: THREE.Camera, canvas: HTMLCanvasElement): void {
     InteractionManager.camera = camera
+    InteractionManager.canvas = canvas
 
-    InteractionManager.setupCancelOnMove()
-    InteractionManager.setupTriggerOnUp()
+    InteractionManager.setupMove()
+    InteractionManager.setupUp()
+    InteractionManager.setupDown()
   }
 
-  private static setupCancelOnMove (): void {
-    // When cursor move, cancel interaction
-    window.addEventListener('touchmove', function (event) {
-      const endPosition = {
-        x: event.changedTouches[0].screenX,
-        y: event.changedTouches[0].screenY
+  private static setupMove (): void {
+    function styleCursorOnHover (): void {
+      // Style pointer as cursor when hovering a clickable object
+      const raycaster = new THREE.Raycaster()
+      raycaster.setFromCamera(InteractionManager.pointer, InteractionManager.camera)
+      const intersects = raycaster.intersectObjects(InteractionManager.clickableElements)
+
+      if (intersects.length > 0) {
+        document.body.style.cursor = 'pointer'
+      } else {
+        document.body.style.cursor = 'default'
+      }
+    }
+
+    function cancelActionOnBigMovement (event: PointerEvent): void {
+      const currentPosition = {
+        x: event.screenX,
+        y: event.screenY
       }
 
       if (typeof InteractionManager.startPosition !== 'undefined') {
-        const a = InteractionManager.startPosition.x - endPosition.x
-        const b = InteractionManager.startPosition.y - endPosition.y
+        const a = InteractionManager.startPosition.x - currentPosition.x
+        const b = InteractionManager.startPosition.y - currentPosition.y
         const dist = Math.sqrt(a * a + b * b)
 
         if (dist > 20 && !InteractionManager.isMoving) {
-          Logger.debugAnimation('touch move')
-          InteractionManager.isMoving = true
+          // TODO: Cancel also if the user moved the camera around too far
+          Logger.debugInteraction('Pointer is moving')
+          InteractionManager.setIsMoving(true)
         }
+      } else {
+        // Something went wrong on start event, let's try to recover
+        InteractionManager.startPosition = { ...currentPosition }
       }
-    })
+    }
 
-    window.addEventListener('mousemove', function (event) {
-      if (!InteractionManager.isMoving) {
-        Logger.debugAnimation('mouse move')
-        InteractionManager.isMoving = true
-      }
-
-      // Style pointer as cursor when hovering a clickable object
-      // const modalDisplayed = [contactModalContainer, redirectModalContainer, loadingScreen].some(container => container.classList.contains('active'))
-      const modalDisplayed = false
-      if (!modalDisplayed) {
-        const mouse = new THREE.Vector2()
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
-
-        const raycaster = new THREE.Raycaster()
-        raycaster.setFromCamera(mouse, InteractionManager.camera)
-        const intersects = raycaster.intersectObjects(InteractionManager.clickableElements)
-
-        if (intersects.length > 0) {
-          document.body.style.cursor = 'pointer'
-        } else {
-          document.body.style.cursor = 'default'
-        }
-      }
-    }, false)
+    function onPointerMove (event: PointerEvent): void {
+      // calculate pointer position in normalized device coordinates
+      // (-1 to +1) for both components
+      InteractionManager.updatePointer(event)
+      cancelActionOnBigMovement(event)
+      styleCursorOnHover()
+    }
+    InteractionManager.canvas.addEventListener('pointermove', onPointerMove, false)
   }
 
-  private static setupTriggerOnUp (): void {
-    // When cursor up, trigger interaction if no movement in between.
-    const endFunction = (event: UIEvent): void => {
+  private static setupUp (): void {
+    // When cursor up, trigger interaction if no movement happened in between
+    const endFunction = (event: PointerEvent): void => {
       document.body.style.cursor = 'default'
       if (typeof InteractionManager.target !== 'undefined') {
         if (!InteractionManager.isMoving) {
+          Logger.debugInteraction('alright')
           InteractionManager.target.onInteraction(event)
         }
-        Logger.debugAnimation('touchend global')
+        Logger.debugInteraction('touchend global', { target: InteractionManager.target, isMoving: InteractionManager.isMoving })
         InteractionManager.setTarget(undefined)
       }
     }
 
-    window.addEventListener('mouseup', endFunction, false)
-    window.addEventListener('touchend', endFunction, false)
+    InteractionManager.canvas.addEventListener('pointerup', endFunction, false)
+  }
+
+  private static setupDown (): void {
+    // When pointer down, initialize interaction
+    const startFunction = (event: PointerEvent): void => {
+      InteractionManager.updatePointer(event)
+
+      const pointedElement: MeshInteractive | undefined = InteractionManager.getPointedElement()
+
+      Logger.debugInteraction('event started on', { event, pointedElement, clickableElements: InteractionManager.clickableElements })
+
+      if (pointedElement) {
+        InteractionManager.startPosition = {
+          x: event.screenX,
+          y: event.screenY
+        }
+
+        InteractionManager.setIsMoving(false)
+        InteractionManager.setTarget(pointedElement)
+      }
+    }
+
+    InteractionManager.canvas.addEventListener('pointerdown', startFunction, false)
+  }
+
+  private static updatePointer (event: PointerEvent): void {
+    InteractionManager.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
+    InteractionManager.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
+  }
+
+  private static getPointedElement (): MeshInteractive | undefined {
+    const raycaster = new THREE.Raycaster()
+    raycaster.setFromCamera(InteractionManager.pointer, InteractionManager.camera)
+    const intersects = raycaster.intersectObjects<MeshInteractive>(InteractionManager.clickableElements, false)
+
+    if (intersects.length === 0) return undefined
+
+    const pointerElement = intersects[0].object
+
+    return pointerElement
   }
 
   public static setTarget (target: MeshInteractive | undefined): void {
@@ -132,38 +172,15 @@ class MeshInteractive extends MeshLoadable {
   public turnOffInteraction (): void {
     if (!this.isInteractive) return
 
-    InteractionManager.domEvents.removeEventListener(this, 'mousedown', this.setupFunction.bind(this), false)
-    InteractionManager.domEvents.removeEventListener(this, 'touchstart', this.touchEnd.bind(this), false)
-
     InteractionManager.removeClickable(this)
-
     this.isInteractive = false
   }
 
   public turnOnInteraction (): void {
     if (this.isInteractive) return
 
-    InteractionManager.domEvents.addEventListener(this, 'mousedown', this.setupFunction.bind(this), false)
-    // this. not detected correctly when it is on a three js object (but work on global document). Using touchstart instead.
-    InteractionManager.domEvents.addEventListener(this, 'touchstart', this.touchEnd.bind(this), false)
-
     InteractionManager.addClickable(this)
-
     this.isInteractive = true
-  }
-
-  private touchEnd (event: any): void {
-    InteractionManager.startPosition = {
-      x: event.origDomEvent.changedTouches[0].screenX,
-      y: event.origDomEvent.changedTouches[0].screenY
-    }
-    this.setupFunction(event)
-  }
-
-  private setupFunction (event: UIEvent): void {
-    Logger.debugAnimation(`event started on: ${JSON.stringify(event)}, ${JSON.stringify(this)}`)
-    InteractionManager.setIsMoving(false)
-    InteractionManager.setTarget(this)
   }
 
   public load (): void {
@@ -176,8 +193,7 @@ class MeshInteractive extends MeshLoadable {
 }
 
 function setupInteractions (camera: THREE.Camera, canvas: HTMLCanvasElement): void {
-  const domEvents = new THREEx.DomEvents(camera, canvas)
-  InteractionManager.Instanciate(domEvents, camera)
+  InteractionManager.Instanciate(camera, canvas)
 }
 
 export { setupInteractions, MeshInteractive, MeshLoadable, type Loadable }

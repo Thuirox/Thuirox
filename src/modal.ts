@@ -4,10 +4,11 @@ import { debugModal } from './helpers/const'
 // Fullscreen image modal
 const imageContainer = document.getElementById('image-container')!
 
-imageContainer.onclick = () => {
+imageContainer.addEventListener('pointerup', (e) => {
   imageContainer.style.opacity = '0'
   imageContainer.style.pointerEvents = 'none'
-}
+  e.stopPropagation()
+})
 
 // Contact information modal
 const contactButton = document.getElementById('contact-button')!
@@ -15,26 +16,28 @@ const contactCross = document.getElementById('contact-modal-cross')!
 const contactModal = document.getElementById('contact-modal')!
 const contactModalContainer = document.getElementById('contact-modal-container')!
 
-function displayContactModal (): void {
+function displayContactModal (e: PointerEvent): void {
   if (debugModal) console.log('display contact')
   contactModalContainer.style.opacity = '1'
   contactModalContainer.style.pointerEvents = 'auto'
   contactModalContainer.classList.add('active')
+  e.stopPropagation()
 }
-function hideContactModal (): void {
+function hideContactModal (e: PointerEvent): void {
   if (debugModal) console.log('hide contact')
   contactModalContainer.style.opacity = '0'
   contactModalContainer.style.pointerEvents = 'none'
   contactModalContainer.classList.remove('active')
-}
-
-contactButton.onclick = displayContactModal
-contactModalContainer.onclick = hideContactModal
-contactCross.onclick = hideContactModal
-
-contactModal.onclick = (e) => {
   e.stopPropagation()
 }
+
+contactButton.addEventListener('pointerup', displayContactModal)
+contactModalContainer.addEventListener('pointerup', hideContactModal)
+contactCross.addEventListener('pointerup', hideContactModal)
+
+contactModal.addEventListener('pointerup', (e) => {
+  e.stopPropagation()
+})
 
 // Redirect modal
 const redirectModalContainer = document.getElementById('redirect-modal-container')!
@@ -45,13 +48,13 @@ const redirectModal = document.getElementById('redirect-modal')!
 const redirectConfirmButton = document.getElementById('redirect-modal-confirm-button')! as HTMLLinkElement
 const redirectCancelButton = document.getElementById('redirect-modal-cancel-button')!
 
-redirectModal.onclick = (e) => {
+redirectModal.addEventListener('pointerup', (e) => {
   e.stopPropagation()
-}
+})
 
-redirectModalContainer.onclick = hideRedirectModal
-redirectCross.onclick = hideRedirectModal
-redirectCancelButton.onclick = hideRedirectModal
+redirectModalContainer.addEventListener('pointerup', hideRedirectModal)
+redirectCross.addEventListener('pointerup', hideRedirectModal)
+redirectCancelButton.addEventListener('pointerup', hideRedirectModal)
 
 function displayRedirectModal (): void {
   if (debugModal) console.log('display Redirect')
@@ -60,11 +63,12 @@ function displayRedirectModal (): void {
   redirectModalContainer.classList.add('active')
 }
 
-function hideRedirectModal (): void {
+function hideRedirectModal (e: PointerEvent): void {
   if (debugModal) console.log('hide Redirect')
   redirectModalContainer.style.opacity = '0'
   redirectModalContainer.style.pointerEvents = 'none'
   redirectModalContainer.classList.remove('active')
+  e.stopPropagation()
 }
 
 export {
