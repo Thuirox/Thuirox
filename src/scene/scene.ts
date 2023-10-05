@@ -119,6 +119,7 @@ class CustomScene {
     room.addImage(githubButton.mesh)
 
     const websiteButton = new WebsiteButton(new THREE.Vector3(1.5, -5, -7), 1, 'https://justabayet.github.io/whenisnextlolclash/')
+    websiteButton.setBackgroundOpacity(0.1)
     room.addImage(websiteButton.mesh)
 
     const linkedinButton = new LinkedinButton(new THREE.Vector3(10, 0, -2.5), 2, 'https://www.linkedin.com/in/anthony-bayet')
