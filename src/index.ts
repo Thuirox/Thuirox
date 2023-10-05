@@ -35,7 +35,7 @@ function setupGyroControls (camera: Camera, orbitControls: OrbitControls, contro
   GyroscopeControls.initialize(camera, { onGyroAvailable, logOrientation })
 
   const gyroscopeControls = GyroscopeControls.getInstance()
-  gyroscopeControls.updateCameraAngleOffset(camera.angleDegOffset)
+  gyroscopeControls.updateCameraAngleOffset(1)
   return gyroscopeControls
 }
 
@@ -83,16 +83,16 @@ function main (): void {
 
   // const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
   camera.position.set(
-    cameraInitialPosition.x + camera.positionOffset.x,
-    cameraInitialPosition.y + camera.positionOffset.y,
-    cameraInitialPosition.z + camera.positionOffset.z
+    cameraInitialPosition.x,
+    cameraInitialPosition.y,
+    cameraInitialPosition.z
   )
   // camera.position.set(40, 20, 20); // camera out of balls
   // camera.position.set(7, 7, 7); // camera in first ball but out of cube
 
   setupInteractions(camera, canvas)
 
-  const orbitControls: OrbitControls = setupManualControls(camera, canvas, cameraInitialPosition)
+  const orbitControls: OrbitControls = setupManualControls(camera, canvas)
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const controlsSwitchButton = document.getElementById('gyro-button')!
@@ -114,11 +114,11 @@ function main (): void {
     const pos = TransportManager.currentRoom.mesh.getWorldPosition(new THREE.Vector3())
 
     camera.position.set(
-      pos.x + camera.positionOffset.x,
-      pos.y + camera.positionOffset.y,
-      pos.z + camera.positionOffset.z
+      pos.x,
+      pos.y,
+      pos.z
     )
-    orbitControls.target.set(pos.x, pos.y, pos.z)
+    // orbitControls.target.set(pos.x, pos.y, pos.z)
     // controls.target.set(0, 0, 0);
     // camera.position.set(120, 20, 20); // camera out of balls
   })
@@ -129,6 +129,10 @@ function main (): void {
       stats.update()
     }
 
+    const v3 = new THREE.Vector3()
+    camera.getWorldDirection(v3)
+
+    // console.log(v3, camera.position)
     if (gyroscopeControls.isInUse()) {
       gyroscopeControls.updateGyro()
     } else {

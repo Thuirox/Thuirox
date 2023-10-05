@@ -6,7 +6,7 @@ import { type OrbitControls } from '../manualControls'
 import { type GyroscopeControls } from '../gyroControls'
 import { Logger } from '../helpers/logger'
 
-type CameraAnimationArgsType = { camera: any, offset: THREE.Vector3, gyroscopeControls: GyroscopeControls, orbitControls: OrbitControls } | null
+type CameraAnimationArgsType = { camera: any, gyroscopeControls: GyroscopeControls, orbitControls: OrbitControls } | null
 interface CameraAnimationTargetType { v3: THREE.Vector3, angle: number }
 
 const getCameraAnimation = (): Animation<CameraAnimationTargetType, CameraAnimationArgsType> => {
@@ -30,12 +30,12 @@ const getCameraAnimation = (): Animation<CameraAnimationTargetType, CameraAnimat
         z: computeFunction(animation.start.v3.z, animation.end.v3.z, ratio)
       }
 
-      const { camera, offset, gyroscopeControls } = animation.args
+      const { camera, gyroscopeControls } = animation.args
 
       camera.position.set(
-        position.x + offset.x,
-        position.y + offset.y,
-        position.z + offset.z
+        position.x,
+        position.y,
+        position.z
       )
 
       const angle = animation.start.angle + (animation.end.angle - animation.start.angle) * ratio
@@ -45,15 +45,15 @@ const getCameraAnimation = (): Animation<CameraAnimationTargetType, CameraAnimat
       if (animation.args == null) {
         return
       }
-      const { camera, offset, gyroscopeControls, orbitControls } = animation.args
+      const { camera, gyroscopeControls, orbitControls } = animation.args
 
       const position = animation.end.v3
       camera.position.set(
-        position.x + offset.x,
-        position.y + offset.y,
-        position.z + offset.z
+        position.x,
+        position.y,
+        position.z
       )
-      orbitControls.target.set(position.x, position.y, position.z)
+      // orbitControls.target.set(position.x, position.y, position.z)
       gyroscopeControls.updateCameraAngleOffset(animation.end.angle)
     }, null
   )
@@ -113,19 +113,27 @@ class TransportManager {
       Logger.error(`Room mesh null: ${JSON.stringify(room)}`)
       return
     }
-    const titleWorldPosition = room.mesh.localToWorld(new THREE.Vector3(0, 0, -8))
+
+    const roomPosition = new THREE.Vector3().copy(room.mesh.position)
+
+    const titlePosition = new THREE.Vector3(0, 0, -8).add(roomPosition)
+
+    const titleWorldPosition = room.mesh.localToWorld(new THREE.Vector3().copy(titlePosition))
+
+    console.log(roomPosition, room.mesh.localToWorld(new THREE.Vector3().copy(roomPosition)), titlePosition, titleWorldPosition)
     // Target the title emplacement of the target room
-    this.orbitControls.target.set(titleWorldPosition.x, titleWorldPosition.y, titleWorldPosition.z)
+    // this.orbitControls.target.set(titleWorldPosition.x, titleWorldPosition.y, titleWorldPosition.z)
+    this.camera.lookAt(titleWorldPosition)
 
     const targetPosition = new THREE.Vector3()
     room.mesh.getWorldPosition(targetPosition)
 
     const startAngleGyro = this.camera.angleDegOffset
 
-    const offsetPointWorld = room.mesh.localToWorld(new THREE.Vector3(0, 0, -0.001))
-    const offsetPoint = new THREE.Vector3().copy(targetPosition)
+    // const offsetPointWorld = room.mesh.localToWorld(new THREE.Vector3(0, 0, -0.001))
+    // const offsetPoint = new THREE.Vector3().copy(targetPosition)
 
-    this.camera.updatePositionOffsetPoint(offsetPoint.sub(offsetPointWorld))
+    // this.camera.updatePositionOffsetPoint(offsetPoint.sub(offsetPointWorld))
 
     cameraAnimation.setParams({
       v3: new THREE.Vector3(this.camera.position.x, this.camera.position.y, this.camera.position.z),
@@ -137,10 +145,8 @@ class TransportManager {
     },
     {
       camera: this.camera,
-      offset: this.camera.positionOffset,
       orbitControls: this.orbitControls,
       gyroscopeControls: this.gyroscopeControls
-
     })
 
     cameraAnimation.init()

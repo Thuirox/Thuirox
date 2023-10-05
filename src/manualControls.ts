@@ -1,5 +1,6 @@
 import type * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { OrbitControls } from './orbitControlsLight.js'
 
 function isMobile (): boolean {
   // Check if the user is usign a mobile device. https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
@@ -28,23 +29,23 @@ function isMobile (): boolean {
   return isMobile
 }
 
-function setupManualControls (camera: THREE.Camera, canvas: HTMLCanvasElement, initialTargetPosition: THREE.Vector3): OrbitControls {
+function setupManualControls (camera: THREE.Camera, canvas: HTMLCanvasElement): OrbitControls {
   // Init mouse and touch controls
   const controls = new OrbitControls(camera, canvas)
-  controls.enablePan = false
-  controls.enableZoom = false
+  // controls.enablePan = false
+  // controls.enableZoom = false
   controls.enableDamping = true
 
   if (isMobile()) {
-    controls.rotateSpeed = 0.7
+    controls.rotateSpeed = 0.6
   } else {
-    controls.rotateSpeed = 0.5
+    controls.rotateSpeed = 0.4
   }
 
   // reverse control
   controls.rotateSpeed *= -1
 
-  controls.target.set(initialTargetPosition.x, initialTargetPosition.y, initialTargetPosition.z)
+  // controls.target.set(initialTargetPosition.x, initialTargetPosition.y, initialTargetPosition.z)
 
   controls.update()
 
