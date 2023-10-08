@@ -2,7 +2,7 @@ import { type PerspectiveCamera, Vector3 } from 'three'
 import { Animation } from '../animation'
 import { type Room } from '../scene/room'
 import { Logger } from '../helpers/logger'
-import { type ControlManager } from '../controls'
+import { type ControlManager } from 'immersive-controls'
 
 type CameraAnimationArgsType = { camera: PerspectiveCamera, controlManager: ControlManager } | null
 interface CameraAnimationTargetType { position: Vector3, rotation: Vector3 }

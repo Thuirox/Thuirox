@@ -8,7 +8,7 @@ import { cameraInitialPosition } from './helpers/const'
 import Stats from 'stats.js'
 import { TransportManager } from './managers/transportManager'
 import { Logger } from './helpers/logger'
-import { ControlManager, PLUGIN_KEYS, FirstPersonPlugin, GyroscopePlugin, type Orientation } from './controls'
+import { ControlManager, PLUGIN_KEYS, FirstPersonPlugin, GyroscopePlugin, type Orientation } from 'immersive-controls'
 
 const debug = false
 
