@@ -72,9 +72,6 @@ class Transporter {
     this.cubeMaterial.needsUpdate = true
   }
 
-  init (): void {
-  }
-
   addLines (): void {
     this.mesh.add(this.lines)
   }

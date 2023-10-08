@@ -135,7 +135,7 @@ class Room extends DoubleLinkedList<Room> implements Loadable {
     this.meshGroup = new MeshGroup(this.childrenCenter, new Vector3(0, 0, 0))
   }
 
-  getCurrent (): Room {
+  getCurrent (): this {
     return this
   }
 

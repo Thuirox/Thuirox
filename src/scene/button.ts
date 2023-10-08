@@ -114,7 +114,7 @@ class RedirectButton extends Button {
     super(position, size, imagePath)
 
     this.url = url
-    this.text = text || url
+    this.text = text ?? url
 
     const redirection = (): void => {
       redirectModalText.innerHTML = this.text

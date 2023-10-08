@@ -21,12 +21,12 @@ class Logger {
 
   static debugAnimation (message: string, context?: object): void {
     if (Logger.showDebug && Logger.shouldDebugAnimation) {
-      console.log(`Animation: ${message}`, context !== undefined ? context : '')
+      console.log(`Animation: ${message}`, context ?? '')
     }
   }
 
   static debugInteraction (message: string, context?: object): void {
-    if (Logger.showDebug && Logger.shouldDebugInteraction) console.log(`Interaction: ${message}`, context !== undefined ? context : '')
+    if (Logger.showDebug && Logger.shouldDebugInteraction) console.log(`Interaction: ${message}`, context ?? '')
   }
 }
 

@@ -67,8 +67,6 @@ class CustomScene {
     room.addTransporter(square)
     square.setIsDoubleSided(false)
 
-    square.init()
-
     const gesturesHero = new Panel('images/justabayet/gestureshero.png', new Vector3(-4.5, -3, -8), 2)
     room.addImage(gesturesHero.mesh)
     const whenisnextlolclash = new Panel('images/justabayet/whenisnextlolclash.png', new Vector3(-5.5, 1.5, -9), 3)
@@ -96,18 +94,12 @@ class CustomScene {
 
   async createClashRoom (pivot: Object3D): Promise<Room> {
     const center = new Vector3(0, 0, 0)
-    // const roomColor = 0x0B0014;
-    // const roomColor = 0xF6BB62; // Text Color
-    // const roomColor = 0x1A2623; // Project Background Color
-    // const roomColor = colors[0];
     const roomColor = 0x455854
     const room = new Room(pivot, center, this.sphereRadius, roomColor, { hasEntry: true })
 
     const square = new Transporter(room, new Vector3(0, 0, 0), roomColor)
     room.addTransporter(square)
     square.setIsDoubleSided(false)
-
-    square.init()
 
     const index = new Panel('images/whenisnextlolclash/index.png', new Vector3(-5.5, 0, -8), 4, 1)
     room.addImage(index.mesh)
@@ -141,7 +133,6 @@ class CustomScene {
     const square = new Transporter(room, new Vector3(0, 0, 0), roomColor)
     room.addTransporter(square)
     square.setIsDoubleSided(false)
-    square.init()
 
     const logoSize = 3
     const awardSize = 1.5
@@ -180,7 +171,6 @@ class CustomScene {
     const square = new Transporter(room, new Vector3(0, 0, 0), roomColor)
     room.addTransporter(square)
     square.setIsDoubleSided(false)
-    square.init()
 
     const imageChara = new Panel('images/theCodingOfIsaac/character.png', new Vector3(-3, -2, -8), 2, 1)
     room.addImage(imageChara.mesh)
@@ -201,7 +191,6 @@ class CustomScene {
 
   async createGesturesHeroRoom (pivot: Object3D): Promise<Room> {
     const center = new Vector3(0, 0, 0)
-    // const roomColor = colors[2];
     const roomColor = 0x33CCCC
 
     const room = new Room(pivot, center, this.sphereRadius, roomColor, { hasEntry: true, hasExit: true })
@@ -209,7 +198,6 @@ class CustomScene {
     const square = new Transporter(room, new Vector3(0, 0, 0), roomColor)
     room.addTransporter(square)
     square.setIsDoubleSided(false)
-    square.init()
 
     const game = new Panel('images/gesturesHero/index.png', new Vector3(4, 4.5, -10), 8, 1)
     room.addImage(game.mesh)

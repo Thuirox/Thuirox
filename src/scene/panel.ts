@@ -21,7 +21,7 @@ class Panel extends Image {
 
 class Title extends Image {
   constructor (path: string, position: Vector3, size: number = 5, opacity: number = 1) {
-    super(path, position, size, opacity, false, undefined)
+    super(path, position, size, opacity, false)
   }
 }
 

@@ -150,8 +150,13 @@ interface Loadable {
   unload: () => void
 }
 class MeshLoadable extends Mesh<BufferGeometry, Material> implements Loadable {
-  public load (): void {}
-  public unload (): void {}
+  public load (): void {
+    throw new Error('MeshLoadable parent load method should be overwritten')
+  }
+
+  public unload (): void {
+    throw new Error('MeshLoadable parent unload method should be overwritten')
+  }
 }
 
 class MeshInteractive extends MeshLoadable {
