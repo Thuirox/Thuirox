@@ -1,21 +1,20 @@
-import * as THREE from 'three'
+import { type PerspectiveCamera, Vector3 } from 'three'
 import { Animation } from '../animation'
-import { type Camera } from '../scene/camera'
 import { type Room } from '../scene/room'
 import { Logger } from '../helpers/logger'
 import { type ControlManager } from '../controls'
 
-type CameraAnimationArgsType = { camera: Camera, controlManager: ControlManager } | null
-interface CameraAnimationTargetType { position: THREE.Vector3, rotation: THREE.Vector3 }
+type CameraAnimationArgsType = { camera: PerspectiveCamera, controlManager: ControlManager } | null
+interface CameraAnimationTargetType { position: Vector3, rotation: Vector3 }
 
 const getCameraAnimation = (): Animation<CameraAnimationTargetType, CameraAnimationArgsType> => {
   return new Animation<CameraAnimationTargetType, CameraAnimationArgsType>(
     {
-      position: new THREE.Vector3(),
-      rotation: new THREE.Vector3()
+      position: new Vector3(),
+      rotation: new Vector3()
     }, {
-      position: new THREE.Vector3(),
-      rotation: new THREE.Vector3()
+      position: new Vector3(),
+      rotation: new Vector3()
     },
     1000,
     (ratio: number, animation: Animation<CameraAnimationTargetType, CameraAnimationArgsType>) => {
@@ -51,10 +50,10 @@ const cameraAnimation = getCameraAnimation()
 
 class TransportManager {
   public static currentRoom: Room | null = null
-  public static camera: Camera
+  public static camera: PerspectiveCamera
   public static controlManager: ControlManager
 
-  public static initiate (camera: Camera, controlManager: ControlManager): void {
+  public static initiate (camera: PerspectiveCamera, controlManager: ControlManager): void {
     TransportManager.camera = camera
     TransportManager.controlManager = controlManager
   }
@@ -101,23 +100,23 @@ class TransportManager {
       return
     }
 
-    const titleRelativePosition = new THREE.Vector3(0, 0, 8)
+    const titleRelativePosition = new Vector3(0, 0, 8)
 
     const titleWorldPosition = room.mesh.localToWorld(titleRelativePosition)
 
-    const targetPosition = new THREE.Vector3()
+    const targetPosition = new Vector3()
     room.mesh.getWorldPosition(targetPosition)
 
     const initialRotation = this.controlManager.getInitialRotation()
 
-    const targetRotation = new THREE.Vector3().copy(targetPosition).sub(titleWorldPosition)
+    const targetRotation = new Vector3().copy(targetPosition).sub(titleWorldPosition)
 
     cameraAnimation.setParams({
-      position: new THREE.Vector3().copy(this.camera.position),
+      position: new Vector3().copy(this.camera.position),
       rotation: initialRotation
     },
     {
-      position: new THREE.Vector3().copy(targetPosition),
+      position: new Vector3().copy(targetPosition),
       rotation: targetRotation
     },
     {

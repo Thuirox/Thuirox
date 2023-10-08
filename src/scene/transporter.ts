@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import { Vector3, type ColorRepresentation, LineSegments, EdgesGeometry, type Material, BoxGeometry, MeshPhongMaterial, DoubleSide, FrontSide } from 'three'
 import { Animation } from '../animation'
 import { MeshInteractive } from '../interaction'
 import { TransportManager } from '../managers/transportManager'
@@ -6,18 +6,18 @@ import { type Room } from './room'
 
 class Transporter {
   private readonly room: Room
-  private readonly center: THREE.Vector3
-  private readonly color: THREE.ColorRepresentation
+  private readonly center: Vector3
+  private readonly color: ColorRepresentation
   private isDoubleSided: boolean = true
   private readonly squareSideLength: number
 
   public readonly mesh: MeshInteractive
-  private readonly lines: THREE.LineSegments<THREE.EdgesGeometry, THREE.Material>
+  private readonly lines: LineSegments<EdgesGeometry, Material>
   private readonly animation: Animation<number, undefined>
 
-  private readonly cubeMaterial: THREE.Material
+  private readonly cubeMaterial: Material
 
-  constructor (room: Room, center: THREE.Vector3, color: THREE.ColorRepresentation, squareSideLength: number = 6.5) {
+  constructor (room: Room, center: Vector3, color: ColorRepresentation, squareSideLength: number = 6.5) {
     this.room = room
     this.center = center
     this.color = color
@@ -29,10 +29,10 @@ class Transporter {
     const boxWidth = boxSide
     const boxHeight = boxSide
     const boxDepth = boxSide
-    const cubeGeometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth)
-    this.cubeMaterial = new THREE.MeshPhongMaterial({
+    const cubeGeometry = new BoxGeometry(boxWidth, boxHeight, boxDepth)
+    this.cubeMaterial = new MeshPhongMaterial({
       color: this.color,
-      side: this.isDoubleSided ? THREE.DoubleSide : THREE.FrontSide
+      side: this.isDoubleSided ? DoubleSide : FrontSide
     })
 
     this.mesh = new MeshInteractive(() => {
@@ -44,19 +44,19 @@ class Transporter {
     this.mesh.position.x = this.center.x
     this.mesh.position.y = this.center.y
 
-    const edges = new THREE.EdgesGeometry(cubeGeometry)
+    const edges = new EdgesGeometry(cubeGeometry)
 
-    this.lines = new THREE.LineSegments(edges)
+    this.lines = new LineSegments(edges)
     this.lines.material.transparent = true
     this.lines.material.opacity = 0.3
-    this.lines.material.side = THREE.FrontSide
+    this.lines.material.side = FrontSide
 
     this.mesh.add(this.lines)
 
     this.animation = new Animation<number, undefined>(
       0, Math.PI * 0.001, 1000,
       (_, animation) => {
-        const v3 = new THREE.Vector3(1, 1, 1)
+        const v3 = new Vector3(1, 1, 1)
         v3.normalize()
 
         this.mesh.rotateOnAxis(v3, animation.end)
@@ -68,7 +68,7 @@ class Transporter {
 
   setIsDoubleSided (isDoubleSided: boolean): void {
     this.isDoubleSided = isDoubleSided
-    this.cubeMaterial.side = this.isDoubleSided ? THREE.DoubleSide : THREE.FrontSide
+    this.cubeMaterial.side = this.isDoubleSided ? DoubleSide : FrontSide
     this.cubeMaterial.needsUpdate = true
   }
 

@@ -1,9 +1,9 @@
-import * as THREE from 'three'
+import { type Camera, Vector2, Raycaster, Mesh, type BufferGeometry, type Material, type NormalBufferAttributes } from 'three'
 import { Logger } from './helpers/logger'
 
 class InteractionManager {
   private static target?: MeshInteractive
-  private static camera: THREE.Camera
+  private static camera: Camera
   private static canvas: HTMLCanvasElement
 
   private static isMoving: boolean = false
@@ -12,11 +12,11 @@ class InteractionManager {
 
   public static startPosition?: { x: number, y: number }
 
-  private static readonly pointer: THREE.Vector2 = new THREE.Vector2()
+  private static readonly pointer: Vector2 = new Vector2()
 
   static targetFunction: () => void
 
-  public static Instanciate (camera: THREE.Camera, canvas: HTMLCanvasElement): void {
+  public static Instanciate (camera: Camera, canvas: HTMLCanvasElement): void {
     InteractionManager.camera = camera
     InteractionManager.canvas = canvas
 
@@ -28,7 +28,7 @@ class InteractionManager {
   private static setupMove (): void {
     function styleCursorOnHover (): void {
       // Style pointer as cursor when hovering a clickable object
-      const raycaster = new THREE.Raycaster()
+      const raycaster = new Raycaster()
       raycaster.setFromCamera(InteractionManager.pointer, InteractionManager.camera)
       const intersects = raycaster.intersectObjects(InteractionManager.clickableElements)
 
@@ -117,7 +117,7 @@ class InteractionManager {
   }
 
   private static getPointedElement (): MeshInteractive | undefined {
-    const raycaster = new THREE.Raycaster()
+    const raycaster = new Raycaster()
     raycaster.setFromCamera(InteractionManager.pointer, InteractionManager.camera)
     const intersects = raycaster.intersectObjects<MeshInteractive>(InteractionManager.clickableElements, false)
 
@@ -149,7 +149,7 @@ interface Loadable {
   load: () => void
   unload: () => void
 }
-class MeshLoadable extends THREE.Mesh<THREE.BufferGeometry, THREE.Material> implements Loadable {
+class MeshLoadable extends Mesh<BufferGeometry, Material> implements Loadable {
   public load (): void {}
   public unload (): void {}
 }
@@ -160,8 +160,8 @@ class MeshInteractive extends MeshLoadable {
 
   constructor (
     onInteraction: () => void = () => {},
-    geometry?: THREE.BufferGeometry<THREE.NormalBufferAttributes> | undefined,
-    material?: THREE.Material | undefined
+    geometry?: BufferGeometry<NormalBufferAttributes> | undefined,
+    material?: Material | undefined
   ) {
     super(geometry, material)
 
@@ -192,7 +192,7 @@ class MeshInteractive extends MeshLoadable {
   }
 }
 
-function setupInteractions (camera: THREE.Camera, canvas: HTMLCanvasElement): void {
+function setupInteractions (camera: Camera, canvas: HTMLCanvasElement): void {
   InteractionManager.Instanciate(camera, canvas)
 }
 

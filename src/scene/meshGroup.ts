@@ -1,21 +1,21 @@
-import * as THREE from 'three'
+import { type Mesh, Object3D, Vector3 } from 'three'
 import { Animation, DifferedAnimation } from '../animation'
 import { type MeshLoadable } from '../interaction'
 
 class MeshGroup {
-  private readonly parent: THREE.Object3D
+  private readonly parent: Object3D
 
-  private position: THREE.Vector3
-  private readonly initialPosition: THREE.Vector3
-  private readonly hiddenPosition: THREE.Vector3
+  private position: Vector3
+  private readonly initialPosition: Vector3
+  private readonly hiddenPosition: Vector3
 
   private readonly childrenMoving: MeshLoadable[]
-  private readonly childrenStatic: THREE.Mesh[]
+  private readonly childrenStatic: Mesh[]
 
-  private readonly childrenAnimatedCenter: THREE.Object3D
-  private readonly childrenStaticCenter: THREE.Object3D
+  private readonly childrenAnimatedCenter: Object3D
+  private readonly childrenStaticCenter: Object3D
 
-  constructor (parent: THREE.Object3D, position: THREE.Vector3) {
+  constructor (parent: Object3D, position: Vector3) {
     this.parent = parent
 
     this.position = position
@@ -25,18 +25,18 @@ class MeshGroup {
     this.childrenStatic = []
 
     // Add reference point for animated image.
-    this.childrenAnimatedCenter = new THREE.Object3D()
+    this.childrenAnimatedCenter = new Object3D()
     this.childrenAnimatedCenter.position.set(this.position.x, this.position.y, this.position.z)
 
     this.parent.add(this.childrenAnimatedCenter)
 
     // Add reference point for static image.
-    this.childrenStaticCenter = new THREE.Object3D()
+    this.childrenStaticCenter = new Object3D()
     this.childrenStaticCenter.position.set(this.initialPosition.x, this.initialPosition.y, this.initialPosition.z)
 
     this.parent.add(this.childrenStaticCenter)
 
-    this.hiddenPosition = new THREE.Vector3(this.childrenAnimatedCenter.position.x, -20, this.childrenAnimatedCenter.position.z)
+    this.hiddenPosition = new Vector3(this.childrenAnimatedCenter.position.x, -20, this.childrenAnimatedCenter.position.z)
   }
 
   addChild (child: MeshLoadable, isStatic: boolean = false): void {
@@ -59,17 +59,17 @@ class MeshGroup {
     this.childrenMoving.forEach((child) => { child.unload() })
   }
 
-  setPosition (position: THREE.Vector3): void {
+  setPosition (position: Vector3): void {
     this.position = position
     this.childrenAnimatedCenter.position.set(position.x, position.y, position.z)
   }
 
-  moveTo (targetPosition: THREE.Vector3, duration = 2000, differedDuration = 0): void {
+  moveTo (targetPosition: Vector3, duration = 2000, differedDuration = 0): void {
     const sourcePosition = this.position.clone()
 
     const distance = targetPosition.clone().sub(sourcePosition) // (end - start)
 
-    const imageAnimation = new Animation<THREE.Vector3, undefined>(
+    const imageAnimation = new Animation<Vector3, undefined>(
       sourcePosition, targetPosition, duration,
       (ratio, { start }) => {
         // start.x + (end.x - start.x) * ratio

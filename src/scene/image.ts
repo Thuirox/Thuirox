@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import { DoubleSide, LinearFilter, MeshBasicMaterial, PlaneGeometry, type Texture, type Vector3, VideoTexture } from 'three'
 import { loader } from '../helpers/const'
 import { addRandomness } from '../helpers/utils'
 import { Animation } from '../animation'
@@ -7,7 +7,7 @@ import { updateProgressionLoaded } from '../loadingScreen'
 import { Logger } from '../helpers/logger'
 
 interface TextureLoaded {
-  texture: THREE.Texture
+  texture: Texture
   width: number
   height: number
 }
@@ -15,7 +15,7 @@ interface TextureLoaded {
 class Image {
   private readonly path: string
 
-  public readonly position: THREE.Vector3
+  public readonly position: Vector3
 
   public readonly size: number
   private readonly opacity: number
@@ -23,7 +23,7 @@ class Image {
 
   public readonly mesh: MeshInteractive
 
-  constructor (path: string, position: THREE.Vector3, size: number = 5, opacity: number = 1, isVideo: boolean = false, callback = () => {}) {
+  constructor (path: string, position: Vector3, size: number = 5, opacity: number = 1, isVideo: boolean = false, callback = () => {}) {
     this.path = path
 
     this.position = position
@@ -45,15 +45,15 @@ class Image {
     callback()
   }
 
-  createMesh (position: THREE.Vector3): MeshInteractive {
-    const material = new THREE.MeshBasicMaterial({
+  createMesh (position: Vector3): MeshInteractive {
+    const material = new MeshBasicMaterial({
       transparent: true,
       opacity: this.opacity,
-      side: THREE.DoubleSide,
+      side: DoubleSide,
       alphaTest: 0.5
     })
 
-    const geometry = new THREE.PlaneGeometry(this.size, this.size)
+    const geometry = new PlaneGeometry(this.size, this.size)
 
     const mesh = new MeshInteractive(undefined, geometry, material)
 
@@ -90,9 +90,9 @@ class Image {
 
     // Best filtering method would be LinearMipmapLinearFilter like for images.
     // But for some reasons when sets on videos, they stop working.
-    const texture = new THREE.VideoTexture(video)
-    texture.minFilter = THREE.LinearFilter
-    // texture.maxFilter = THREE.LinearFilter
+    const texture = new VideoTexture(video)
+    texture.minFilter = LinearFilter
+    // texture.maxFilter = LinearFilter
 
     const width = texture.image.videoWidth
     const height = texture.image.videoHeight

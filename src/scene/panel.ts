@@ -1,9 +1,9 @@
-import type * as THREE from 'three'
+import { type Vector3 } from 'three'
 import { imageContainer } from '../modal'
 import { Image } from './image'
 
 class Panel extends Image {
-  constructor (path: string, position: THREE.Vector3, size: number = 5, opacity: number = 1, isVideo: boolean = false, callback = () => {}, isAnimated: boolean = true) {
+  constructor (path: string, position: Vector3, size: number = 5, opacity: number = 1, isVideo: boolean = false, callback = () => {}, isAnimated: boolean = true) {
     super(path, position, size, opacity, isVideo, callback)
 
     this.mesh.onInteraction = () => {
@@ -20,7 +20,7 @@ class Panel extends Image {
 }
 
 class Title extends Image {
-  constructor (path: string, position: THREE.Vector3, size: number = 5, opacity: number = 1) {
+  constructor (path: string, position: Vector3, size: number = 5, opacity: number = 1) {
     super(path, position, size, opacity, false, undefined)
   }
 }

@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import { BackSide, BoxGeometry, EdgesGeometry, LineBasicMaterial, LineSegments, type Material, MeshBasicMaterial, Object3D, Vector3 } from 'three'
 import { MeshInteractive, MeshLoadable } from '../interaction'
 import { Animation } from '../animation'
 import { displayRedirectModal, redirectConfirmButton, redirectModalText } from '../modal'
@@ -10,19 +10,19 @@ class Button {
   private backgroundOpacity: number
 
   public readonly mesh: MeshLoadable
-  private readonly cube: THREE.Object3D
+  private readonly cube: Object3D
   private readonly cubeMesh: MeshInteractive
-  private readonly edgesMesh: THREE.LineSegments<THREE.EdgesGeometry, THREE.Material>
+  private readonly edgesMesh: LineSegments<EdgesGeometry, Material>
 
   private readonly animation: Animation<number, undefined>
 
-  private readonly position: THREE.Vector3
+  private readonly position: Vector3
   private readonly size: number
   private readonly path: string
 
   private readonly logo: Image
 
-  constructor (position: THREE.Vector3, size: number = 5, path: string = '') {
+  constructor (position: Vector3, size: number = 5, path: string = '') {
     this.action = () => {
       console.log('button clicked')
     }
@@ -38,37 +38,37 @@ class Button {
     this.mesh.position.set(this.position.x, this.position.y, this.position.z)
     this.mesh.lookAt(0, 0, 0)
 
-    this.logo = new Image(this.path, new THREE.Vector3(0, 0, 0), this.size)
+    this.logo = new Image(this.path, new Vector3(0, 0, 0), this.size)
     this.logo.mesh.turnOffInteraction()
     this.mesh.add(this.logo.mesh)
 
     // Rotating box
     const cubeSide = this.size * this.cubeScale
-    const cubeGeometry = new THREE.BoxGeometry(cubeSide, cubeSide, cubeSide)
+    const cubeGeometry = new BoxGeometry(cubeSide, cubeSide, cubeSide)
 
-    const edges = new THREE.EdgesGeometry(cubeGeometry)
+    const edges = new EdgesGeometry(cubeGeometry)
 
-    this.edgesMesh = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({
+    this.edgesMesh = new LineSegments(edges, new LineBasicMaterial({
       transparent: true,
       opacity: 0.4
     }))
 
-    this.cubeMesh = new MeshInteractive(this.action, cubeGeometry, new THREE.MeshBasicMaterial({
+    this.cubeMesh = new MeshInteractive(this.action, cubeGeometry, new MeshBasicMaterial({
       color: 0xffffff,
       transparent: true,
       opacity: this.backgroundOpacity,
-      side: THREE.BackSide
+      side: BackSide
     }))
 
-    // this.cubeMesh = new THREE.Mesh( cubeGeometry, new THREE.MeshBasicMaterial({
+    // this.cubeMesh = new Mesh( cubeGeometry, new MeshBasicMaterial({
     //     color: 0xffffff,
     //     transparent: true,
     //     opacity: this.backgroundOpacity,
-    //     side: THREE.BackSide
+    //     side: BackSide
 
     // }));
 
-    this.cube = new THREE.Object3D()
+    this.cube = new Object3D()
     this.cube.add(this.edgesMesh)
     this.cube.add(this.cubeMesh)
 
@@ -81,7 +81,7 @@ class Button {
     this.animation = new Animation<number, undefined>(
       0, Math.PI * 0.001, 1000,
       (_, animation) => {
-        const v3 = new THREE.Vector3(1, 1, 1)
+        const v3 = new Vector3(1, 1, 1)
         v3.normalize()
         this.cube.rotateOnAxis(v3, animation.end)
       }, undefined, undefined)
@@ -110,7 +110,7 @@ class RedirectButton extends Button {
   private readonly url: string
   public text: string
 
-  constructor (position: THREE.Vector3, size = 5, imagePath = '', url = '', text?: string) {
+  constructor (position: Vector3, size = 5, imagePath = '', url = '', text?: string) {
     super(position, size, imagePath)
 
     this.url = url
@@ -127,19 +127,19 @@ class RedirectButton extends Button {
 }
 
 class GithubButton extends RedirectButton {
-  constructor (position: THREE.Vector3, size = 5, repoPath = '', text: string = 'Open the Github repo?') {
+  constructor (position: Vector3, size = 5, repoPath = '', text: string = 'Open the Github repo?') {
     super(position, size, 'images/github.png', repoPath, text)
   }
 }
 
 class WebsiteButton extends RedirectButton {
-  constructor (position: THREE.Vector3, size = 5, url = '', text: string = 'Open the live demo?') {
+  constructor (position: Vector3, size = 5, url = '', text: string = 'Open the live demo?') {
     super(position, size, 'images/redirect.png', url, text)
   }
 }
 
 class LinkedinButton extends RedirectButton {
-  constructor (position: THREE.Vector3, size = 5, url = '', text: string = 'Open the likedin profile?') {
+  constructor (position: Vector3, size = 5, url = '', text: string = 'Open the likedin profile?') {
     super(position, size, 'images/linkedin.png', url, text)
   }
 }

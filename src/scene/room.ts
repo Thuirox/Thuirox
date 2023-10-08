@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import { type ColorRepresentation, DoubleSide, Mesh, MeshPhongMaterial, Object3D, SphereGeometry, Vector3 } from 'three'
 import { LightManager } from '../managers/lightManager'
 import { angleBetweenSphere, debugLoading } from '../helpers/const'
 import { MeshGroup } from './meshGroup'
@@ -7,14 +7,14 @@ import { type MeshLoadable, type Loadable } from '../interaction'
 import { type Transporter } from './transporter'
 
 class Room extends DoubleLinkedList<Room> implements Loadable {
-  private readonly parent: THREE.Object3D
-  private center: THREE.Vector3
+  private readonly parent: Object3D
+  private center: Vector3
   private readonly radius: number
-  private readonly color: THREE.ColorRepresentation
+  private readonly color: ColorRepresentation
 
-  public mesh: THREE.Object3D
-  private readonly childrenCenter: THREE.Object3D
-  private readonly parentPivot: THREE.Object3D<THREE.Event>
+  public mesh: Object3D
+  private readonly childrenCenter: Object3D
+  private readonly parentPivot: Object3D<Event>
 
   private readonly sphereNbSegments: number
   private readonly capNbSegments: number
@@ -32,7 +32,7 @@ class Room extends DoubleLinkedList<Room> implements Loadable {
 
   public transporter?: Transporter
 
-  constructor (parent: THREE.Object3D, center: THREE.Vector3, radius: number, color: THREE.ColorRepresentation, args?: { hasExit?: boolean, hasEntry?: boolean, toPivot?: boolean }) {
+  constructor (parent: Object3D, center: Vector3, radius: number, color: ColorRepresentation, args?: { hasExit?: boolean, hasEntry?: boolean, toPivot?: boolean }) {
     super()
 
     this.parent = parent
@@ -65,9 +65,9 @@ class Room extends DoubleLinkedList<Room> implements Loadable {
          *
          * this.parent -> this.parentPivot -> this.mesh
          */
-    this.mesh = new THREE.Object3D()
+    this.mesh = new Object3D()
 
-    this.parentPivot = new THREE.Object3D()
+    this.parentPivot = new Object3D()
     this.parent.add(this.parentPivot)
 
     this.parentPivot.add(this.mesh)
@@ -77,35 +77,35 @@ class Room extends DoubleLinkedList<Room> implements Loadable {
       this.mesh.rotateY(angleBetweenSphere)
     }
 
-    this.childrenCenter = new THREE.Object3D()
+    this.childrenCenter = new Object3D()
     this.mesh.add(this.childrenCenter)
 
     const orificeFullSize = (Math.PI / 2) - angleBetweenSphere
 
-    const entryOrifice = new THREE.SphereGeometry(this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, 2 * Math.PI, this.openAngleEntry, orificeFullSize - this.openAngleEntry)
-    const exitOrifice = new THREE.SphereGeometry(this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, 2 * Math.PI, this.openAngleExit, orificeFullSize - this.openAngleExit)
+    const entryOrifice = new SphereGeometry(this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, 2 * Math.PI, this.openAngleEntry, orificeFullSize - this.openAngleEntry)
+    const exitOrifice = new SphereGeometry(this.radius, this.sphereNbSegments, this.sphereNbSegments, 0, 2 * Math.PI, this.openAngleExit, orificeFullSize - this.openAngleExit)
 
     const jointSizeAngle = Math.PI - 2 * this.openAngle - 0.1
 
-    const jointUpper = new THREE.SphereGeometry(this.radius, 3, this.jointNbSegments, 0, jointSizeAngle, 0, Math.PI)
-    const jointLower = new THREE.SphereGeometry(this.radius, 3, this.jointNbSegments, 0, jointSizeAngle, 0, Math.PI)
+    const jointUpper = new SphereGeometry(this.radius, 3, this.jointNbSegments, 0, jointSizeAngle, 0, Math.PI)
+    const jointLower = new SphereGeometry(this.radius, 3, this.jointNbSegments, 0, jointSizeAngle, 0, Math.PI)
 
     const capSize = Math.PI - orificeFullSize - 2 * angleBetweenSphere
-    const cap = new THREE.SphereGeometry(this.radius, this.capNbSegments, this.capNbSegments, 0, 2 * Math.PI, 0, capSize)
+    const cap = new SphereGeometry(this.radius, this.capNbSegments, this.capNbSegments, 0, 2 * Math.PI, 0, capSize)
 
-    const sphereMaterial = new THREE.MeshPhongMaterial({
-      side: THREE.DoubleSide,
+    const sphereMaterial = new MeshPhongMaterial({
+      side: DoubleSide,
       color: this.color,
       clipShadows: true,
       clipIntersection: false
     })
-    const meshEntryOrifice = new THREE.Mesh(entryOrifice, sphereMaterial)
-    const meshExitOrifice = new THREE.Mesh(exitOrifice, sphereMaterial)
-    const meshjointUpper = new THREE.Mesh(jointUpper, sphereMaterial)
-    const meshjointLower = new THREE.Mesh(jointLower, sphereMaterial)
-    const meshCap = new THREE.Mesh(cap, sphereMaterial)
+    const meshEntryOrifice = new Mesh(entryOrifice, sphereMaterial)
+    const meshExitOrifice = new Mesh(exitOrifice, sphereMaterial)
+    const meshjointUpper = new Mesh(jointUpper, sphereMaterial)
+    const meshjointLower = new Mesh(jointLower, sphereMaterial)
+    const meshCap = new Mesh(cap, sphereMaterial)
 
-    const pivotSphereElements = new THREE.Object3D()
+    const pivotSphereElements = new Object3D()
     this.childrenCenter.add(pivotSphereElements)
 
     pivotSphereElements.add(meshEntryOrifice)
@@ -130,9 +130,9 @@ class Room extends DoubleLinkedList<Room> implements Loadable {
 
     cap.rotateX(Math.PI / 2)
 
-    this.lightManager = new LightManager(this.childrenCenter, new THREE.Vector3(0, 0, 0))
+    this.lightManager = new LightManager(this.childrenCenter, new Vector3(0, 0, 0))
 
-    this.meshGroup = new MeshGroup(this.childrenCenter, new THREE.Vector3(0, 0, 0))
+    this.meshGroup = new MeshGroup(this.childrenCenter, new Vector3(0, 0, 0))
   }
 
   getCurrent (): Room {
@@ -181,7 +181,7 @@ class Room extends DoubleLinkedList<Room> implements Loadable {
     }
   }
 
-  setCenter (center: THREE.Vector3): void {
+  setCenter (center: Vector3): void {
     this.center = center
     this.mesh.position.x = this.center.x
     this.mesh.position.y = this.center.y

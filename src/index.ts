@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import { Cache, ColorManagement, LinearSRGBColorSpace, PCFSoftShadowMap, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three'
 import { setupScene } from './scene/scene'
 import { setupInteractions } from './interaction'
 import { AnimationController } from './animation'
@@ -6,16 +6,15 @@ import { AnimationController } from './animation'
 import { cameraInitialPosition } from './helpers/const'
 
 import Stats from 'stats.js'
-import { Camera } from './scene/camera'
 import { TransportManager } from './managers/transportManager'
 import { Logger } from './helpers/logger'
 import { ControlManager, PLUGIN_KEYS, FirstPersonPlugin, GyroscopePlugin, type Orientation } from './controls'
 
 const debug = false
 
-THREE.Cache.enabled = true
+Cache.enabled = true
 
-function setupControlManager (camera: Camera, canvas: HTMLCanvasElement): ControlManager {
+function setupControlManager (camera: PerspectiveCamera, canvas: HTMLCanvasElement): ControlManager {
   const controlManager = new ControlManager()
 
   const firstPersonPlugin = new FirstPersonPlugin(camera, canvas)
@@ -57,16 +56,16 @@ function main (): void {
     document.body.appendChild(stats.dom)
   }
   const canvas = document.getElementById('canvas3D') as HTMLCanvasElement
-  const renderer = new THREE.WebGLRenderer({
+  const renderer = new WebGLRenderer({
     canvas,
     antialias: true
   })
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.shadowMap.enabled = true
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap
+  renderer.shadowMap.type = PCFSoftShadowMap
   renderer.localClippingEnabled = true
-  THREE.ColorManagement.enabled = false
-  renderer.outputColorSpace = THREE.LinearSRGBColorSpace
+  ColorManagement.enabled = false
+  renderer.outputColorSpace = LinearSRGBColorSpace
 
   // camera setup
   const fov = 70
@@ -74,7 +73,7 @@ function main (): void {
   const near = 0.1
   const far = 250
 
-  const camera = new Camera(fov, aspect, near, far)
+  const camera = new PerspectiveCamera(fov, aspect, near, far)
   window.addEventListener('resize', onWindowResize, false)
 
   function onWindowResize (): void {
@@ -99,13 +98,13 @@ function main (): void {
 
   TransportManager.initiate(camera, controlManager)
 
-  const scene = new THREE.Scene()
+  const scene = new Scene()
   void setupScene(scene, camera, renderer, () => {
     if (!TransportManager.currentRoom?.mesh) {
       Logger.error(`TransportManager.currentRoom.mesh null: ${JSON.stringify(TransportManager.currentRoom)}`)
       return
     }
-    const pos = TransportManager.currentRoom.mesh.getWorldPosition(new THREE.Vector3())
+    const pos = TransportManager.currentRoom.mesh.getWorldPosition(new Vector3())
 
     camera.position.copy(pos)
   })

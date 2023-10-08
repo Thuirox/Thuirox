@@ -1,28 +1,28 @@
-import * as THREE from 'three'
+import { type Object3D, PointLight, type Vector3 } from 'three'
 import { Animation } from '../animation'
 import { Logger } from '../helpers/logger'
 
 class LightManager {
-  private readonly parent: THREE.Object3D
-  private readonly position: THREE.Vector3
+  private readonly parent: Object3D
+  private readonly position: Vector3
 
   private readonly turnOffAnimation: Animation<number, undefined>
   private readonly turnOnAnimation: Animation<number, undefined>
 
-  private readonly topLight: THREE.PointLight
-  private readonly bottomLight: THREE.PointLight
+  private readonly topLight: PointLight
+  private readonly bottomLight: PointLight
 
-  constructor (parent: THREE.Object3D, position: THREE.Vector3) {
+  constructor (parent: Object3D, position: Vector3) {
     this.position = position
     this.parent = parent
 
     const color = 0xFFFFFF
     const intensity = 1
 
-    this.topLight = new THREE.PointLight(color, intensity, 30)
+    this.topLight = new PointLight(color, intensity, 30)
     this.topLight.position.set(this.position.x, this.position.y + 10, this.position.z)
 
-    this.bottomLight = new THREE.PointLight(color, intensity, 20)
+    this.bottomLight = new PointLight(color, intensity, 20)
     this.bottomLight.position.set(this.position.x, this.position.y - 10, this.position.z)
 
     this.parent.add(this.topLight)
