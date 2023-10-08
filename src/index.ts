@@ -1,7 +1,5 @@
 import * as THREE from 'three'
-import { GyroscopeControls } from './gyroControls'
 import { setupScene } from './scene/scene'
-import { setupManualControls } from './manualControls'
 import { setupInteractions } from './interaction'
 import { AnimationController } from './animation'
 
@@ -11,32 +9,45 @@ import Stats from 'stats.js'
 import { Camera } from './scene/camera'
 import { TransportManager } from './managers/transportManager'
 import { Logger } from './helpers/logger'
-import { type OrbitControls } from './manualControls'
+import { ControlManager, PLUGIN_KEYS, FirstPersonPlugin, GyroscopePlugin, type Orientation } from './controls'
 
 const debug = false
 
 THREE.Cache.enabled = true
 
-function setupGyroControls (camera: Camera, orbitControls: OrbitControls, controlsSwitchButton: HTMLElement): GyroscopeControls {
+function setupControlManager (camera: Camera, canvas: HTMLCanvasElement): ControlManager {
+  const controlManager = new ControlManager()
+
+  const firstPersonPlugin = new FirstPersonPlugin(camera, canvas)
+
   const onGyroAvailable = (): void => {
-    orbitControls.enabled = false
-    GyroscopeControls.getInstance().setEnabled()
+    controlManager.addPlugin(gyroscopePlugin)
+    controlManager.enableControl(PLUGIN_KEYS.gyroscopeControls)
     controlsSwitchButton.style.display = 'block'
+
+    // Temporary fix to set gyro offset correctly
+    setTimeout(() => {
+      controlManager.updateOffset()
+    }, 1000)
   }
 
-  const logOrientation = (orientation: { alpha: number | null, beta: number | null, gamma: number | null }): void => {
-    const getString = (value: number | null): string => {
-      return value != null ? value.toFixed(3) : '?'
-    }
+  const logUpdateDirection = (orientation: Orientation): void => {
+    const getString = (value: number | null): string => value != null ? value.toFixed(3) : '?'
 
     Logger.screenDebug(`${getString(orientation.alpha)}\n${getString(orientation.beta)}\n${getString(orientation.gamma)}`)
   }
 
-  GyroscopeControls.initialize(camera, { onGyroAvailable, logOrientation })
+  const gyroscopePlugin = new GyroscopePlugin(camera, onGyroAvailable, logUpdateDirection)
 
-  const gyroscopeControls = GyroscopeControls.getInstance()
-  gyroscopeControls.updateCameraAngleOffset(camera.angleDegOffset)
-  return gyroscopeControls
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const controlsSwitchButton = document.getElementById('gyro-button')!
+  controlsSwitchButton.onclick = () => {
+    controlManager.switchControl()
+  }
+
+  controlManager.addPlugin(firstPersonPlugin)
+
+  return controlManager
 }
 
 function main (): void {
@@ -64,7 +75,6 @@ function main (): void {
   const far = 250
 
   const camera = new Camera(fov, aspect, near, far)
-
   window.addEventListener('resize', onWindowResize, false)
 
   function onWindowResize (): void {
@@ -81,29 +91,13 @@ function main (): void {
 
   onWindowResize()
 
-  // const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-  camera.position.set(
-    cameraInitialPosition.x + camera.positionOffset.x,
-    cameraInitialPosition.y + camera.positionOffset.y,
-    cameraInitialPosition.z + camera.positionOffset.z
-  )
-  // camera.position.set(40, 20, 20); // camera out of balls
-  // camera.position.set(7, 7, 7); // camera in first ball but out of cube
+  camera.position.copy(cameraInitialPosition)
 
   setupInteractions(camera, canvas)
 
-  const orbitControls: OrbitControls = setupManualControls(camera, canvas, cameraInitialPosition)
+  const controlManager = setupControlManager(camera, canvas)
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const controlsSwitchButton = document.getElementById('gyro-button')!
-  controlsSwitchButton.onclick = () => {
-    orbitControls.enabled = !orbitControls.enabled
-    GyroscopeControls.getInstance().setEnabled(!orbitControls.enabled)
-  }
-
-  const gyroscopeControls = setupGyroControls(camera, orbitControls, controlsSwitchButton)
-
-  TransportManager.initiate(camera, orbitControls, gyroscopeControls)
+  TransportManager.initiate(camera, controlManager)
 
   const scene = new THREE.Scene()
   void setupScene(scene, camera, renderer, () => {
@@ -113,27 +107,15 @@ function main (): void {
     }
     const pos = TransportManager.currentRoom.mesh.getWorldPosition(new THREE.Vector3())
 
-    camera.position.set(
-      pos.x + camera.positionOffset.x,
-      pos.y + camera.positionOffset.y,
-      pos.z + camera.positionOffset.z
-    )
-    orbitControls.target.set(pos.x, pos.y, pos.z)
-    // controls.target.set(0, 0, 0);
-    // camera.position.set(120, 20, 20); // camera out of balls
+    camera.position.copy(pos)
   })
 
   function render (): void {
     if (debug) {
-      // console.log(renderer.info);
       stats.update()
     }
 
-    if (gyroscopeControls.isInUse()) {
-      gyroscopeControls.updateGyro()
-    } else {
-      orbitControls.update()
-    }
+    controlManager.update()
 
     AnimationController.update()
 
