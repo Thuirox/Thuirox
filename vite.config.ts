@@ -11,5 +11,5 @@ export default defineConfig({
     basicSsl(),
     vsharp()
   ],
-  base: '/justabayet/'
+  base: '/'
 })
