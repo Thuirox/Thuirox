@@ -1,5 +1,3 @@
-{::options auto_ids="false"}
-
 <p align="center">
   <img src="https://github.com/justabayet/justabayet/blob/main/public/images/justabayet/title.png" style="width:50%; height:auto;" />
 </p>
