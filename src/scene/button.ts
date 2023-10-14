@@ -4,12 +4,28 @@ import { Animation } from '../animation'
 import { displayRedirectModal, redirectConfirmButton, redirectModalText } from '../modal'
 import { Image } from './image'
 
+class ButtonElements extends MeshLoadable {
+  private readonly childrenLoadable: MeshLoadable[] = []
+
+  public addChild (child: MeshLoadable): void {
+    this.childrenLoadable.push(child)
+  }
+
+  public load (): void {
+    this.childrenLoadable.forEach(child => { child.load() })
+  }
+
+  public unload (): void {
+    this.childrenLoadable.forEach(child => { child.unload() })
+  }
+}
+
 class Button {
   private action: () => void
   private readonly cubeScale: number
   private backgroundOpacity: number
 
-  public readonly mesh: MeshLoadable
+  public readonly mesh: ButtonElements
   private readonly cube: Object3D
   private readonly cubeMesh: MeshInteractive
   private readonly edgesMesh: LineSegments<EdgesGeometry, Material>
@@ -34,7 +50,7 @@ class Button {
     this.cubeScale = 1.3
     this.backgroundOpacity = 0.3
 
-    this.mesh = new MeshLoadable()
+    this.mesh = new ButtonElements()
     this.mesh.position.set(this.position.x, this.position.y, this.position.z)
     this.mesh.lookAt(0, 0, 0)
 
@@ -73,6 +89,7 @@ class Button {
     this.cube.add(this.cubeMesh)
 
     this.mesh.add(this.cube)
+    this.mesh.addChild(this.cubeMesh)
 
     this.cube.rotateZ(Math.PI / 4)
     this.cube.rotateY(Math.PI / 4)
