@@ -2,12 +2,12 @@
   <img src="https://github.com/justabayet/justabayet/blob/main/public/images/justabayet/title.png" style="width:50%; height:auto;" />
 </p>
 
-Software development is the limitless world of creation where only passion, and effort set the boundaries.
+Software development is the world of creation where only passion, and effort set the boundaries.
 
 ## BarkBudget
 Unleash Your Financial Potential.
 
-[BarkBudget](https://justabayet.github.io/BarkBudget/) the react companion that helps you achieve your financial goals by forecasting your future earnings and expenses, providing you with a clear view of your financial situation and guiding you towards your financial freedom.
+[BarkBudget](https://bb.justabayet.com) the react companion that helps you achieve your financial goals by forecasting your future earnings and expenses, providing you with a clear view of your financial situation and guiding you towards your financial freedom.
 
 ## Engineering User Interfaces with Beat Gestures
 
