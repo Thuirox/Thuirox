@@ -81,22 +81,19 @@ canvas{
   z-index: 10;
   width: 100vw;
   overflow-x: hidden;
-  height: 30px;
-}
-
-#wip-banner div{
-  position: absolute;
-  display: flex;
-  direction: row;
-  width: 200vw;
-  animation: wip-text 15s linear infinite;
   background-color: rgb(247, 228, 221);
 }
 
+#wip-banner div{
+  display: flex;
+  flex-direction: row;
+  width: 200vw;
+  animation: wip-text 15s linear infinite;
+}
+
 #wip-banner span{
-  display: inline-block;
   text-align: center;
-  width: 100vw;
+  flex-grow: 1;
 }
 
 @keyframes wip-text {
