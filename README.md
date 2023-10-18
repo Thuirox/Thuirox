@@ -1,6 +1,8 @@
-<p align="center">
-  <img src="https://github.com/justabayet/justabayet/blob/main/public/images/justabayet/title.png" style="width:50%; height:auto;" />
-</p>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/justabayet/justabayet/blob/main/public/images/justabayet/white_no_bg.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/justabayet/justabayet/blob/main/public/images/justabayet/black_no_bg.png">
+  <img src="https://github.com/justabayet/justabayet/blob/main/public/images/justabayet/title.png">
+</picture>
 
 Software development is the world of creation where only passion, and effort set the boundaries.
 
