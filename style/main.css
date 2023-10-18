@@ -73,3 +73,37 @@ canvas{
 
     cursor: pointer;
 }
+
+#wip-banner{
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100vw;
+  overflow-x: hidden;
+  height: 30px;
+}
+
+#wip-banner div{
+  position: absolute;
+  display: flex;
+  direction: row;
+  width: 200vw;
+  animation: wip-text 15s linear infinite;
+  background-color: rgb(247, 228, 221);
+}
+
+#wip-banner span{
+  display: inline-block;
+  text-align: center;
+  width: 100vw;
+}
+
+@keyframes wip-text {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
