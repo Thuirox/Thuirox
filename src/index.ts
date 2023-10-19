@@ -45,6 +45,9 @@ function setupControlManager (camera: PerspectiveCamera, canvas: HTMLCanvasEleme
   }
 
   controlManager.addPlugin(firstPersonPlugin)
+  gyroscopePlugin.inertiaFactor = 0.7
+  firstPersonPlugin.inertiaFactor = 0.3
+  firstPersonPlugin.rotateSpeed = 0.4
 
   return controlManager
 }
