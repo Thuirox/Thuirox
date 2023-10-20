@@ -44,7 +44,7 @@
     "vite-plugin-vsharp": "^1.4.2"
   },
   "dependencies": {
-    "immersive-controls": "^1.0.3",
+    "immersive-controls": "^1.0.4",
     "three": "^0.154.0"
   }
 }
