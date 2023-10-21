@@ -48,7 +48,7 @@ class Transporter {
 
     this.lines = new LineSegments(edges)
     this.lines.material.transparent = true
-    this.lines.material.opacity = 0.3
+    this.lines.material.opacity = 0.8
     this.lines.material.side = FrontSide
 
     this.mesh.add(this.lines)

@@ -66,7 +66,7 @@ class Button {
 
     this.edgesMesh = new LineSegments(edges, new LineBasicMaterial({
       transparent: true,
-      opacity: 0.4
+      opacity: 0.8
     }))
 
     this.cubeMesh = new MeshInteractive(this.action, cubeGeometry, new MeshBasicMaterial({
