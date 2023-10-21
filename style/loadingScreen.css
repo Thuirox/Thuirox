@@ -208,35 +208,35 @@
 .cube div.top {
   -webkit-transform: rotateX(90deg);
   transform: rotateX(90deg);
-  margin-top: calc(var(--cube-width)/-2);
+  margin-top: calc(var(--cube-width) / -2);
 }
 
 .cube div.right {
   -webkit-transform: rotateY(90deg);
   transform: rotateY(90deg);
-  margin-left: calc(var(--cube-width)/2);
+  margin-left: calc(var(--cube-width) / 2);
 }
 
 .cube div.bottom {
   -webkit-transform: rotateX(-90deg);
   transform: rotateX(-90deg);
-  margin-top: calc(var(--cube-width)/2);
+  margin-top: calc(var(--cube-width) / 2);
 }
 
 .cube div.left {
   -webkit-transform: rotateY(-90deg);
   transform: rotateY(-90deg);
-  margin-left: calc(var(--cube-width)/-2);
+  margin-left: calc(var(--cube-width) / -2);
 }
 
 .cube div.front {
-  -webkit-transform: translateZ(calc(var(--cube-width)/2));
-  transform: translateZ(calc(var(--cube-width)/2));
+  -webkit-transform: translateZ(calc(var(--cube-width) / 2));
+  transform: translateZ(calc(var(--cube-width) / 2));
 }
 
 .cube div.back {
-  -webkit-transform: translateZ(calc(var(--cube-width)/-2)) rotateX(180deg);
-  transform: translateZ(calc(var(--cube-width)/-2)) rotateX(180deg);
+  -webkit-transform: translateZ(calc(var(--cube-width) / -2)) rotateX(180deg);
+  transform: translateZ(calc(var(--cube-width) / -2)) rotateX(180deg);
 }
 
 @-webkit-keyframes spin {
