@@ -1,6 +1,7 @@
 :root{
     --start-button-opacity-low: 0.5;
     --start-button-opacity-high: 0.8;
+    --cube-width: 80px;
 }
 
 html, body{

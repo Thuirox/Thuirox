@@ -17,7 +17,7 @@ function loadingScreenSetup (): void {
   }, 2000)
 
   setTimeout(() => {
-    startButton.style.cursor = 'pointer'
+    startButtonContainer.style.cursor = 'pointer'
 
     loadingScreen.onclick = () => {
       clearTimeout(startButtonAnimationTimeout)
