@@ -1,5 +1,5 @@
 import { type Scene, type Renderer, Vector3, AmbientLight, type Object3D, type PerspectiveCamera } from 'three'
-import { Panel, Title } from './panel'
+import { Panel, PanelHtml, Title } from './panel'
 import { Transporter } from './transporter'
 import { Room } from './room'
 import { cameraInitialPosition } from '../helpers/const'
@@ -69,7 +69,7 @@ class CustomScene {
 
     const gesturesHero = new Panel('images/justabayet/gestureshero.png', new Vector3(-4.5, -3, -8), 2)
     room.addImage(gesturesHero.mesh)
-    const whenisnextlolclash = new Panel('images/justabayet/whenisnextlolclash.png', new Vector3(-5.5, 1.5, -9), 3)
+    const whenisnextlolclash = new PanelHtml('images/justabayet/whenisnextlolclash.png', 'winlc', new Vector3(-5.5, 1.5, -9), 3)
     room.addImage(whenisnextlolclash.mesh)
     const thecodingofisaac = new Panel('images/justabayet/thecodingofisaac.png', new Vector3(5, 2.2, -9), 5)
     room.addImage(thecodingofisaac.mesh)
