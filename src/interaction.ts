@@ -30,7 +30,7 @@ class InteractionManager {
       // Style pointer as cursor when hovering a clickable object
       const raycaster = new Raycaster()
       raycaster.setFromCamera(InteractionManager.pointer, InteractionManager.camera)
-      const intersects = raycaster.intersectObjects(InteractionManager.clickableElements)
+      const intersects = raycaster.intersectObjects<MeshInteractive>(InteractionManager.clickableElements)
 
       if (intersects.length > 0) {
         document.body.style.cursor = 'pointer'
